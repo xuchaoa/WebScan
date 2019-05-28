@@ -8,9 +8,13 @@
 
 
 
-BROKER_URL = "redis://:SDUTctf@10.6.65.231:6379/2"
+# BROKER_URL = "redis://:SDUTctf@10.6.65.231:6379/2"
 # CELERY_BROKER_URL = "redis://:SDUTctf@10.6.65.231:6379/2"
-CELERY_RESULT_BACKEND = 'redis://:SDUTctf@10.6.65.231:6379/3'
+# CELERY_RESULT_BACKEND = 'redis://:SDUTctf@10.6.65.231:6379/3'
+
+BROKER_URL= 'amqp://admin:sdutsec@10.6.65.231:5672/xscan'
+
+CELERY_RESULT_BACKEND= 'amqp://admin:sdutsec@10.6.65.231:5672/xscan'
 
 CELERY_ACCEPT_CONTENT = ['json']
 
