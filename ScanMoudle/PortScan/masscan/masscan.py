@@ -147,7 +147,7 @@ class PortScanner(object):
     def __getitem__(self, host):
         """
         Return a host detail.
-        实现类的迭代
+        实现类的迭代,类似于__str__,但是有区别
         """
         if sys.version_info[0] == 2:
             '''

@@ -26,6 +26,6 @@ def test():
     return 1
 
 if __name__ == '__main__':
-    for i in range(2000):
+    for i in range(2):
         test.delay()
     # print('over')
