@@ -20,7 +20,7 @@ app = Celery(main='celery_tasks')
 app.config_from_object('celery_tasks.config')
 
 # 自动注册celery任务
-app.autodiscover_tasks(['celery_tasks.SendCode'])
+# app.autodiscover_tasks(['celery_tasks.SendCode'])
 
 # app.start(argv=['celery', 'worker', '-l', 'info', '-f', 'logs/celery.log'])
 # app.start(argv=['celery', 'worker', '-l', 'info', '-l', 'info'])
