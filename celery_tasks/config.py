@@ -11,9 +11,11 @@ from datetime import timedelta
 from kombu import Queue, Exchange
 
 
+
 # BROKER_URL = "redis://:SDUTctf@10.6.65.231:6379/2"
 # CELERY_BROKER_URL = "redis://:SDUTctf@10.6.65.231:6379/2"
 # CELERY_RESULT_BACKEND = 'redis://:SDUTctf@10.6.65.231:6379/3'
+
 
 BROKER_URL= 'amqp://admin:sdutsec@10.6.65.231:5672/xscan'
 
@@ -32,33 +34,37 @@ CELERY_ACKS_LATE = True
 # 忽略 Task 处理程序的返回结果，结果直接在处理程序中连接后端数据库进行处理
 CELERY_IGNORE_RESULT = True
 
-# 处理程序从任务队列预加载的待处理任务数
-CELERYD_PREFETCH_MULTIPLIER = 2
+# # 处理程序从任务队列预加载的待处理任务数
+# CELERYD_PREFETCH_MULTIPLIER = 2
 
-# 任务发出后，经过一段时间还未收到acknowledge , 就将任务重新交给其他worker执行
-CELERY_DISABLE_RATE_LIMITS = True
+# # 任务发出后，经过一段时间还未收到acknowledge , 就将任务重新交给其他worker执行
+# CELERY_DISABLE_RATE_LIMITS = True
 
+# 设置默认,当没有微任务指定队列时,推到默认队列
+CELERY_DEFAULT_QUEUE = 'xscan'
+CELERY_DEFAULT_ROUTING_KEY = 'xscan'
 
-
-TASK_QUEUES = (
-    Queue("test", Exchange("test"),routing_key='test'),
-    Queue('queue_reduce', routing_key='queue_sum'),
-    Queue('celery', routing_key='celery'),
+# work不指定queque启动时会默认指定的队列
+CELERY_QUEUES = (
+    Queue("portscan", Exchange("xscan",type='direct'),routing_key='portscan'),
+    Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
 
-TASK_ROUTES = {
-    'tasks.test':{'queue':'queue_add', 'routing_key':'xx'},
+
+CELERY_ROUTES = {
+    'celery_tasks.SendCode.tasks.test':{'queue':'test', 'routing_key':'xx'},  #send_task时指定队列,则该配置被忽略.
     # 'task.reduce':{'queue':'queue_reduce', 'routing_key':'queue_sum'},
 }
 
 #导入任务文件
+
 CELERY_IMPORTS = [
     "celery_tasks.SendCode.tasks",  # 导入py文件
     # "celery_task.epp_scripts.test2",
 ]
 
 
-# 配置定时任务()
+# 配置定时任务不成功
 # TODO 报错如下
 # Did you remember to import the module containing this task?
 # Or maybe you're using relative imports?
@@ -69,7 +75,7 @@ CELERY_IMPORTS = [
 
 CELERYBEAT_SCHEDULE = {
     "schedule-test": {
-        "task": "tasks.test",  #执行的函数
+        "task": "celery_tasks.SendCode.tasks.test",  #执行的函数
         "schedule": timedelta(seconds=2),   # every minute 每分钟执行
         "args": () , # # 任务函数参数
         "options":{'queque':'test','routing_key':'xx'}

@@ -20,10 +20,15 @@ from celery_tasks.main import app
 # channel.queue_declare(queue='hello')
 
 # exchange -- 它使我们能够确切地指定消息应该到哪个队列去。
-# 向队列插入数值 routing_key是队列名 body是要插入的内容
+# 向队列插入数值 routing_key是队列名 body是要插入的内容Did you remember to import the module containing this task?
+# Or maybe you're using relative imports?
+#
+# Please see
+# http://docs.celeryq.org/en/latest/internals/protocol.html
+# for more information.
 
-app.send_task(name='testscan',queue='test')
-# queque指定任务推到哪个队列
+app.send_task(name='testscan',queue='celery')
+# queque指定任务推到哪个队列,如果不存在Rabbitmq会自动创建,不需要指定routing_key 直接添加到相应队列,无此参数默认celery队列
 # name 是任务名
 print("开始队列")
 # 缓冲区已经flush而且消息已经确认发送到了RabbitMQ中，关闭链接

@@ -8,11 +8,11 @@
 
 from celery_tasks.main import app
 
+import os
 
-
-import os,django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CTF_AWD_Platform.settings")
-django.setup()
+# import os,django
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CTF_AWD_Platform.settings")
+# django.setup()
 from django.conf import settings
 from django.core.mail import send_mail
 
@@ -33,6 +33,6 @@ def test(self):
     # return 1
 
 if __name__ == '__main__':
-    for i in range(2):
+    for i in range(10000):
         test.delay()
     # print('over')

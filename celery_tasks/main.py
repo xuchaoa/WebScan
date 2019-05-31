@@ -7,17 +7,18 @@
 # @Software: PyCharm
 
 from celery import Celery
+from . import config
 
 # 为celery使用django配置文件进行设置，根据自己项目设置
-import os
-if not os.getenv('DJANGO_SETTINGS_MODULE'):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "WebScan.settings")
+# import os
+# if not os.getenv('DJANGO_SETTINGS_MODULE'):
+#     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "WebScan.settings")
 
 # 创建celery应用
 app = Celery(main='celery_tasks')
 
 # 导入celery配置
-app.config_from_object('celery_tasks.config')
+app.config_from_object(config)
 
 # 自动注册celery任务
 # app.autodiscover_tasks(['celery_tasks.SendCode'])
