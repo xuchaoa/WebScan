@@ -8,3 +8,4 @@ requests==2.22.0
 requests-toolbelt==0.9.1
 pyreadline==2.1
 pika==1.0.1
+fabric3==1.14.post1
