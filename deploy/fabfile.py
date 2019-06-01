@@ -12,6 +12,7 @@ from fabric.api import *
 def prepare_deploy():
     local('echo "hello"')
 
+
 #必须先在这里指定登录用户
 env.user = 'root'
 
