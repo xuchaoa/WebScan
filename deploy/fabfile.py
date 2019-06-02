@@ -18,6 +18,7 @@ env.user = 'root'
 
 env.roledefs = {
     'webservers':['10.6.65.209'],
+    # 'testserver':['10.6.65.209']
     # 'dbservers':['192.168.56.13']
 }
 

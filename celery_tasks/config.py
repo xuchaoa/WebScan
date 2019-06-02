@@ -47,7 +47,7 @@ CELERY_DEFAULT_ROUTING_KEY = 'xscan'
 # work不指定queque启动时会默认指定的队列
 CELERY_QUEUES = (
     Queue("portscan", Exchange("xscan",type='direct'),routing_key='portscan'),
-    Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
+    # Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
 
 
@@ -60,6 +60,7 @@ CELERY_ROUTES = {
 
 CELERY_IMPORTS = [
     "celery_tasks.SendCode.tasks",  # 导入py文件
+    "celery_tasks.PortScan.tasks"
     # "celery_task.epp_scripts.test2",
 ]
 

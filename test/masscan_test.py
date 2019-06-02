@@ -14,7 +14,8 @@
 
 import sys
 
-from PortScan.masscan import masscan
+# from ScanMoudle.PortScan.masscan import masscan
+import masscan
 
 try:
     mas = masscan.PortScanner()
@@ -26,7 +27,7 @@ except:
     sys.exit(1)
 
 print("masscan version:", mas.masscan_version)
-mas.scan('10.6.65.231', ports='15672,5672',sudo=False)
+mas.scan('10.6.65.231', ports='0-65535',sudo=False)
 print("masscan command line:", mas.command_line)
 #print('maascan scaninfo: ', mas.scaninfo)
 #print('maascan scanstats: ', mas.scanstats)
