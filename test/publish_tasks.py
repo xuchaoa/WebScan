@@ -27,7 +27,9 @@ from celery_tasks.main import app
 # http://docs.celeryq.org/en/latest/internals/protocol.html
 # for more information.
 
-app.send_task(name='portscan',queue='portscan')
+app.send_task(name='portscan',
+              queue='portscan',
+              kwargs=dict(host='10.6.65.106',ports='0-65535',rate='10000',))
 # queque指定任务推到哪个队列,如果不存在Rabbitmq会自动创建,不需要指定routing_key 直接添加到相应队列,无此参数默认celery队列
 # name 是任务名
 print("开始队列")
