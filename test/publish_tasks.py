@@ -7,6 +7,9 @@
 # @Software: PyCharm
 
 import pika
+import os, sys
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
 from celery_tasks.main import app
 
 # # ######################### 生产者 #########################

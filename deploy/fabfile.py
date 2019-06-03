@@ -72,12 +72,9 @@ def GetPython36():
     run('yum -y install python36')
 
 @roles('scannode')
-def PutMasscan():
-    with cd("/home"):
-        with settings(warn_only=True):  # put（上传）出现异常时继续执行，不终止
-            result = put("./DeployFile/masscan", "/usr/bin")
-        if result.failed and not confirm("put file failed, Continue[Y/N]?"):  # 出现异常时，确认用户是否继续，（Y继续）
-            abort("Aborting file put task!")
+def InstallMasscan():
+    run("yum install -y masscan")
+    
 @roles('scannode')
 def RsyncCode():
     rsync_project(remote_dir="/home/xscan/", local_dir="/home/archerx/PycharmProjects/WebScan/")

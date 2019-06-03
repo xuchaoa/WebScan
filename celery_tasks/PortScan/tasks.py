@@ -11,6 +11,8 @@ from celery_tasks.main import app
 
 import os
 import sys
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(BASE_DIR)
 from ScanMoudle.PortScan.masscan import masscan
 
 
@@ -32,7 +34,6 @@ def portscan(self,host,ports,rate):
 
     except:
         print("Unexpected error:", sys.exc_info()[0])
-
     mas.scan(host, ports, sudo=False,arguments="--rate "+rate)
     # print("masscan command line:", mas.command_line)
 
@@ -42,3 +43,8 @@ def portscan(self,host,ports,rate):
         PortResult.update(temp)
         print("Host: %s (%s)" % (host, mas[host]))
     print(PortResult)
+
+
+if __name__ == '__main__':
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    print(BASE_DIR)
