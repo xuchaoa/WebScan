@@ -74,7 +74,7 @@ def GetPython36():
 @roles('scannode')
 def InstallMasscan():
     run("yum install -y masscan")
-    
+
 @roles('scannode')
 def RsyncCode():
     rsync_project(remote_dir="/home/xscan/", local_dir="/home/archerx/PycharmProjects/WebScan/")
