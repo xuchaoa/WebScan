@@ -71,6 +71,7 @@ def UpdateRepo():
 def GetPython36():
     run('yum -y install python36')
 
+
 @roles('scannode')
 def InstallMasscan():
     run("yum install -y masscan")
