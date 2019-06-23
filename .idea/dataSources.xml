@@ -12,11 +12,11 @@
         <property name="enable_load_extension" value="true" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="cms_finger" uuid="5d4af372-4663-4ce6-87d8-7810e3d7cc5d">
+    <data-source source="LOCAL" name="cms_finger" uuid="739712ad-a3af-44c5-85c0-65d551af0829">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/ScanMoudle/webscan/cms_finger.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/ScanMoudle/webscan/fingerdetect/cms_finger.db</jdbc-url>
       <driver-properties>
         <property name="enable_load_extension" value="true" />
       </driver-properties>

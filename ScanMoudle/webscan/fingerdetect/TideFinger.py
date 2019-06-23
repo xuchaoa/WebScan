@@ -10,6 +10,8 @@ import random,ssl,getopt
 import threading,Queue,datetime
 import sys,re,sqlite3,lxml
 from bs4 import BeautifulSoup as BS
+import argparse
+import json
 
 try:
     import requests
@@ -466,89 +468,65 @@ def finger_query(url):
 # exit(0)
 
 if __name__ == "__main__":
-    msg = '''
-    Usage: python TideFinger.py -u http://www.123.com [-p 1] [-m 50] [-t 5] 
-    
-    -u: 待检测目标URL地址
-    -p: 指定该选项为1后，说明启用代理检测，请确保代理文件名为proxys_ips.txt,每行一条代理，格式如: 124.225.223.101:80
-    -m: 指纹匹配的线程数，不指定时默认为50
-    -t: 网站响应超时时间，默认为5秒
-    '''
-    if len(sys.argv) < 2:
-        print msg
-    else:
-        try:
-            use_proxy = False
-            check_thunder = 50
-            request_timeout = 5
-            options,args = getopt.getopt(sys.argv[1:],"u:p:s:t")
-            ip = ''
-            m_count = 100
-            target_url=''
-            ping = True
-            for opt,arg in options:
-                if opt == '-u':
-                    target_url = arg
-                elif opt == '-p':
-                    if arg == '1':
-                        use_proxy = True
-                elif opt == '-m':
-                    check_thunder = int(arg)
-                elif opt == '-t':
-                    request_timeout = int(arg)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-u', dest='url', type=str)
+    parser.add_argument('-p', dest='proxy', type=int, default=0)
+    parser.add_argument('-m', dest='threads', type=int, default=50)
+    parser.add_argument('-t', dest='timeout', type=int, default=5)
+    args = parser.parse_args()
+    target_url = args.url
+    threads = args.threads
+    use_proxy = args.proxy
+    timeout = args.timeout
+    global check_thunder, request_timeout
+    check_thunder = threads
+    request_timeout = timeout
+    if target_url:
 
-            # target_url = 'http://000121000.pig66.com'
-            # target_url = 'https://www.freebuf.com'
 
-            start =datetime.datetime.now()
-            if use_proxy:
-                proxy_list = []
-                if os.path.exists('proxys_ips.txt'):
-                    for porxy_tmp in open('proxys_ips.txt'):
-                        proxy_list.append(porxy_tmp.strip())
-                else:
-                    print "读取代理列表出错，请确保代理文件名为proxys_ips.txt,每行一条代理，格式如: 124.225.223.101:80"
-
-            if re.match(r'^https?:/{2}\w.+$', target_url):
-                print '\n'
-                print "Current Task: ",target_url
-                daytime = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-                cms = Cmsscanner(target_url)
-                fofa_finger,HttpServer = cms.run()
-                print "-"*50
-                fofa_banner = ''
-                cms_name = ''
-                cms_name_flag = 0
-                for fofa_finger_tmp in fofa_finger:
-                    fofa_banner= fofa_banner + ' '+fofa_finger_tmp
-                    if fofa_finger_tmp.lower() in cms_finger_list:
-                        cms_name = fofa_finger_tmp
-                        cms_name_flag = 1
-                if fofa_banner.startswith(' '):
-                    fofa_banner = fofa_banner[1:]
-                if fofa_banner:
-                    print R,"fofa_banner:",W,G,fofa_banner,W
-
-                if not cms_name_flag:
-                    cms_name_tmp = finger_query(target_url)
-                    if cms_name_tmp:
-                        cms_name = cms_name_tmp['cms_name']
-
-                print R,"CMS__finger:",W,G,cms_name,W
-                print R,"HttpServer:",W,G,HttpServer,W
-                end =datetime.datetime.now()
-                print "-"*50
-                print "Time Used:",(end - start).seconds,'秒'
-                result = {"fofa_banner":fofa_finger,
-                          "cms_finger":cms_name,
-                          "HttpServer":HttpServer}
-                print result
+        start = datetime.datetime.now()
+        if use_proxy:
+            proxy_list = []
+            if os.path.exists('proxys_ips.txt'):
+                for porxy_tmp in open('proxys_ips.txt'):
+                    proxy_list.append(porxy_tmp.strip())
             else:
-                print "URL地址错误"
+                print
+                "读取代理列表出错，请确保代理文件名为proxys_ips.txt,每行一条代理，格式如: 124.225.223.101:80"
 
-        except Exception,e:
-            print str(time.strftime('%Y-%m-%d %X', time.localtime(time.time())))+"  Info  "+str(e)
-            pass
+        if re.match(r'^https?:/{2}\w.+$', target_url):
 
+            daytime = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+
+            cms = Cmsscanner(target_url)
+            fofa_finger, HttpServer = cms.run()
+            fofa_banner = ''
+            cms_name = ''
+            cms_name_flag = 0
+            for fofa_finger_tmp in fofa_finger:
+                fofa_banner = fofa_banner + ' ' + fofa_finger_tmp
+                if fofa_finger_tmp.lower() in cms_finger_list:
+                    cms_name = fofa_finger_tmp
+                    cms_name_flag = 1
+            if fofa_banner.startswith(' '):
+                fofa_banner = fofa_banner[1:]
+
+
+            if not cms_name_flag:
+                cms_name_tmp = finger_query(target_url)
+                if cms_name_tmp:
+                    cms_name = cms_name_tmp['cms_name']
+
+
+            end = datetime.datetime.now()
+
+            result = {"fofa_banner": fofa_finger,
+                      "cms_finger": cms_name,
+                      "HttpServer": HttpServer}
+            print(json.dumps(result))
+        else:
+            print "URL地址错误"
+    else:
+        print('url is blank')
 
 
