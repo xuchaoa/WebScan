@@ -14,6 +14,7 @@ import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(BASE_DIR)
 from ScanMoudle.PortScan.masscan import masscan
+import json
 
 
 
@@ -41,8 +42,9 @@ def portscan(self,host,ports,rate):
     for host in mas.all_hosts:
         temp = {host: mas[host]}
         PortResult.update(temp)
-        print("Host: %s (%s)" % (host, mas[host]))
+        # print("Host: %s (%s)" % (host, mas[host]))
     print(PortResult)
+    print(json.dumps(PortResult, sort_keys=True, indent=4, separators=(',', ':')))
 
 
 if __name__ == '__main__':
