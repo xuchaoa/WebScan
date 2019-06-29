@@ -525,7 +525,7 @@ if __name__ == "__main__":
                       "HttpServer": HttpServer}
             print(json.dumps(result))
         else:
-            print "URL地址错误"
+            print ("URL地址错误")
     else:
         print('url is blank')
 
