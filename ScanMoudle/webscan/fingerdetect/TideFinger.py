@@ -438,6 +438,7 @@ class WhatCms:
             sqlconn1.close()
             self.start_threads()
 
+
     def get_result(self):
         while True:
             if self.is_finish:
