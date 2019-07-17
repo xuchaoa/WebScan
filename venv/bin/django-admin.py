@@ -1,4 +1,4 @@
-#!/home/archerx/PycharmProjects/WebScan/venv/bin/python
+#!/home/x/PycharmProjects/WebScan/venv/bin/python
 from django.core import management
 
 if __name__ == "__main__":

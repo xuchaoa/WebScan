@@ -17,17 +17,12 @@ import sys
 # from ScanMoudle.PortScan.masscan import masscan
 import masscan
 
-try:
-    mas = masscan.PortScanner()
-except masscan.PortScannerError:
-    print("masscan binary not found", sys.exc_info()[0])
 
-except:
-    print("Unexpected error:", sys.exc_info()[0])
+mas = masscan.PortScanner()
 
 
 
-mas.scan('10.6.65.231,10.6.65.16', ports='0-443',sudo=False)
+mas.scan('10.0.85.203', ports='0-443',sudo=False)
 # print("masscan command line:", mas.command_line)
 
 PortResult = {}

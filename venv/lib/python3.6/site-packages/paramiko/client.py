@@ -236,6 +236,7 @@ class SSHClient(ClosingContextManager):
         auth_timeout=None,
         gss_trust_dns=True,
         passphrase=None,
+        disabled_algorithms=None,
     ):
         """
         Connect to an SSH server and authenticate to it.  The server's host key
@@ -310,6 +311,9 @@ class SSHClient(ClosingContextManager):
             for the SSH banner to be presented.
         :param float auth_timeout: an optional timeout (in seconds) to wait for
             an authentication response.
+        :param dict disabled_algorithms:
+            an optional dict passed directly to `.Transport` and its keyword
+            argument of the same name.
 
         :raises:
             `.BadHostKeyException` -- if the server's host key could not be
@@ -327,6 +331,8 @@ class SSHClient(ClosingContextManager):
             Added the ``gss_trust_dns`` argument.
         .. versionchanged:: 2.4
             Added the ``passphrase`` argument.
+        .. versionchanged:: 2.6
+            Added the ``disabled_algorithms`` argument.
         """
         if not sock:
             errors = {}
@@ -362,7 +368,10 @@ class SSHClient(ClosingContextManager):
                 raise NoValidConnectionsError(errors)
 
         t = self._transport = Transport(
-            sock, gss_kex=gss_kex, gss_deleg_creds=gss_deleg_creds
+            sock,
+            gss_kex=gss_kex,
+            gss_deleg_creds=gss_deleg_creds,
+            disabled_algorithms=disabled_algorithms,
         )
         t.use_compression(compress=compress)
         t.set_gss_host(
@@ -476,6 +485,9 @@ class SSHClient(ClosingContextManager):
             Python
         :param int timeout:
             set command's channel timeout. See `.Channel.settimeout`
+        :param bool get_pty:
+            Request a pseudo-terminal from the server (default ``False``).
+            See `.Channel.get_pty`
         :param dict environment:
             a dict of shell environment variables, to be merged into the
             default environment that the remote command executes within.
@@ -489,6 +501,9 @@ class SSHClient(ClosingContextManager):
             3-tuple
 
         :raises: `.SSHException` -- if the server fails to execute the command
+
+        .. versionchanged:: 1.10
+            Added the ``get_pty`` kwarg.
         """
         chan = self._transport.open_session(timeout=timeout)
         if get_pty:
@@ -497,7 +512,7 @@ class SSHClient(ClosingContextManager):
         if environment:
             chan.update_environment(environment)
         chan.exec_command(command)
-        stdin = chan.makefile("wb", bufsize)
+        stdin = chan.makefile_stdin("wb", bufsize)
         stdout = chan.makefile("r", bufsize)
         stderr = chan.makefile_stderr("r", bufsize)
         return stdin, stdout, stderr

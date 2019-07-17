@@ -1,4 +1,4 @@
-#!/home/archerx/PycharmProjects/WebScan/venv/bin/python
+#!/home/x/PycharmProjects/WebScan/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
