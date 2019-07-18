@@ -7,16 +7,21 @@ import requests
 import os
 
 
-def fileScan(url):
+def fileScan(url,type):
     # with open('../../data/FileScan/')
     filesList = os.listdir('../../../data/FileScan/')
-    SFileList = []
-    for fi in filesList:
-        SFileList.append('../../../data/FileScan/' + fi)
-    f = open('../../../data/FileScan/php.txt','r',encoding='utf8').read()
-    for i in f:
-        print(f)
+    print(filesList)
+    path = '../../../data/FileScan/'
+
+    if type == 'php':
+        if type + '.txt' in filesList:
+            f = open(path + type + '.txt', 'r', encoding='utf8').read()
+            for i in f:
+                print(f)
+        else:
+            return None
+
 
 
 if __name__ == '__main__':
-    fileScan('1')
+    fileScan('1','php')
