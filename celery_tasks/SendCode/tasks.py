@@ -7,6 +7,7 @@
 # @Software: PyCharm
 
 from celery_tasks.main import app
+from celery import Task
 
 import os
 
@@ -31,6 +32,8 @@ def test(self):
     # time.sleep(4)
     print("hello")
     # return 1
+
+
 
 if __name__ == '__main__':
 

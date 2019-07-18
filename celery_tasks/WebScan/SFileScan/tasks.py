@@ -5,9 +5,10 @@
 
 import requests
 import os
+from celery_tasks.main import app
 
-
-def sfileScan(url):
+@app.task(bind=True,name='sFileScan')
+def sfileScan(self,url):
     keywords = ['wwwroot','web','ftp','admin','www']
 
     listFile = []
@@ -42,6 +43,7 @@ def sfileScan(url):
     if len(warning_list) > 3:
         return False
     print(warning_list)
+    return warning_list   #
 
 
 if __name__ == '__main__':
