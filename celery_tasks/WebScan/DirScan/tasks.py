@@ -22,6 +22,5 @@ def fileScan(url,type):
             return None
 
 
-
 if __name__ == '__main__':
     fileScan('1','php')
