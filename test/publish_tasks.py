@@ -39,6 +39,10 @@ print("开始队列")
 # 缓冲区已经flush而且消息已经确认发送到了RabbitMQ中，关闭链接
 # connection.close()
 
-app.send_task(name='sFileScan',
-              queue = 'sFileScan',
-              kwargs=dict(url='https://binarysec.top'))
+# app.send_task(name='sFileScan',
+#               queue = 'sFileScan',
+#               kwargs=dict(url='https://binarysec.top'))
+
+app.send_task(name='FuzzDomain',
+              queue = 'FuzzDomain',
+              kwargs=dict(DOMAIN='ixuchao.cn', MAX_LEVEL=1, THREADS=30))

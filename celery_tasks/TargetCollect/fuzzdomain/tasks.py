@@ -24,6 +24,7 @@ import urllib3
 from urllib3.exceptions import InsecureRequestWarning
 
 from conf.global_config import FUZZDOMAIN_DIC_NORMAL, FUZZDOMAIN_DIC_SMALL
+from celery_tasks.main import app
 
 urllib3.disable_warnings(InsecureRequestWarning)
 
@@ -255,7 +256,7 @@ class SubdomainBrute(object):
         return results
 
 
-def fuzzdomain(domain, max_level=3, threads=100):
+def fuzzdomain(domain, max_level=1, threads=100):
     result = {}
     others = []
     fuzz_engine = SubdomainBrute(max_level=max_level, threads=threads)
@@ -268,22 +269,15 @@ def fuzzdomain(domain, max_level=3, threads=100):
     return dict(domains=result, other_domains=others)
 
 
-def run():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--debug', dest='DEBUG', action='store_true', default=False)
-    parser.add_argument('--max-level', dest='MAX_LEVEL', type=int, default=3)
-    parser.add_argument('--threads', dest='THREADS', type=int, default=25)
-    parser.add_argument('DOMAIN', type=str)
-
-    args = parser.parse_args()
-
+@app.task(bind=True,name='FuzzDomain')
+def run(self,DOMAIN, MAX_LEVEL=3, THREADS=25):
     global DEBUG
-    DEBUG = args.DEBUG
+    DEBUG = False
 
-    max_level = args.MAX_LEVEL
-    threads = args.THREADS
+    max_level = MAX_LEVEL
+    threads = THREADS
 
-    domain = args.DOMAIN
+    domain = DOMAIN
     fuzz_engine = SubdomainBrute(max_level=max_level, threads=threads)
     try:
         result = fuzz_engine.fuzz(brute_domain=domain)
@@ -291,15 +285,17 @@ def run():
         print('failed to brute subdomain on "{}", {}'.format(domain, str(ex)))
         traceback.print_exc()
         return
-
     print(json.dumps(result))
 
 
 
 if __name__ == '__main__':
     import time
-
     start = time.time()
-    run()
+    run('ixuchao.cn')
     end = time.time()
-    _debug_('cost: {:.4f}s'.format(end - start))
+    print('cost: {:.4f}s'.format(end - start))
+
+
+
+# TODO: make the runtime lower

@@ -62,6 +62,7 @@ CELERY_IMPORTS = [
     "celery_tasks.SendCode.tasks",  # 导入py文件
     "celery_tasks.PortScan.tasks",
     "celery_tasks.WebScan.SFileScan.tasks",
+    "celery_tasks.TargetCollect.fuzzdomain.tasks",
     # "celery_task.epp_scripts.test2",
 ]
 
