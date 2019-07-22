@@ -270,7 +270,7 @@ def fuzzdomain(domain, max_level=1, threads=100):
 
 
 @app.task(bind=True,name='FuzzDomain')
-def run(self,DOMAIN, MAX_LEVEL=3, THREADS=25):
+def run(self,DOMAIN, MAX_LEVEL=1, THREADS=25):
     global DEBUG
     DEBUG = False
 
