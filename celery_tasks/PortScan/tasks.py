@@ -26,13 +26,12 @@ def work_name(name, tid=None):
 
 
 
-@app.task(bind=True,name=work_name('portscan'))
+@app.task(bind=True,name=work_name('PortScan'))
 def portscan(self,host,ports,rate):
     try:
         mas = masscan.PortScanner()
     except masscan.PortScannerError:
         print("masscan binary not found", sys.exc_info()[0])
-
     except:
         print("Unexpected error:", sys.exc_info()[0])
     mas.scan(host, ports, sudo=False,arguments="--rate "+rate)
