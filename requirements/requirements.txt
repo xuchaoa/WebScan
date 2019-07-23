@@ -11,5 +11,9 @@ pika==1.0.1
 fabric3==1.14.post1
 tldextract==2.2.1
 dnspython==1.16.0
+gevent
+argparse==1.4.0
+IPy==1.0
+
 
 
