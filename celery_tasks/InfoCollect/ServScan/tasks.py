@@ -10,11 +10,11 @@
 import nmap
 # from lib.data import logger
 import json
+from celery_tasks.main import app
 
-
-def nmapscan(host, ports):
+@app.task(bind=True,name='ServScan')
+def nmapscan(self, host, ports):
     '''
-
     :param host: str
     :param ports: str list
     :return: None or json data

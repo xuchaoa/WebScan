@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2019/6/2 下午5:02
+# @Time    : 7/23/19 5:09 PM
 # @Author  : Archerx
-# @Site    : https://blog.ixuchao.cn
+# @Blog    : https://blog.ixuchao.cn
 # @File    : __init__.py.py
-# @Software: PyCharm
