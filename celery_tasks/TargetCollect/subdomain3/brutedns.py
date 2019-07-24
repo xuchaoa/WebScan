@@ -9,7 +9,6 @@ import time
 import csv
 import shutil
 
-
 from queue import Queue
 import gc
 import os
@@ -43,7 +42,7 @@ class Brutedomain:
         self.sub_dict = args['sub_file']
         self.speed = args['speed']
         self.next_sub_dict = args['next_sub_file']
-        self.other_result = args['other_file']
+        # self.other_result = args['other_file']
 
         self.resolver = dns.resolver.Resolver()
         self.resolver.nameservers = [
@@ -67,10 +66,10 @@ class Brutedomain:
 
         self.add_ulimit()
 
-        self.queues = Queue()
-        self.dict_cname = dict()
+        self.queues = Queue()  # wydomain + target_domain 所有第一轮要爆破的子域
+        self.dict_cname = dict()  # 存放 域名：cname
         self.dict_ip = dict()
-        self.dict_ip_block = dict()
+        self.dict_ip_block = dict()  # 存放 域名：ip
         self.ip_flag = dict()
         self.cdn_set = set()
         self.queue_sub = Queue()
@@ -78,18 +77,17 @@ class Brutedomain:
         self.dict_ip_count = dict()
         self.found_count = 0
 
-        self.set_next_sub = self.load_next_sub_dict()
-        self.set_cdn = self.load_cdn()
+        self.set_next_sub = self.load_next_sub_dict()  # next_sub_full.txt
+        self.set_cdn = self.load_cdn()  # cdn_servers.txt
 
-        self.load_sub_dict_to_queue()
-        self.extract_next_sub_log()
+        self.load_sub_dict_to_queue()  # wydomain + target_domain
+        # self.extract_next_sub_log()
 
         self.segment_num = self.judge_speed(args['speed'])
 
-
     def add_ulimit(self):
         if (platform.system() != "Windows"):
-            os.system("ulimit -n 65535")
+            os.system("ulimit -n 65535")  # 设置进程可以打开的最大文件描述符的数量。
 
     def load_cdn(self):
         cdn_set = set()
@@ -111,38 +109,6 @@ class Brutedomain:
                 domain = "{sub}.{target_domain}".format(
                     sub=sub.strip(), target_domain=self.target_domain)
                 self.queues.put(domain)
-
-    def load_result_from_other(self):
-        log_type = type(self.other_result)
-        other_subdomain_list = list()
-        if (log_type == str):
-            try:
-                subdomain_log = open('{target_domain}'.format(target_domain=self.other_result), 'r')
-                other_result = [subdomain.strip() for subdomain in subdomain_log]
-                subdomain_log.close()
-            except Exception:
-                print('subdomain log is not exist')
-                sys.exit(1)
-        elif (log_type == list):
-            other_result = self.other_result
-        else:
-            other_result = []
-
-        for subdomain in other_result:
-            if (('.' + str(self.target_domain)) in subdomain):
-                other_subdomain_list.append(subdomain.strip())
-        return other_subdomain_list
-
-    def extract_next_sub_log(self):
-        other_subdomain_list = self.load_result_from_other()
-        for subdomain in other_subdomain_list:
-            self.queues.put(subdomain)
-            sub = subdomain.strip(".{domain}".format(domain=self.target_domain))
-            sub_num = sub.split(".")
-            if (len(sub_num) != 1):
-                sub_num.remove(sub_num[-1])
-                for sub in sub_num:
-                    self.set_next_sub.add(sub.strip())
 
     def check_cdn(self, cname):
         for cdn in self.set_cdn:
@@ -277,21 +243,6 @@ class Brutedomain:
                             active_ip_list.append(ip)
                             self.active_ip_dict[CIP] = active_ip_list
 
-    def raw_write_disk(self):
-        print(self.dict_ip)
-        if (not os.path.exists('result/{domain}'.format(domain=self.target_domain))):
-            os.mkdir('result/{domain}'.format(domain=self.target_domain))
-        with open('result/{name}/{name}.csv'.format(name=self.target_domain), 'w') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(['domain', 'CDN', 'IP'])
-            for subdomain, ip_list in self.dict_ip.items():
-                try:
-                    flag = self.dict_cname[subdomain]
-                except Exception:
-                    flag = "No"
-                writer.writerow([subdomain, flag, ip_list])
-
-
     def collect_cname(self):
         with open('result/cname.txt', 'a') as txt:
             for cname in self.cdn_set:
@@ -310,7 +261,7 @@ class Brutedomain:
         i = 0
         while not self.queues.empty():
             i = i + 1
-            domain_list = self.get_block()
+            domain_list = self.get_block()  # 限制速率
             coroutines = [gevent.spawn(self.query_domain, l)
                           for l in domain_list]
             try:
@@ -318,35 +269,29 @@ class Brutedomain:
             except KeyboardInterrupt:
                 print('user stop')
                 sys.exit(1)
-            # pool=gevent.pool.Pool(2000)
-            # for l in domain_list:
-            #     pool.spawn(self.query_domain,l)
-            # pool.join()
+
             self.deweighting_subdomain()
             self.cmd_print(self.queues.qsize(), start, time.time(), i)
-
 
             if (self.queues.qsize() < 30000):
                 while (self.queues.qsize() < self.set_dynamic_num()):
                     if not self.generate_sub():
                         break
         self.handle_data()
-        self.raw_write_disk()
+        # self.raw_write_disk()
+        print(self.dict_ip)
         print("*****************************Over********************************")
 
-def main():
-    '''
 
-    :return:
-    '''
+def main():
     args = {
         "level": 2,
         "speed": 'medium',
-        "domain": 'ixuchao.cn',
+        "domain": 'baidu.com',
         "cdn": '',
-        "sub_file": 'dict/next_sub_full.txt',
+        "sub_file": 'dict/wydomain.csv',
         "next_sub_file": 'dict/next_sub_full.txt',
-        "other_file":'google.com.log'
+        "other_file": 'google.com.log'
     }
     brute = Brutedomain(args)
     try:
