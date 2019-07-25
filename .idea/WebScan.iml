@@ -19,6 +19,8 @@
       <sourceFolder url="file://$MODULE_DIR$/celery_tasks" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/deploy" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/conf" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utils" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/celery_tasks/TargetCollect/subdomain3/lib" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.6 (WebScan)" jdkType="Python SDK" />

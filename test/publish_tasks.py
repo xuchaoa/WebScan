@@ -30,11 +30,11 @@ from celery_tasks.main import app
 # http://docs.celeryq.org/en/latest/internals/protocol.html
 # for more information.
 
-app.send_task(name='PortScan',
-              queue='PortScan',
-              kwargs=dict(host='123.207.155.221',ports='0-10000',rate='1000',))
+# app.send_task(name='PortScan',
+#               queue='PortScan',
+#               kwargs=dict(host='123.207.155.221',ports='0-10000',rate='1000',))
 # queque指定任务推到哪个队列,如果不存在Rabbitmq会自动创建,不需要指定routing_key 直接添加到相应队列,无此参数默认celery队列
-# name 是任务名
+# name 是任务名，相当于路由的key
 
 
 # 缓冲区已经flush而且消息已经确认发送到了RabbitMQ中，关闭链接
@@ -52,3 +52,10 @@ app.send_task(name='PortScan',
 # app.send_task(name='ServScan',
 #               queue = 'ServScan',
 #               kwargs=dict(host='123.207.155.221', ports=['80','443','8080','9711','22']))
+
+# app.send_task(name='SubDomain',
+#               queue = 'SubDomain',
+#               kwargs=dict(level=2,speed='medium',domain='ixuchao.cn'))
+
+app.send_task(name='testscan',
+              queue = 'testscan')

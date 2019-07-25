@@ -4,11 +4,14 @@
     author:root@yanxiuer.com
     modify by Archerx at 2019.7.25
 '''
+
+
 import sys
 import platform
 import time
 import csv
 import shutil
+import json
 
 
 from queue import Queue
@@ -19,10 +22,34 @@ import dns.resolver
 from IPy import IP
 import gevent
 from gevent import monkey
-
 monkey.patch_all()
-import lib.config as config
+# import lib.config as config
+from utils.mongo_op import MongoDB
+from celery_tasks.main import app
 
+
+
+# 在爆破中，如果一个无效ip多次出现，可以将IP加入到下列表中，程序会在爆破中过滤。
+waiting_fliter_ip = [
+    '222.221.5.253',
+    '222.221.5.252',
+    '1.1.1.1'
+]
+
+
+# 速度分为三种模式，可以根据以下配置进行调节
+
+# high
+high_segment_num = 10000  # 程序采用逐量放到内存爆破，以减少内存占用。该设置会改变每次的读取量
+
+# medium
+medium_segment_num = 5000
+
+# low
+low_segment_num = 2000
+
+# 设置一个ip出现的最多次数,后续出现将被丢弃
+ip_max_count = 30
 
 # import logging
 # logging.basicConfig(
@@ -38,7 +65,7 @@ class Brutedomain:
         self.target_domain = args['domain']
         self.cdn_flag = args['cdn']
         if not (self.target_domain):
-            print('usage: brutedns.py -d/-f baidu.com/domains.txt -s low/medium/high -c y/n')
+            print('usage: tasks.py -d/-f baidu.com/domains.txt -s low/medium/high -c y/n')
             sys.exit(1)
         self.level = args['level']
         self.sub_dict = args['sub_file']
@@ -91,7 +118,7 @@ class Brutedomain:
 
     def load_cdn(self):
         cdn_set = set()
-        with open('dict/cdn_servers.txt', 'r') as file_cdn:
+        with open('/home/x/PycharmProjects/WebScan/celery_tasks/TargetCollect/subdomain3/dict/cdn_servers.txt', 'r') as file_cdn:
             for cdn in file_cdn:
                 cdn_set.add(cdn.strip())
         return cdn_set
@@ -119,11 +146,11 @@ class Brutedomain:
 
     def judge_speed(self, speed):
         if (speed == "low"):
-            segment_num = config.low_segment_num
+            segment_num = low_segment_num
         elif (speed == "high"):
-            segment_num = config.high_segment_num
+            segment_num = high_segment_num
         else:
-            segment_num = config.medium_segment_num
+            segment_num = medium_segment_num
         return segment_num
 
     def get_type_id(self, name):
@@ -184,14 +211,14 @@ class Brutedomain:
         for subdomain, ip_list in self.dict_ip_block.items():
             ip_str = str(sorted(ip_list))
             if (self.dict_ip_count.__contains__(ip_str)):
-                if (self.dict_ip_count[ip_str] > config.ip_max_count):
+                if (self.dict_ip_count[ip_str] > ip_max_count):
                     temp_list.append(subdomain)
                 else:
                     self.dict_ip_count[ip_str] = self.dict_ip_count[ip_str] + 1
             else:
                 self.dict_ip_count[ip_str] = 1
 
-            for filter_ip in config.waiting_fliter_ip:
+            for filter_ip in waiting_fliter_ip:
                 if (filter_ip in ip_str):
                     temp_list.append(subdomain)
 
@@ -265,6 +292,11 @@ class Brutedomain:
         for _ in handle_ip.items():
             handle_ip[_[0]] = list(_[1])
         print(handle_ip)
+        with open('result.json','w') as f:
+            f.write(json.dumps(handle_ip))
+        _ = MongoDB()
+        # _.add_child_tasks(id, test_data)
+
 
     def run(self):
         start = time.time()
@@ -291,15 +323,15 @@ class Brutedomain:
         self.handle_data()
         self.handle_data_x()
 
-
-def main():
+@app.task(bind=True,name='SubDomain')
+def main(self,domain,level=None,speed=None):
     args = {
-        "level": 2,
-        "speed": 'medium',
-        "domain": 'ixuchao.cn',
+        "level": level if level else 2,
+        "speed": speed if speed  else 'medium',
+        "domain": domain,
         "cdn": '',
-        "sub_file": 'dict/wydomain.csv',
-        "next_sub_file": 'dict/next_sub_full.txt'
+        "sub_file": '/home/x/PycharmProjects/WebScan/celery_tasks/TargetCollect/subdomain3/dict/wydomain.csv',
+        "next_sub_file": '/home/x/PycharmProjects/WebScan/celery_tasks/TargetCollect/subdomain3/dict/next_sub_full.txt'
     }
     brute = Brutedomain(args)
     try:
@@ -333,4 +365,4 @@ if __name__ == '__main__':
     # parser.add_argument("-f3", "--other_file",
     #                     help="subdomain log")
 
-    main()
+    main('ixuchao.cn')

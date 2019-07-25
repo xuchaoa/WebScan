@@ -26,7 +26,7 @@ def work_name(name, tid=None):
 
 
 
-@app.task(bind=True,name=work_name('testscan'))
+@app.task(bind=True,name='testscan')
 def test(self):
     import time
     # time.sleep(4)

@@ -44,9 +44,11 @@ CELERY_IGNORE_RESULT = True
 CELERY_DEFAULT_QUEUE = 'xscan'
 CELERY_DEFAULT_ROUTING_KEY = 'xscan'
 
-# work不指定queque启动时会默认指定的队列
+# work不指定queque启动时会默认监听的队列，同时会自动绑定key和queue
 CELERY_QUEUES = (
-    Queue("portscan", Exchange("xscan",type='direct'),routing_key='portscan'),
+    Queue("PortScan", Exchange("xscan",type='direct'),routing_key='PortScan'),
+    Queue("ServScan", Exchange("xscan",type='direct'),routing_key='ServScan'),
+    Queue("testscan", Exchange("xscan",type='direct'),routing_key='testscan'),
     # Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
 
@@ -64,6 +66,7 @@ CELERY_IMPORTS = [
     "celery_tasks.TargetCollect.fuzzdomain.tasks",
     "celery_tasks.InfoCollect.PortScan.tasks",
     "celery_tasks.InfoCollect.ServScan.tasks",
+    # "celery_tasks.TargetCollect.subdomain3.tasks",
     # "celery_task.epp_scripts.test2",
 ]
 
@@ -79,10 +82,10 @@ CELERY_IMPORTS = [
 
 CELERYBEAT_SCHEDULE = {
     "schedule-test": {
-        "task": "celery_tasks.SendCode.tasks.test",  #执行的函数
+        "task": "testscan",  #执行的函数
         "schedule": timedelta(seconds=2),   # every minute 每分钟执行
         "args": () , # # 任务函数参数
-        "options":{'queque':'test','routing_key':'xx'}
+        "options":{'queue':'testscan','routing_key':'testscan'}
     },
 
     # "test2": {
