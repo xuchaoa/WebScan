@@ -7,6 +7,8 @@
 
 
 from pymongo import MongoClient
+import json
+from bson.objectid import ObjectId
 
 
 class MongoDB(object):
@@ -33,10 +35,30 @@ class MongoDB(object):
         except:
             return False
 
+    def add_child_tasks(self,parentID,SubDomainResult):
+        """
+        :param parentID:
+        :param SubDomainResult:
+        :return:
+        """
+        child_task_ids = []
+        for _ in SubDomainResult.items():
+            task_template = {
+                "ip":_[0],
+                "domain":_[1],
+                "ports":"",
+                "vulnerable_attack":{
+
+                }
+            }
+            child_task_ids.append(str(self.db.result.insert(task_template)))
+
+        self.db.task.update({"_id":ObjectId(parentID)},{'$push':{'ChildTaskID':{'$each':child_task_ids}}})
+
+
 def main():
     x = MongoDB()
     new_posts = {
-    "task_id":"456",
     "ip":"",
     "domain":"",
     "ports":"",
@@ -52,16 +74,22 @@ def main():
             "payload":"add"
         }
     }
-
 }
     coll = x.db.scanresult
-    coll.insert(new_posts)
+    aaa = coll.insert(new_posts)
+    print(str(aaa))
     # coll.update({'task_id':'456'},new_posts,upsert=False)
     # print(coll.find({'task_id':'456'})[0])
 
 
 if __name__ == '__main__':
     # main()
+
+    # x = MongoDB()
+    # x.add_vuln_info('456','cve-2017-11','info','notice','payload')
+
     x = MongoDB()
-    x.add_vuln_info('456','cve-2017-11','info','notice','payload')
+    test_data = {'123.207.155.221': ['blog.ixuchao.cn', 'love.ixuchao.cn'], '150.109.112.233': ['www.ixuchao.cn'], '106.12.150.166': ['blogs.ixuchao.cn', 'bb.ixuchao.cn']}
+    id = '5d3927b09b9f1895ff3e1e43'
+    x.add_child_tasks(id,test_data)
 

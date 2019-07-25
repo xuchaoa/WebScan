@@ -2,12 +2,14 @@
 # -*- encoding: utf-8 -*-
 '''
     author:root@yanxiuer.com
+    modify by Archerx at 2019.7.25
 '''
 import sys
 import platform
 import time
 import csv
 import shutil
+
 
 from queue import Queue
 import gc
@@ -42,8 +44,6 @@ class Brutedomain:
         self.sub_dict = args['sub_file']
         self.speed = args['speed']
         self.next_sub_dict = args['next_sub_file']
-        # self.other_result = args['other_file']
-
         self.resolver = dns.resolver.Resolver()
         self.resolver.nameservers = [
             '114.114.114.114',
@@ -66,8 +66,8 @@ class Brutedomain:
 
         self.add_ulimit()
 
-        self.queues = Queue()  # wydomain + target_domain 所有第一轮要爆破的子域
-        self.dict_cname = dict()  # 存放 域名：cname
+        self.queues = Queue()  #wydomain + target_domain 所有第一轮要爆破的子域
+        self.dict_cname = dict()  #存放 域名：cname
         self.dict_ip = dict()
         self.dict_ip_block = dict()  # 存放 域名：ip
         self.ip_flag = dict()
@@ -78,16 +78,16 @@ class Brutedomain:
         self.found_count = 0
 
         self.set_next_sub = self.load_next_sub_dict()  # next_sub_full.txt
-        self.set_cdn = self.load_cdn()  # cdn_servers.txt
+        self.set_cdn = self.load_cdn()   #cdn_servers.txt
 
-        self.load_sub_dict_to_queue()  # wydomain + target_domain
-        # self.extract_next_sub_log()
+        self.load_sub_dict_to_queue()   # wydomain + target_domain
 
         self.segment_num = self.judge_speed(args['speed'])
 
+
     def add_ulimit(self):
         if (platform.system() != "Windows"):
-            os.system("ulimit -n 65535")  # 设置进程可以打开的最大文件描述符的数量。
+            os.system("ulimit -n 65535")  #设置进程可以打开的最大文件描述符的数量。
 
     def load_cdn(self):
         cdn_set = set()
@@ -255,13 +255,23 @@ class Brutedomain:
                       found_count=self.found_count,
                       velocity=round(self.segment_num * i / (end - start), 2)))
 
+    def handle_data_x(self):
+        handle_ip = dict()
+        for _ in self.dict_ip.items():
+            for __ in _[1]:
+                if not __ in handle_ip.keys():
+                    handle_ip[__] = set()
+                handle_ip[__].add(_[0])
+        for _ in handle_ip.items():
+            handle_ip[_[0]] = list(_[1])
+        print(handle_ip)
+
     def run(self):
         start = time.time()
-        print("*****************************Begin*******************************")
         i = 0
         while not self.queues.empty():
             i = i + 1
-            domain_list = self.get_block()  # 限制速率
+            domain_list = self.get_block()    #  限制速率
             coroutines = [gevent.spawn(self.query_domain, l)
                           for l in domain_list]
             try:
@@ -273,25 +283,23 @@ class Brutedomain:
             self.deweighting_subdomain()
             self.cmd_print(self.queues.qsize(), start, time.time(), i)
 
+
             if (self.queues.qsize() < 30000):
                 while (self.queues.qsize() < self.set_dynamic_num()):
                     if not self.generate_sub():
                         break
         self.handle_data()
-        # self.raw_write_disk()
-        print(self.dict_ip)
-        print("*****************************Over********************************")
+        self.handle_data_x()
 
 
 def main():
     args = {
         "level": 2,
         "speed": 'medium',
-        "domain": 'baidu.com',
+        "domain": 'ixuchao.cn',
         "cdn": '',
         "sub_file": 'dict/wydomain.csv',
-        "next_sub_file": 'dict/next_sub_full.txt',
-        "other_file": 'google.com.log'
+        "next_sub_file": 'dict/next_sub_full.txt'
     }
     brute = Brutedomain(args)
     try:
