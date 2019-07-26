@@ -6,16 +6,15 @@
 # @File    : tasks.py
 # @Software: PyCharm
 
-
-from celery_tasks.main import app
-
 import os
 import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(BASE_DIR)
 from ScanMoudle.PortScan.masscan import masscan
 import json
-
+from celery_tasks.main import app
+from utils.mongo_op import MongoDB
+from utils.printx import print_json_format
 
 
 def work_name(name, tid=None):
@@ -27,7 +26,7 @@ def work_name(name, tid=None):
 
 
 @app.task(bind=True,name=work_name('PortScan'))
-def portscan(self,host,ports,rate):
+def portscan(self, taskID, host, ports='0-10000', rate=2000):
     try:
         mas = masscan.PortScanner()
     except masscan.PortScannerError:
@@ -42,10 +41,13 @@ def portscan(self,host,ports,rate):
         temp = {host: mas[host]}
         PortResult.update(temp)
         # print("Host: %s (%s)" % (host, mas[host]))
-    print(PortResult)
-    print(json.dumps(PortResult, sort_keys=True, indent=4, separators=(',', ':')))
+    # print(PortResult)
+    print_json_format(PortResult)
+
+    _ = MongoDB()
+    _.add_open_ports(taskID, json.dumps(PortResult))
+
 
 
 if __name__ == '__main__':
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    print(BASE_DIR)
+    portscan('123.207.172.60','0-10000',2000)
