@@ -278,7 +278,6 @@ class Brutedomain:
         _.add_child_tasks(self.taskID, handle_ip)
         return handle_ip
 
-
     def run(self):
         start = time.time()
         i = 0
@@ -303,6 +302,7 @@ class Brutedomain:
                         break
         self.handle_data()
         self.handle_data_x()
+
 
 @app.task(bind=True,name='SubDomain')
 def main(self, taskID , domain, level=None, speed=None):
