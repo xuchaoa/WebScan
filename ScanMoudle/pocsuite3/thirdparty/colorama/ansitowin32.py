@@ -89,7 +89,7 @@ class AnsiToWin32(object):
             convert = conversion_supported and not self.stream.closed and self.stream.isatty()
         self.convert = convert
 
-        # dict of ansi codes to win32 functions and parameters
+        # subdomain_dict of ansi codes to win32 functions and parameters
         self.win32_calls = self.get_win32_calls()
 
         # are we wrapping stderr?

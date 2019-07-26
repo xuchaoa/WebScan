@@ -113,7 +113,7 @@ class Parser(object):
             interfaces
                 The interfaces dictionary.
 
-        Returns: interfaces dict
+        Returns: interfaces subdomain_dict
 
         """
         # fixup some things

@@ -49,6 +49,7 @@ CELERY_QUEUES = (
     Queue("PortScan", Exchange("xscan",type='direct'),routing_key='PortScan'),
     Queue("ServScan", Exchange("xscan",type='direct'),routing_key='ServScan'),
     Queue("testscan", Exchange("xscan",type='direct'),routing_key='testscan'),
+    Queue("SubDomain", Exchange("xscan",type='direct'),routing_key='SubDomain'),
     # Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
 
@@ -66,7 +67,7 @@ CELERY_IMPORTS = [
     "celery_tasks.TargetCollect.fuzzdomain.tasks",
     "celery_tasks.InfoCollect.PortScan.tasks",
     "celery_tasks.InfoCollect.ServScan.tasks",
-    # "celery_tasks.TargetCollect.subdomain3.tasks",
+    "celery_tasks.TargetCollect.subdomain3.tasks",
     # "celery_task.epp_scripts.test2",
 ]
 

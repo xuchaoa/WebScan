@@ -41,6 +41,9 @@ class MongoDB(object):
         :param SubDomainResult:
         :return:
         """
+        if len(SubDomainResult) == 0:
+            return None
+
         child_task_ids = []
         for _ in SubDomainResult.items():
             task_template = {
@@ -59,22 +62,22 @@ class MongoDB(object):
 def main():
     x = MongoDB()
     new_posts = {
-    "ip":"",
-    "domain":"",
-    "ports":"",
-    "vulnerable_attack":{
-        "ssh_burte":{
-            "info":"",
-            "notice":"",
-            "payload":""
-        },
-        "cve-2017-1221":{
-            "info":"add",
-            "notice":"add",
-            "payload":"add"
+            "ip":"",
+            "domain":"",
+            "ports":"",
+            "vulnerable_attack":{
+                "ssh_burte":{
+                    "info":"",
+                    "notice":"",
+                    "payload":""
+                },
+                "cve-2017-1221":{
+                    "info":"add",
+                    "notice":"add",
+                    "payload":"add"
+                }
+            }
         }
-    }
-}
     coll = x.db.scanresult
     aaa = coll.insert(new_posts)
     print(str(aaa))
@@ -90,6 +93,6 @@ if __name__ == '__main__':
 
     x = MongoDB()
     test_data = {'123.207.155.221': ['blog.ixuchao.cn', 'love.ixuchao.cn'], '150.109.112.233': ['www.ixuchao.cn'], '106.12.150.166': ['blogs.ixuchao.cn', 'bb.ixuchao.cn']}
-    id = '5d3927b09b9f1895ff3e1e43'
-    x.add_child_tasks(id,test_data)
+    id = '5d3ac1452083f76b467da2c7'
+    x.add_child_tasks(id,{})
 

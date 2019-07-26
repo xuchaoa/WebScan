@@ -154,7 +154,7 @@ class CEye(object):
 
         :param value: 输入的要发送的信息
         :param type: 请求类型(dns|request),默认是request
-        :return: dict { url:返回接收的域名,flag:返回随机的flag }
+        :return: subdomain_dict { url:返回接收的域名,flag:返回随机的flag }
         Example:
           {
             'url': 'http://htCb.jwm77k.ceye.io/htCbpingaaahtCb',

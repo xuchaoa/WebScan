@@ -27,29 +27,10 @@ monkey.patch_all()
 from utils.mongo_op import MongoDB
 from celery_tasks.main import app
 
+from conf.global_config import low_segment_num, high_segment_num, medium_segment_num, ip_max_count, waiting_fliter_ip
+from conf.global_config import SUBDOMAIN_CDN_SERVER_DICT, SUBDOMAIN_NEXT_SUB_FULL_DICT, SUBDOMAIN_WYDOMAIN_DICT
 
 
-# 在爆破中，如果一个无效ip多次出现，可以将IP加入到下列表中，程序会在爆破中过滤。
-waiting_fliter_ip = [
-    '222.221.5.253',
-    '222.221.5.252',
-    '1.1.1.1'
-]
-
-
-# 速度分为三种模式，可以根据以下配置进行调节
-
-# high
-high_segment_num = 10000  # 程序采用逐量放到内存爆破，以减少内存占用。该设置会改变每次的读取量
-
-# medium
-medium_segment_num = 5000
-
-# low
-low_segment_num = 2000
-
-# 设置一个ip出现的最多次数,后续出现将被丢弃
-ip_max_count = 30
 
 # import logging
 # logging.basicConfig(
@@ -64,6 +45,7 @@ class Brutedomain:
     def __init__(self, args):
         self.target_domain = args['domain']
         self.cdn_flag = args['cdn']
+        self.taskID = args['taskID']
         if not (self.target_domain):
             print('usage: tasks.py -d/-f baidu.com/domains.txt -s low/medium/high -c y/n')
             sys.exit(1)
@@ -118,7 +100,7 @@ class Brutedomain:
 
     def load_cdn(self):
         cdn_set = set()
-        with open('/home/x/PycharmProjects/WebScan/celery_tasks/TargetCollect/subdomain3/dict/cdn_servers.txt', 'r') as file_cdn:
+        with open(SUBDOMAIN_CDN_SERVER_DICT, 'r') as file_cdn:
             for cdn in file_cdn:
                 cdn_set.add(cdn.strip())
         return cdn_set
@@ -292,10 +274,9 @@ class Brutedomain:
         for _ in handle_ip.items():
             handle_ip[_[0]] = list(_[1])
         print(handle_ip)
-        with open('result.json','w') as f:
-            f.write(json.dumps(handle_ip))
         _ = MongoDB()
-        # _.add_child_tasks(id, test_data)
+        _.add_child_tasks(self.taskID, handle_ip)
+        return handle_ip
 
 
     def run(self):
@@ -324,14 +305,15 @@ class Brutedomain:
         self.handle_data_x()
 
 @app.task(bind=True,name='SubDomain')
-def main(self,domain,level=None,speed=None):
+def main(self, taskID , domain, level=None, speed=None):
     args = {
+        "taskID": taskID,
         "level": level if level else 2,
         "speed": speed if speed  else 'medium',
         "domain": domain,
         "cdn": '',
-        "sub_file": '/home/x/PycharmProjects/WebScan/celery_tasks/TargetCollect/subdomain3/dict/wydomain.csv',
-        "next_sub_file": '/home/x/PycharmProjects/WebScan/celery_tasks/TargetCollect/subdomain3/dict/next_sub_full.txt'
+        "sub_file": SUBDOMAIN_WYDOMAIN_DICT,
+        "next_sub_file": SUBDOMAIN_NEXT_SUB_FULL_DICT
     }
     brute = Brutedomain(args)
     try:
@@ -359,9 +341,9 @@ if __name__ == '__main__':
     # parser.add_argument("-c", "--cdn",
     #                     help="collect cnnames,y or n", default='')
     # parser.add_argument("-f1", "--sub_file",
-    #                     help="sub dict", default='dict/wydomain.csv')
+    #                     help="sub subdomain_dict", default='subdomain_dict/wydomain.csv')
     # parser.add_argument("-f2", "--next_sub_file",
-    #                     help="next_sub dict", default='dict/next_sub_full.txt')
+    #                     help="next_sub subdomain_dict", default='subdomain_dict/next_sub_full.txt')
     # parser.add_argument("-f3", "--other_file",
     #                     help="subdomain log")
 
