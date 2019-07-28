@@ -11,9 +11,10 @@ import nmap
 # from lib.data import logger
 import json
 from celery_tasks.main import app
+from utils.mongo_op import MongoDB
 
 @app.task(bind=True,name='ServScan')
-def nmapscan(self, host, ports):
+def nmapscan(self, taskID, host, ports):
     '''
     :param host: str
     :param ports: str list
@@ -43,7 +44,8 @@ def nmapscan(self, host, ports):
         except KeyError:
             return None
         print(result)
-        return result
+        _ = MongoDB()
+        _.add_port_serv(taskID,json.dumps(result))
     return None
 
 

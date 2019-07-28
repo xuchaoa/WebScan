@@ -258,11 +258,12 @@ class Brutedomain:
                 txt.write('{cname}\r\n'.format(cname=cname))
 
     def cmd_print(self, wait_size, start, end, i):
-        print("domain: {domain} |found: {found_count} number|speed:{velocity} number/s|waiting: {qsize} number|"
+        print("domain: {domain} |found: {found_count} number|speed:{velocity} number/s|waiting: {qsize} number|cost: {time} s"
               .format(domain=self.target_domain,
                       qsize=wait_size,
                       found_count=self.found_count,
-                      velocity=round(self.segment_num * i / (end - start), 2)))
+                      velocity=round(self.segment_num * i / (end - start), 2),
+                      time=end-start))
 
     def handle_data_x(self):
         handle_ip = dict()
@@ -275,8 +276,19 @@ class Brutedomain:
             handle_ip[_[0]] = list(_[1])
         print(handle_ip)
         _ = MongoDB()
-        _.add_child_tasks(self.taskID, handle_ip)
+        taskIDs = _.add_child_tasks(self.taskID, handle_ip)
+
+        i = 0
+        for _ in handle_ip.keys():
+            self.add_port_tasks(str(taskIDs[i]),_)
+            i += 1
         return handle_ip
+
+    def add_port_tasks(self, taskID, host):
+        app.send_task(name='PortScan',
+                      queue='PortScan',
+                      kwargs=dict(taskID=taskID, host=host))
+
 
     def run(self):
         start = time.time()
@@ -301,6 +313,7 @@ class Brutedomain:
                     if not self.generate_sub():
                         break
         self.handle_data()
+        print(self.dict_ip)
         self.handle_data_x()
 
 
@@ -347,4 +360,4 @@ if __name__ == '__main__':
     # parser.add_argument("-f3", "--other_file",
     #                     help="subdomain log")
 
-    main('ixuchao.cn')
+    main('aaa','ixuchao.cn')

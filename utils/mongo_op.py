@@ -16,9 +16,9 @@ class MongoDB(object):
     def __init__(self):
         self.host = '127.0.0.1'
         self.port = 27017
-        self.database = 'scanner'
+        self.database = 'xscan'
         self.conn = MongoClient(self.host, self.port)
-        self.db = self.conn.scaner
+        self.db = self.conn.xscan
         # self.db.authenticate('','')
 
     def add_vuln_info(self,taskID,name,info,notice,payload):
@@ -54,9 +54,10 @@ class MongoDB(object):
 
                 }
             }
-            child_task_ids.append(str(self.db.result.insert(task_template)))
+            child_task_ids.append(str(self.db.HostScan.insert(task_template)))
 
         self.db.task.update({"_id":ObjectId(parentID)},{'$push':{'ChildTaskID':{'$each':child_task_ids}}})
+        return child_task_ids
 
     def add_open_ports(self, taskID, result):
         ports_result = dict()
@@ -64,8 +65,11 @@ class MongoDB(object):
         if result:
             for _ in result.items():
                 ports_result = _[1]
-            print(ports_result)
-            coll = self.db.result
+            for tmp in ports_result.keys():
+                for _ in ports_result[tmp].keys():
+                    del ports_result[tmp][_]['services']
+                    del ports_result[tmp][_]['endtime']
+            coll = self.db.HostScan
             try:
                 coll.update({"_id":ObjectId(taskID)}, {'$set': {"ports" : ports_result}})
                 return True
@@ -74,6 +78,13 @@ class MongoDB(object):
                 return False
         else:
             print("no")
+
+    def add_port_serv(self,taskID,result):
+        result = json.loads(result)
+        for _ in result.keys():
+            del result[_]['state']
+            del result[_]['reason']
+            self.db.HostScan.update({"_id":ObjectId(taskID)},{'$set':{"ports.tcp."+_+".service": result[_]}})
 
 
 
@@ -97,7 +108,7 @@ def insert_test():
                 }
             }
         }
-    coll = x.db.scanresult
+    coll = x.db.HostScan
     aaa = coll.insert(new_posts)
     print(str(aaa))
     # coll.update({'task_id':'456'},new_posts,upsert=False)

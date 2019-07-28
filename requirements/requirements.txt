@@ -14,6 +14,7 @@ dnspython==1.16.0
 gevent
 argparse==1.4.0
 IPy==1.0
+python-nmap==0.6.1
 
 
 

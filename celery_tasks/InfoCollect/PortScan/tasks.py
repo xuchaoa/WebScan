@@ -23,10 +23,13 @@ def work_name(name, tid=None):
         tid = os.environ.get('MISSION_TID', None)
     return '{}'.format(name) if not tid else '{}.{}'.format(str(tid), name)
 
-
+def add_serv_task(taskID, host, ports):
+    app.send_task(name='ServScan',
+                  queue='ServScan',
+                  kwargs=dict(taskID=taskID, host=host,ports=ports))
 
 @app.task(bind=True,name=work_name('PortScan'))
-def portscan(self, taskID, host, ports='0-10000', rate=2000):
+def portscan(self, taskID, host, ports='0-10000', rate=1500):
     try:
         mas = masscan.PortScanner()
     except masscan.PortScannerError:
@@ -41,13 +44,24 @@ def portscan(self, taskID, host, ports='0-10000', rate=2000):
         temp = {host: mas[host]}
         PortResult.update(temp)
         # print("Host: %s (%s)" % (host, mas[host]))
-    # print(PortResult)
-    print_json_format(PortResult)
+    print(PortResult)
+    # print_json_format(PortResult)
+
 
     _ = MongoDB()
     _.add_open_ports(taskID, json.dumps(PortResult))
 
 
+    ports = []
+    host = ''
+    for _ in PortResult.keys():
+        host = _
+        for __ in PortResult[_].keys():
+            for ___ in PortResult[_][__].keys():
+                ports.append(str(___))
+    add_serv_task(taskID, host, ports)
+
+
 
 if __name__ == '__main__':
-    portscan('123.207.172.60','0-10000',2000)
+    portscan('xxxxx','123.207.155.221')
