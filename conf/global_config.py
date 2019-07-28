@@ -32,6 +32,11 @@ SUBDOMAIN_CDN_SERVER_DICT = realjoin(SUBDOMAIN_PATH, 'cdn_servers.txt')
 SUBDOMAIN_NEXT_SUB_FULL_DICT = realjoin(SUBDOMAIN_PATH, 'next_sub_full.txt')
 SUBDOMAIN_WYDOMAIN_DICT = realjoin(SUBDOMAIN_PATH, 'wydomain.csv')
 
+##### GeoIp setting
+GEOLITE_PATH = realjoin(DATA_PATH,'GeoLite2')
+GEOLITE_CITY_DB = realjoin(GEOLITE_PATH, 'GeoLite2-City.mmdb')
+
+
 # 在爆破中，如果一个无效ip多次出现，可以将IP加入到下列表中，程序会在爆破中过滤。
 waiting_fliter_ip = [
     '222.221.5.253',
