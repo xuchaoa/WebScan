@@ -280,14 +280,17 @@ class Brutedomain:
 
         i = 0
         for _ in handle_ip.keys():
-            self.add_port_tasks(str(taskIDs[i]),_)
+            self.add_tasks(str(taskIDs[i]),_)
             i += 1
         return handle_ip
 
-    def add_port_tasks(self, taskID, host):
+    def add_tasks(self, taskID, host):
         app.send_task(name='PortScan',
                       queue='PortScan',
                       kwargs=dict(taskID=taskID, host=host))
+        app.send_task(name='IpLocation',
+                      queue='IpLocation',
+                      kwargs=dict(taskID=taskID, ip=host))
 
 
     def run(self):

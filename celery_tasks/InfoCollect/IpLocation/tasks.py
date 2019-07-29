@@ -12,6 +12,8 @@ import json
 import geoip2.database
 import ipaddress
 from conf.global_config import GEOLITE_CITY_DB
+from celery_tasks.main import app
+from utils.mongo_op import MongoDB
 
 '''
 判断ip地理位置
@@ -50,7 +52,8 @@ def geoip(arg):
 
     return d
 
-def poc(ip):
+@app.task(bind=True,name='IpLocation')
+def poc(self, taskID, ip):
     if ipaddress.ip_address(ip).is_private:  #判断是否是内网ip
         d = {
             "country_id": "internal icon-disc",
@@ -59,6 +62,8 @@ def poc(ip):
         }
         return d
     interface = geoip(ip)
+    _ = MongoDB()
+    _.add_ip_location(taskID, json.dumps(interface))
     return interface
 
 

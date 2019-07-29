@@ -86,6 +86,10 @@ class MongoDB(object):
             del result[_]['reason']
             self.db.HostScan.update({"_id":ObjectId(taskID)},{'$set':{"ports.tcp."+_+".service": result[_]}})
 
+    def add_ip_location(self, taskID, result):
+        result = json.loads(result)
+        self.db.HostScan.update({"_id":ObjectId(taskID)},{'$set':{"location":result}})
+
 
 
 
@@ -95,6 +99,7 @@ def insert_test():
             "ip":"",
             "domain":"",
             "ports":"",
+            "location":"",
             "vulnerable_attack":{
                 "ssh_burte":{
                     "info":"",
@@ -4297,12 +4302,17 @@ def add_open_ports_test():
     c = x.add_open_ports('5d3ac102dd76c2600d6fbc9c',json.dumps(a))
     print(c)
 
+def test_ip_location():
+    result = {'country_id': 'CN', 'country': 'China', 'region': 'Beijing'}
+    taskID = '5d3edfd675f097ac6ee499c6'
+    x = MongoDB()
+    x.add_ip_location(taskID,json.dumps(result))
 
 
 
 if __name__ == '__main__':
-    add_open_ports_test()
-
-
+    # add_open_ports_test()
+    # insert_test()
+    test_ip_location()
 
 

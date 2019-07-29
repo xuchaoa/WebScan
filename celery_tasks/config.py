@@ -50,6 +50,7 @@ CELERY_QUEUES = (
     Queue("ServScan", Exchange("xscan",type='direct'),routing_key='ServScan'),
     Queue("testscan", Exchange("xscan",type='direct'),routing_key='testscan'),
     Queue("SubDomain", Exchange("xscan",type='direct'),routing_key='SubDomain'),
+    Queue("IpLocation", Exchange("xscan",type='direct'),routing_key='IpLocation'),
     # Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
 
@@ -68,6 +69,7 @@ CELERY_IMPORTS = [
     "celery_tasks.InfoCollect.PortScan.tasks",
     "celery_tasks.InfoCollect.ServScan.tasks",
     "celery_tasks.TargetCollect.subdomain3.tasks",
+    "celery_tasks.InfoCollect.IpLocation.tasks",
     # "celery_task.epp_scripts.test2",
 ]
 
