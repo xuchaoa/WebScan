@@ -4,3 +4,13 @@
 # @Author  : Archerx
 # @Blog    : https://blog.ixuchao.cn
 # @File    : data.py
+
+
+from .datatype import AttribDict
+
+
+paths = AttribDict()
+
+scan_option = AttribDict()
+
+conf = AttribDict()     #扫描过程中的配置

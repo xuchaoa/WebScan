@@ -1,0 +1,38 @@
+
+
+
+usage: python3 saucerframe.py -s thinkphp_rce -aS "thinkphp" --proxy 127.0.0.1:1080
+
+{
+ 'engine_thread': False,  多线程
+ 'engine_gevent': False,  开启的协程数量
+ 'concurrent_num': 100,  线程数量   默认100
+
+ 'poc_name': '',   poc name
+
+-----'show_scripts': False,   命令行打印当前所有poc
+
+ 'target_single': '',
+ 'target_range': '',
+ 'target_network': '',    ip or MASK
+
+ 'zoomeye_dork': '',
+ 'shodan_dork': '',
+ 'fofa_dork': '',
+ 'censys_dork': '',
+
+ 'api_limit': 100,
+ 'api_offset': 0,
+
+ 'search_type': 'host',  ZoomEye noly , web or host
+
+ 'output_path': '',
+ 'logging_level': 0,
+
+ 'proxy': ''
+ }
+
+这里有所有能接受的参数及其组合
+
+engine:
+

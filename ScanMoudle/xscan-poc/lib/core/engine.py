@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 7/31/19 10:48 AM
+# @Time    : 7/31/19 7:30 PM
 # @Author  : Archerx
 # @Blog    : https://blog.ixuchao.cn
-# @File    : common.py
+# @File    : engine.py
 
-
-def set_paths(proj_path):
+def initEngine():
     pass
+
+
+
+def load_module():
+    global
