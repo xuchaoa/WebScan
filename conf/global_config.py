@@ -36,6 +36,8 @@ SUBDOMAIN_WYDOMAIN_DICT = realjoin(SUBDOMAIN_PATH, 'wydomain.csv')
 GEOLITE_PATH = realjoin(DATA_PATH,'GeoLite2')
 GEOLITE_CITY_DB = realjoin(GEOLITE_PATH, 'GeoLite2-City.mmdb')
 
+##### xpoc setting
+XPOC_PATH = realjoin(PROJECT_PATH,'ScanMoudle/xscan-poc')
 
 # 在爆破中，如果一个无效ip多次出现，可以将IP加入到下列表中，程序会在爆破中过滤。
 waiting_fliter_ip = [
