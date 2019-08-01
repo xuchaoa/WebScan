@@ -14,3 +14,5 @@ paths = AttribDict()
 scan_option = AttribDict()
 
 conf = AttribDict()     #扫描过程中的配置
+
+xscan = AttribDict()    #扫面引擎的参数

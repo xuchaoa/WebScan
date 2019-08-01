@@ -5,7 +5,7 @@ usage: python3 saucerframe.py -s thinkphp_rce -aS "thinkphp" --proxy 127.0.0.1:1
 
 {
  'engine_thread': False,  多线程
- 'engine_gevent': False,  开启的协程数量
+ 'engine_gevent': False,  协程
  'concurrent_num': 100,  线程数量   默认100
 
  'poc_name': '',   poc name
