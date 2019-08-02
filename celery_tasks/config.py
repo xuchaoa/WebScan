@@ -63,7 +63,6 @@ CELERY_ROUTES = {
 #导入任务文件
 
 CELERY_IMPORTS = [
-    "celery_tasks.SendCode.tasks",  # 导入py文件
     "celery_tasks.WebScan.SFileScan.tasks",
     "celery_tasks.TargetCollect.fuzzdomain.tasks",
     "celery_tasks.InfoCollect.PortScan.tasks",
