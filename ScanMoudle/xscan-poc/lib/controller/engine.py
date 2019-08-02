@@ -5,6 +5,7 @@
 # @Blog    : https://blog.ixuchao.cn
 # @File    : engine.py
 
+import gevent
 import importlib.util
 from setting import ESSENTIAL_MODULE_METHODS
 from lib.core.data import conf, xscan
@@ -13,7 +14,7 @@ import os
 import time
 import threading
 from lib.core.enum import POC_RESULT_STATUS
-import gevent
+
 
 def initEngine():
     load_module()
@@ -27,11 +28,12 @@ def initEngine():
         xscan.current_tc_count = xscan.thread_coroutine_num = xscan.target.qsize()
     else:
         xscan.current_tc_count = xscan.thread_coroutine_num = conf.concurrent_num
-    xscan.time = time.time()
+    xscan.start_time = time.time()
 
 
 def load_module():
     global scan_poc
+    # print(ESSENTIAL_MODULE_METHODS,conf.module_path)
     try:
         module_spec = importlib.util.spec_from_file_location(ESSENTIAL_MODULE_METHODS,conf.module_path)
         module = importlib.util.module_from_spec(module_spec)
@@ -45,10 +47,11 @@ def load_module():
         sys.exit(0)
 
 def set_thread_lock():
-    xscan.print_screen_lock = threading.Lock()
+    # xscan.print_screen_lock = threading.Lock()
     xscan.found_count_lock = threading.Lock()
     xscan.scan_conut_lock = threading.Lock()
     xscan.current_tc_count_lock = threading.Lock()
+    # xscan.x = threading.Lock()
 
 def change_scan_count(num):
     if xscan.thread_mode:
@@ -89,8 +92,6 @@ def result_handle(result, target):
         xscan.result.append(_)
     change_found_count(1)
 
-
-
 def xpoc():
     while True:
         if xscan.target.qsize() > 0 and xscan.is_continue:
@@ -105,28 +106,27 @@ def xpoc():
         change_scan_count(1)
     change_current_tc_count(-1)
 
-
-
-
 def run():
     initEngine()
     if xscan.thread_mode:
         set_thread_lock()
         print('nulti thread mode, number is {}'.format(xscan.current_tc_count ))
-        for _ in range(xscan.current_tc_count ):
+        for _ in range(xscan.thread_coroutine_num ):
             t = threading.Thread(target=xpoc, name=str(_))
             t.setDaemon(True)
             t.start()
         while xscan.current_tc_count > 0 and xscan.is_continue:
             time.sleep(0.01)
     else:
-        print('Coroutine mode, number is {}'.format(xscan.current_tc_count))
-        gevent.joinall([gevent.spawn(xscan) for _ in range(xscan.current_tc_count)])
+        print('Coroutine mode, number is {}'.format(xscan.thread_coroutine_num))
+
+        gevent.joinall([gevent.spawn(xpoc) for _ in range(0, xscan.thread_coroutine_num)])
 
     print('\n')
     msg = '%s found | %s remaining | %s scanned in %.2f seconds' % (
         xscan.found_count, xscan.target.qsize(), xscan.scan_count, time.time() - xscan.start_time)
-    out = '\r' + ' ' * (xscan.console_width - len(msg)) + msg
-    print(out)
+
+    print(msg)
+    print(xscan.result)
 
 

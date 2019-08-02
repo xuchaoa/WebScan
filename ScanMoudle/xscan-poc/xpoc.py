@@ -21,14 +21,18 @@ def main():
     try:
         set_paths(module_path())
 
-        x = {'engine_thread': False, 'engine_gevent': False, 'concurrent_num': 100, 'script_name': '', 'show_scripts': False, 'target_single': '', 'target_file': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': '', 'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 100, 'api_offset': 0, 'search_type': 'host', 'output_path': '', 'logging_level': 0, 'proxy': ''}
+        x = {'engine_thread': True, 'concurrent_num': 100, 'poc_name': 'weblogic_2019_48814',
+             'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': 'weblogic',
+             'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 50, 'api_offset': 0, 'search_type': 'host',
+             'output_path': '', 'logging_level': 0, 'proxy': ''}
         scan_option.update(x)
         init_options(scan_option)
         run()
-    except:
+    except Exception as e:
+        print(e)
         pass
     finally:
         print('done')
 
 if __name__ == '__main__':
-    pass
+    main()

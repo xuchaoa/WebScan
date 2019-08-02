@@ -15,7 +15,7 @@ def set_paths(module_path):
     '''
     paths.ROOT_PATH = module_path
     paths.DATA_PATH = os.path.join(paths.ROOT_PATH, "data")
-    paths.POC_PATH = os.path.join(paths.ROOT_PATH, "poc")
+    paths.POC_PATH = os.path.join(paths.ROOT_PATH, "pocs")
     paths.CONFIG_FILE = os.path.join(paths.ROOT_PATH, "config.conf")
 
 

@@ -136,7 +136,7 @@ def handle_zoomeye(query, limit, type, offset):
     page = 0
     while is_continue:
         data = z.dork_search(query, page=page, resource=type)
-        print(data)
+        # print(data)
         if data:
             for i in data:
                 ip_str = i.get('ip')

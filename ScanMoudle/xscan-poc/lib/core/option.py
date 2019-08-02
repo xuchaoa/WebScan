@@ -20,10 +20,8 @@ def init_options(scan_option):
     target_register(scan_option)
 
 def  engine_register(args):
-    if args.engine_thread and args.engine_gevent:
-        print("Cannot use Multi-Threaded mode and Coroutine mode at the same time")
-        sys.exit()
-    elif args.engine_thread:
+
+    if args.engine_thread:
         conf.engine_mode = "multi_threaded"
     else:
         conf.engine_mode = "coroutine"
@@ -39,7 +37,7 @@ def poc_register(args):
     if not args.poc_name:
         print("no poc name ")
         sys.exit()
-    conf.module_path = os.path.abspath(os.path.abspath(os.path.join(paths.POC_PATH, args.poc_name)))
+    conf.module_path = os.path.abspath(os.path.abspath(os.path.join(paths.POC_PATH, args.poc_name + '.py')))
 
 def target_register(args):
     conf.target = queue.Queue()
