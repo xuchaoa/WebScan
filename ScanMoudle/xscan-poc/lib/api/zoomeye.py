@@ -8,7 +8,6 @@
 
 import json
 import sys
-
 from lib.core.data import paths, conf
 from lib.utils.configparser import ConfigFileParser
 from lib.core.Request import request
@@ -21,7 +20,7 @@ class ZoomEye():
         self.zoomeye_dork_api = "https://api.zoomeye.org/{}/search"
 
     def auto_login(self):
-        msg = '[+] Trying to login with credentials in config file: %s.' % paths.CONFIG_PATH
+        msg = '[+] Trying to login with credentials in config file: %s.' % paths.CONFIG_FILE
         print(msg)
         try:
             self.username = ConfigFileParser().ZoomEyeEmail()
@@ -137,6 +136,7 @@ def handle_zoomeye(query, limit, type, offset):
     page = 0
     while is_continue:
         data = z.dork_search(query, page=page, resource=type)
+        print(data)
         if data:
             for i in data:
                 ip_str = i.get('ip')
@@ -151,3 +151,11 @@ def handle_zoomeye(query, limit, type, offset):
             page += 1
         else:
             break
+
+if __name__ == '__main__':
+    paths.CONFIG_FILE = '/home/x/PycharmProjects/WebScan/ScanMoudle/xscan-poc/config.conf'
+    import queue
+    conf.target = queue.Queue()
+    handle_zoomeye(query='typecho', limit=10, type='web', offset=0)
+    while not conf.target.empty():
+        print(conf.target.get())

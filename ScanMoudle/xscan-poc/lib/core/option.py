@@ -66,7 +66,9 @@ def target_register(args):
         conf.offset = args.api_offset
 
         if args.zoomeye_dork:
-            pass
+            from lib.api.zoomeye import handle_zoomeye
+            conf.search_type = args.search_type
+            handle_zoomeye(query=args.zoomeye_dork, limit=conf.limit, type=conf.search_type, offset = conf.offset)
         elif args.fofa_dork:
             pass
         elif args.shodan_dork:
