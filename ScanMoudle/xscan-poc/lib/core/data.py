@@ -11,7 +11,7 @@ from .datatype import AttribDict
 
 paths = AttribDict()
 
-scan_option = AttribDict()
+scan_option = AttribDict()   #扫描传入的参数
 
 conf = AttribDict()     #扫描过程中的配置
 
