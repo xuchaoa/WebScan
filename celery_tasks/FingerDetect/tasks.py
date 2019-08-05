@@ -23,9 +23,9 @@ def fingerscan(self,url,proxy=0,thread=50,time=5):
     result = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,cwd=BASE_DIR+"/ScanMoudle/webscan/fingerdetect/")
 
     res = str(result.stdout.read())[2:-3]
-    print(json.loads(res))
+    # print(json.loads(res))
     print(res)
-    print(type(res))
+    # print(type(res))
 
 if __name__ == '__main__':
     print(sys.path[:-1])

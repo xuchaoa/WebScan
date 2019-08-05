@@ -40,4 +40,5 @@ rsync --rsh="ssh" -pthrvz  archerx@10.6.65.240:~/PycharmProjects/WebScan  /root/
 # install nmap on Ubuntu
 apt-get install nmap
 
+apt-get install hydra
 

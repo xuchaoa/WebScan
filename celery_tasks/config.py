@@ -48,9 +48,10 @@ CELERY_DEFAULT_ROUTING_KEY = 'xscan'
 CELERY_QUEUES = (
     Queue("PortScan", Exchange("xscan",type='direct'),routing_key='PortScan'),
     Queue("ServScan", Exchange("xscan",type='direct'),routing_key='ServScan'),
-    Queue("testscan", Exchange("xscan",type='direct'),routing_key='testscan'),
     Queue("SubDomain", Exchange("xscan",type='direct'),routing_key='SubDomain'),
     Queue("IpLocation", Exchange("xscan",type='direct'),routing_key='IpLocation'),
+    Queue("HydraBrute", Exchange("xscan_brute",type='direct'),routing_key='HydraBrute'),
+    Queue("SFileScan", Exchange("xscan_web",type='direct'),routing_key='SFileScan'),
     # Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
 
@@ -64,11 +65,12 @@ CELERY_ROUTES = {
 
 CELERY_IMPORTS = [
     "celery_tasks.WebScan.SFileScan.tasks",
-    "celery_tasks.TargetCollect.fuzzdomain.tasks",
+    # "celery_tasks.TargetCollect.fuzzdomain.tasks",
     "celery_tasks.InfoCollect.PortScan.tasks",
     "celery_tasks.InfoCollect.ServScan.tasks",
     "celery_tasks.TargetCollect.subdomain3.tasks",
     "celery_tasks.InfoCollect.IpLocation.tasks",
+    "celery_tasks.WeakBrute.hydra.tasks",
     # "celery_task.epp_scripts.test2",
 ]
 

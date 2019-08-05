@@ -363,4 +363,4 @@ if __name__ == '__main__':
     # parser.add_argument("-f3", "--other_file",
     #                     help="subdomain log")
 
-    main('aaa','zzp198.cn')
+    main('aaa','blog.zzp198.cn')

@@ -36,6 +36,10 @@ SUBDOMAIN_WYDOMAIN_DICT = realjoin(SUBDOMAIN_PATH, 'wydomain.csv')
 GEOLITE_PATH = realjoin(DATA_PATH,'GeoLite2')
 GEOLITE_CITY_DB = realjoin(GEOLITE_PATH, 'GeoLite2-City.mmdb')
 
+##### HydraBrute setting
+HYDRADIC_PATH = realjoin(DATA_PATH, 'hydra_dict')
+HYDRADIC_SMALL = realjoin(HYDRADIC_PATH, 'weakpass_small.txt')
+HYDRADIC_LARGE = realjoin(HYDRADIC_PATH, 'weakpass_large.txt')
 
 
 # 在爆破中，如果一个无效ip多次出现，可以将IP加入到下列表中，程序会在爆破中过滤。
