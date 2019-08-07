@@ -64,4 +64,4 @@ def portscan(self, taskID, host, ports='0-10000', rate=1500):
 
 
 if __name__ == '__main__':
-    portscan('xxxxx','123.207.155.221')
+    portscan('xxxxx','123.2.2.1')

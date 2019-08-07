@@ -22,8 +22,8 @@ def SSHBrute(username, large_or_small, host, port, service):
                                                               host, port, service))
     print(x)
     with open('x','r') as f:
-        for _ in f.read():
-            print(_)
+        print('-----------------------------')
+        print(f.read())
     os.remove('x')
 
 def VNCBrute():
@@ -31,4 +31,4 @@ def VNCBrute():
 
 
 if __name__ == '__main__':
-    SSHBrute('root','small','127.0.0.1','22','ssh')
+    SSHBrute('x','small','127.0.0.1','22','ssh')

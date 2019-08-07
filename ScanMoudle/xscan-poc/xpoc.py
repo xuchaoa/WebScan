@@ -22,9 +22,14 @@ def main():
     try:
         set_paths(module_path())
 
+        # x = {'engine_thread': False, 'concurrent_num': 100, 'poc_name': 'weblogic_2019_48814',
+        #      'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': 'weblogic',
+        #      'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 50, 'api_offset': 0, 'search_type': 'host',
+        #      'output_path': '', 'logging_level': 0, 'proxy': ''}
         x = {'engine_thread': False, 'concurrent_num': 100, 'poc_name': 'weblogic_2019_48814',
-             'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': 'weblogic',
-             'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 50, 'api_offset': 0, 'search_type': 'host',
+             'target_single': '', 'target_range': '', 'target_network': '123.207.0.0/16', 'zoomeye_dork': '',
+             'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 50, 'api_offset': 0,
+             'search_type': '',
              'output_path': '', 'logging_level': 0, 'proxy': ''}
         scan_option.update(x)
         init_options(scan_option)

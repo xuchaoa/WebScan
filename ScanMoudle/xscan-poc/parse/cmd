@@ -12,9 +12,9 @@ usage: python3 saucerframe.py -s thinkphp_rce -aS "thinkphp" --proxy 127.0.0.1:1
 
 -----'show_scripts': False,   命令行打印当前所有poc
 
- 'target_single': '',
- 'target_range': '',
- 'target_network': '',    ip or MASK
+ 'target_single': '',   10.6.65.1
+ 'target_range': '',   '192.18.1.1-192.168.1.3'
+ 'target_network': '',    ip and MASK
 
  'zoomeye_dork': '',
  'shodan_dork': '',
