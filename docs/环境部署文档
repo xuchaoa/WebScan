@@ -29,7 +29,7 @@ docker run -d --name rabbitmq3.7.15 -p 5672:5672 -p 15672:15672 -v `pwd`/data:/v
 -e 指定环境变量；（RABBITMQ_DEFAULT_VHOST：默认虚拟机名；RABBITMQ_DEFAULT_USER：默认的用户名；RABBITMQ_DEFAULT_PASS：默认用户名的密码）
 
 # celery
-celery -A celery_tasks.main  worker --loglevel=info -c 2 -Q portscan  --without-heartbeat
+celery -A celery_tasks.main  worker --loglevel=info -P gevent --without-heartbeat
 celery -A celery_tasks.main  beat --loglevel=info
 
 --without-heartbeat  关闭心跳包

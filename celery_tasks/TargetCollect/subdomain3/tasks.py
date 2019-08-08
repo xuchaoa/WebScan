@@ -32,15 +32,6 @@ from conf.global_config import SUBDOMAIN_CDN_SERVER_DICT, SUBDOMAIN_NEXT_SUB_FUL
 
 
 
-# import logging
-# logging.basicConfig(
-#     level=logging.DEBUG,
-#     filename="brute.log",
-#     filemode="a",
-#     datefmt='%(asctime)s-%(levelname)s-%(message)s'
-# )
-
-
 class Brutedomain:
     def __init__(self, args):
         self.target_domain = args['domain']
@@ -274,7 +265,7 @@ class Brutedomain:
                 handle_ip[__].add(_[0])
         for _ in handle_ip.items():
             handle_ip[_[0]] = list(_[1])
-        print(handle_ip)
+        print("handle_ip:",handle_ip)
         _ = MongoDB()
         taskIDs = _.add_child_tasks(self.taskID, handle_ip)
 
@@ -285,13 +276,9 @@ class Brutedomain:
         return handle_ip
 
     def add_tasks(self, taskID, host):
-        app.send_task(name='PortScan',
-                      queue='PortScan',
-                      kwargs=dict(taskID=taskID, host=host))
-        app.send_task(name='IpLocation',
-                      queue='IpLocation',
-                      kwargs=dict(taskID=taskID, ip=host))
-
+        app.send_task(name='AliveScan',
+                      queue='AliveScan',
+                      kwargs=dict(taskID=taskID, ip=host, ip_type='single'))
 
     def run(self):
         start = time.time()

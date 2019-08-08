@@ -52,6 +52,7 @@ CELERY_QUEUES = (
     Queue("IpLocation", Exchange("xscan",type='direct'),routing_key='IpLocation'),
     Queue("HydraBrute", Exchange("xscan_brute",type='direct'),routing_key='HydraBrute'),
     Queue("SFileScan", Exchange("xscan_web",type='direct'),routing_key='SFileScan'),
+    Queue("AliveScan", Exchange("xscan",type='direct'),routing_key='AliveScan'),
     # Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
 
@@ -71,6 +72,7 @@ CELERY_IMPORTS = [
     "celery_tasks.TargetCollect.subdomain3.tasks",
     "celery_tasks.InfoCollect.IpLocation.tasks",
     "celery_tasks.WeakBrute.hydra.tasks",
+    "celery_tasks.TargetCollect.AliveScan.tasks",
     # "celery_task.epp_scripts.test2",
 ]
 

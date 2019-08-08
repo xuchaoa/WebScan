@@ -37,8 +37,8 @@ class MongoDB(object):
 
     def add_child_tasks(self,parentID,SubDomainResult):
         """
-        :param parentID:
-        :param SubDomainResult:
+        :param parentID: str
+        :param SubDomainResult: list
         :return:
         """
         if len(SubDomainResult) == 0:
@@ -58,6 +58,9 @@ class MongoDB(object):
 
         self.db.task.update({"_id":ObjectId(parentID)},{'$push':{'ChildTaskID':{'$each':child_task_ids}}})
         return child_task_ids
+
+    def add_child_tasks_normal(self, FtaskID, ChildTasks):
+        self.db.task.update({"_id": ObjectId(FtaskID)}, {'$push': {'ChildTaskID': {'$each': ChildTasks}}})
 
     def add_open_ports(self, taskID, result):
         ports_result = dict()
@@ -90,34 +93,37 @@ class MongoDB(object):
         result = json.loads(result)
         self.db.HostScan.update({"_id":ObjectId(taskID)},{'$set':{"location":result}})
 
-    def add_alive_status(self, taskID, result):
+    def add_alive_status_with_FtaskID(self, result, FtaskID):
         result = json.loads(result)
-        if taskID is None:  #new insert data
+        task_id = {}
+        child_id = []
+        if FtaskID is not None:  #new insert data
             x = MongoDB()
-            for _ in result.keys():
+            for ip,status in result.items():
                 new_posts = {
-                    "ip": _,
-                    "alive": result[_],
+                    "ip": ip,
+                    "alive": status,
                     "domain": "",
                     "ports": "",
                     "location": "",
-                    "vulnerable_attack": {
-                        "ssh_burte": {
-                            "info": "",
-                            "notice": "",
-                            "payload": ""
-                        },
-                        "cve-2017-1221": {
-                            "info": "add",
-                            "notice": "add",
-                            "payload": "add"
-                        }
-                    }
+                    "vulnerable_attack": {}
                 }
                 coll = x.db.HostScan
-                aaa = coll.insert(new_posts)
-        else:
-            pass
+                if status['state'] == 'up':
+                    id = coll.insert(new_posts)
+                    task_id[ip] = str(id)
+                    child_id.append(str(id))
+                else:
+                    id = coll.insert(new_posts)
+                    child_id.append(str(id))
+                self.add_child_tasks_normal(FtaskID,child_id)  #子任务id添加到父任务中
+        return task_id
+
+    def add_alive_status(self, taskID, result):
+        self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$set': {"alive": result}})
+
+    def add_Ftask(self):  # insert blank document to 'task' collection
+        return self.db.task.insert({'ChildTaskID':[]})
 
 
 
