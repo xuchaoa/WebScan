@@ -60,6 +60,7 @@ def handle_data(ip_list, alive_ip, FtaskID):
             alive_ip[str(ip)] = {'state':'down',
                                     'reason':''}
     _ = MongoDB()
+    print(alive_ip)
     alive_task_id = _.add_alive_status_with_FtaskID(json.dumps(alive_ip), FtaskID)
     print("alive_task_id", alive_task_id)
     for ip,taskID in alive_task_id.items():
@@ -81,9 +82,9 @@ def main(self, ip_type, ip, taskID=None, FtaskID=None):
         nmap_alive_scan_single_with_taskid(ip, taskID)
     elif FtaskID is not None:  #手动直接从前段添加的任务包含父任务ID
         if ip_type == 'range':  #ip 范围
-            ip_list = ip_range_to_list(ip, FtaskID)
+            ip_list = ip_range_to_list(ip)
             # ip_str = ','.join(ip_list)
-            nmap_alive_scan_range(ip_list)
+            nmap_alive_scan_range(ip_list, FtaskID)
         elif ip_type == 'single':  #单ip
             nmap_alive_scan_single(ip, FtaskID)
         else:  # ip with mask

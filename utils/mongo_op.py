@@ -116,7 +116,7 @@ class MongoDB(object):
                 else:
                     id = coll.insert(new_posts)
                     child_id.append(str(id))
-                self.add_child_tasks_normal(FtaskID,child_id)  #子任务id添加到父任务中
+            self.add_child_tasks_normal(FtaskID,child_id)  #子任务id添加到父任务中
         return task_id
 
     def add_alive_status(self, taskID, result):
