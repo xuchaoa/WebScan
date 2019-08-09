@@ -26,9 +26,9 @@ def main():
         #      'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': 'weblogic',
         #      'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 50, 'api_offset': 0, 'search_type': 'host',
         #      'output_path': '', 'logging_level': 0, 'proxy': ''}
-        x = {'engine_thread': False, 'concurrent_num': 100, 'poc_name': 'weblogic_2019_48814',
-             'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': '',
-             'shodan_dork': 'weblogic', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 100, 'api_offset': 0,
+        x = {'engine_thread': False, 'concurrent_num': 100, 'poc_name': 'redis_unauth',
+             'target_single': '114.113.112.182:4000', 'target_range': '', 'target_network': '', 'zoomeye_dork': '',
+             'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 100, 'api_offset': 0,
              'search_type': '', 'proxy': ''}
         scan_option.update(x)
         init_options(scan_option)
