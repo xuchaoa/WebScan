@@ -4,7 +4,7 @@
 # @Author  : Archerx
 # @Blog    : https://blog.ixuchao.cn
 # @File    : xpoc.py
-# modify from poc-T Proj by Archerx
+# modify from POC-T Proj by Archerx
 # xpoc将作为一个单独可运行的组件，和主调度引擎之间耦合度很小,方便单独拿出来用
 
 from gevent import monkey
@@ -27,10 +27,9 @@ def main():
         #      'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 50, 'api_offset': 0, 'search_type': 'host',
         #      'output_path': '', 'logging_level': 0, 'proxy': ''}
         x = {'engine_thread': False, 'concurrent_num': 100, 'poc_name': 'weblogic_2019_48814',
-             'target_single': '', 'target_range': '', 'target_network': '123.207.0.0/16', 'zoomeye_dork': '',
-             'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 50, 'api_offset': 0,
-             'search_type': '',
-             'output_path': '', 'logging_level': 0, 'proxy': ''}
+             'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': '',
+             'shodan_dork': 'weblogic', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 100, 'api_offset': 0,
+             'search_type': '', 'proxy': ''}
         scan_option.update(x)
         init_options(scan_option)
         run()

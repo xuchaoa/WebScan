@@ -17,6 +17,7 @@ IPy==1.0
 python-nmap==0.6.1
 geoip2==2.9.0
 beautifulsoup4==4.8.0
+shodan==1.14.0
 
 
 

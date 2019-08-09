@@ -68,11 +68,14 @@ def target_register(args):
             conf.search_type = args.search_type
             handle_zoomeye(query=args.zoomeye_dork, limit=conf.limit, type=conf.search_type, offset = conf.offset)
         elif args.fofa_dork:
-            pass
+            from lib.api.fofa import handle_fofa
+            handle_fofa(query=args.fofa_dork, limit=conf.limit, offset=conf.offset)
         elif args.shodan_dork:
-            pass
+            from lib.api.shodan import handle_shodan
+            handle_shodan(query=args.shodan_dork, limit=conf.limit, offset=conf.offset)
         elif args.censys_dork:
-            pass
+            from lib.api.censys import handle_censys
+            handle_censys(query=args.censys_dork, limit=conf.limit, offset=conf.offset)
 
 
 
