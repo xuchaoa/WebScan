@@ -6,7 +6,10 @@
 # @File    : tasks.py
 
 
-
+import os
+import sys
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.append(BASE_DIR)
 import nmap
 # from lib.data import logger
 import json
@@ -50,4 +53,4 @@ def nmapscan(self, taskID, host, ports):
 
 
 if __name__ == '__main__':
-    nmapscan('123.207.155.221',['80','443','8080','9711','22'])
+    nmapscan('111', '123.207.155.221',['80','443','8080','9711','22'])
