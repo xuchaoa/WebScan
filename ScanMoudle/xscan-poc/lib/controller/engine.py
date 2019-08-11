@@ -5,6 +5,9 @@
 # @Blog    : https://blog.ixuchao.cn
 # @File    : engine.py
 
+# import sys
+# sys.path.append('/home/archerx/PycharmProjects/WebScan/ScanMoudle/xscan-poc')
+
 import gevent
 import importlib.util
 from setting import ESSENTIAL_MODULE_METHODS
