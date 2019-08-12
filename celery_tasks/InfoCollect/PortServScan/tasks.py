@@ -7,16 +7,20 @@
 
 
 import nmap
+from utils.mongo_op import MongoDB
+import json
+from celery_tasks.main import app
 
-def namp_port_scan(ip_addr, resp):
+@app.task(bind=True,name='PortServScan')
+def namp_port_scan(self, taskID, ip_addr, resp):
     scanner = nmap.PortScanner()
     # 1)SYN ACK Scan == syn
     # 2)UDP Scan  == udp
     # 3)Comprehensive Scan == com
     if resp == 'syn_normal':
-        scanner.scan(ip_addr, '22,80,443,3306,9711', '-v -sS -Pn -sV')
-        print(scanner[ip_addr]['tcp'])
-        print("Ip Status: ", scanner[ip_addr]['status'])
+        scanner.scan(ip_addr, '21,22,23,80,115,443,445,547,1433,3306,3389,8080', '-sV -sS -Pn')
+        # print(scanner[ip_addr]['tcp'])
+        # print("Ip Status: ", scanner[ip_addr]['status'])
     if resp == 'syn':
         # print("Nmap Version: ", scanner.nmap_version())
         scanner.scan(ip_addr, '1-1024', '-v -sS')
@@ -38,6 +42,15 @@ def namp_port_scan(ip_addr, resp):
         print("Open Ports: ", scanner[ip_addr]['tcp'].keys())
     else:
         pass
+
+    result = {}
+    for key, value in scanner[ip_addr]['tcp'].items():
+        if value['state'] == 'open':
+            result[key] = value
+    print(result)
+    x = MongoDB()
+    x.add_port_sev_result(taskID,json.dumps(result))
+
 
 
 if __name__ == '__main__':

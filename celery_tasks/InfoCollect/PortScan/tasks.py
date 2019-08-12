@@ -35,32 +35,37 @@ def portscan(self, taskID, host, ports='0-10000', rate=1500):
         mas = masscan.PortScanner()
     except masscan.PortScannerError:
         print("masscan binary not found", sys.exc_info()[0])
+    except masscan.NetworkConnectionError:
+        print("-------------------")
     except:
         print("Unexpected error:", sys.exc_info()[0])
-    mas.scan(host, ports, sudo=False,arguments="--rate {}".format(rate))
+    try:
+        mas.scan(host, ports, sudo=False,arguments="--rate {}".format(rate))
+    except masscan.NetworkConnectionError or masscan.PortScannerError as e:
+        print(e)
+        app.send_task(name='PortServScan',
+                      queue='PortServScan',
+                      kwargs=dict(taskID=taskID, ip_addr=host, resp='syn_normal'))
+    else:
     # print("masscan command line:", mas.command_line)
-
-    PortResult = {}
-    for host in mas.all_hosts:
-        temp = {host: mas[host]}
-        PortResult.update(temp)
-        # print("Host: %s (%s)" % (host, mas[host]))
-    print(PortResult)
+        PortResult = {}
+        for host in mas.all_hosts:
+            temp = {host: mas[host]}
+            PortResult.update(temp)
+            # print("Host: %s (%s)" % (host, mas[host]))
+        print(PortResult)
     # print_json_format(PortResult)
+        _ = MongoDB()
+        _.add_open_ports(taskID, json.dumps(PortResult))
 
-
-    _ = MongoDB()
-    _.add_open_ports(taskID, json.dumps(PortResult))
-
-
-    ports = []
-    host = ''
-    for _ in PortResult.keys():
-        host = _
-        for __ in PortResult[_].keys():
-            for ___ in PortResult[_][__].keys():
-                ports.append(str(___))
-    add_serv_task(taskID, host, ports)
+        ports = []
+        host = ''
+        for _ in PortResult.keys():
+            host = _
+            for __ in PortResult[_].keys():
+                for ___ in PortResult[_][__].keys():
+                    ports.append(str(___))
+        add_serv_task(taskID, host, ports)
 
 
 

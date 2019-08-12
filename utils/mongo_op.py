@@ -122,8 +122,14 @@ class MongoDB(object):
     def add_alive_status(self, taskID, result):
         self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$set': {"alive": result}})
 
+    def add_port_sev_result(self, taskID, result):
+        ports_result  = json.loads(result)
+        coll = self.db.HostScan
+        coll.update({"_id": ObjectId(taskID)}, {'$set': {"ports": ports_result}})
+
     def add_Ftask(self):  # insert blank document to 'task' collection
         return self.db.task.insert({'ChildTaskID':[]})
+
 
 
 
