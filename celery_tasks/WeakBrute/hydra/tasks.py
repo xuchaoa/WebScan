@@ -35,9 +35,23 @@ def MSSqlBrute(username, large_or_small, host, port, service):
         print(f.read())
     os.remove('x')
 
+def NameDictBrute(username_dict, large_or_small, host, port, service):
+    x = os.system("hydra -L {} -P {} {} mssql -o x".format(username_dict,HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
+                                                                  host,  service))
+    print(x)
+    with open('x', 'r') as f:
+        print('-----------------------------')
+        print(f.read())
+    os.remove('x')
+
 def VNCBrute():
     print('111')
 
+def MySqlBrute():
+    pass
+
 
 if __name__ == '__main__':
-    SSHBrute('sa','small','127.0.0.1','1433','mssql')
+    # SSHBrute('sa','small','127.0.0.1','1433','mssql')
+    SSHBrute('x','small','127.0.0.1','22','ssh')
+    SSHBrute('x','small','127.0.0.1','22','ssh')

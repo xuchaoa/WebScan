@@ -25,3 +25,8 @@ app.config_from_object(config)
 
 # app.start(argv=['celery', 'worker', '-l', 'info', '-f', 'logs/celery.log'])
 # app.start(argv=['celery', 'worker', '-l', 'info', '-l', 'info'])
+
+import sentry_sdk
+from sentry_sdk.integrations.celery import CeleryIntegration
+
+sentry_sdk.init("http://4a1bad6dbac74432b238b0f529c25070@192.168.23.128:9000/2", integrations=[CeleryIntegration()])
