@@ -126,6 +126,11 @@ class MongoDB(object):
         ports_result  = json.loads(result)
         coll = self.db.HostScan
         coll.update({"_id": ObjectId(taskID)}, {'$set': {"ports": ports_result}})
+    def add_weak_pass_service(self, taskID, result):
+        result = json.loads(result)
+        for key,value in result.items():
+            self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$set': {"weakpass_service."+key : value}})
+
 
     def add_Ftask(self):  # insert blank document to 'task' collection
         return self.db.task.insert({'ChildTaskID':[]})

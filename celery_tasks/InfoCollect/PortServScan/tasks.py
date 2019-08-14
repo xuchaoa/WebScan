@@ -18,7 +18,7 @@ def namp_port_scan(self, taskID, ip_addr, resp):
     # 2)UDP Scan  == udp
     # 3)Comprehensive Scan == com
     if resp == 'syn_normal':
-        scanner.scan(ip_addr, '21,22,23,80,115,443,445,547,1433,3306,3389,8080', '-sV -sS -Pn')
+        scanner.scan(ip_addr, '21,22,23,80,110,115,139,443,445,547,1433,3306,3389,8080', '-sV -sS -Pn')
         # print(scanner[ip_addr]['tcp'])
         # print("Ip Status: ", scanner[ip_addr]['status'])
     if resp == 'syn':
