@@ -50,8 +50,7 @@ def portscan(self, taskID, host, ports='0-10000', rate=1500):
     # print("masscan command line:", mas.command_line)
         PortResult = {}
         for host in mas.all_hosts:
-            temp = {host: mas[host]}
-            PortResult.update(temp)
+            PortResult.update(mas[host]['tcp'])
             # print("Host: %s (%s)" % (host, mas[host]))
         print(PortResult)
     # print_json_format(PortResult)
@@ -59,15 +58,11 @@ def portscan(self, taskID, host, ports='0-10000', rate=1500):
         _.add_open_ports(taskID, json.dumps(PortResult))
 
         ports = []
-        host = ''
         for _ in PortResult.keys():
-            host = _
-            for __ in PortResult[_].keys():
-                for ___ in PortResult[_][__].keys():
-                    ports.append(str(___))
+            ports.append(str(_))
         add_serv_task(taskID, host, ports)
 
 
 
 if __name__ == '__main__':
-    portscan('xxxxx','123.2.2.1')
+    portscan('5d5506c57dc1aa461b416202','123.207.155.221',ports='80,443,9711')

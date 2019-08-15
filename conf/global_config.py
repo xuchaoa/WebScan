@@ -41,6 +41,29 @@ HYDRADIC_PATH = realjoin(DATA_PATH, 'hydra_dict')
 HYDRADIC_SMALL = realjoin(HYDRADIC_PATH, 'weakpass_small.txt')
 HYDRADIC_LARGE = realjoin(HYDRADIC_PATH, 'weakpass_large.txt')
 
+USERNAME_DICT = realjoin(HYDRADIC_PATH, 'username_dict')
+DIC_USERNAME_FTP = realjoin(USERNAME_DICT, 'dic_username_ftp.txt')
+DIC_USERNAME_IMAP = realjoin(USERNAME_DICT, 'dic_username_imap.txt')
+DIC_USERNAME_MEMCACHED = realjoin(USERNAME_DICT, 'dic_username_memcached.txt')
+DIC_USERNAME_MONGODB = realjoin(USERNAME_DICT, 'dic_username_mongodb.txt')
+DIC_USERNAME_MYSQL = realjoin(USERNAME_DICT, 'dic_username_mysql.txt')
+DIC_USERNAME_ORACLE = realjoin(USERNAME_DICT, 'dic_username_oracle.txt')
+DIC_USERNAME_POP3 = realjoin(USERNAME_DICT, 'dic_username_pop3.txt')
+DIC_USERNAME_POSTGRESQL = realjoin(USERNAME_DICT, 'dic_username_postgresql.txt')
+DIC_USERNAME_RDP = realjoin(USERNAME_DICT, 'dic_username_rdp.txt')
+DIC_USERNAME_REDIS = realjoin(USERNAME_DICT, 'dic_username_redis.txt')
+DIC_USERNAME_SMB = realjoin(USERNAME_DICT, 'dic_username_smb.txt')
+DIC_USERNAME_SMTP = realjoin(USERNAME_DICT, 'dic_username_smtp.txt')
+DIC_USERNAME_SQLSERVER = realjoin(USERNAME_DICT, 'dic_username_sqlserver.txt')
+DIC_USERNAME_SSH = realjoin(USERNAME_DICT, 'dic_username_ssh.txt')
+DIC_USERNAME_SVN = realjoin(USERNAME_DICT, 'dic_username_svn.txt')
+DIC_USERNAME_TELNET = realjoin(USERNAME_DICT, 'dic_username_telnet.txt')
+DIC_USERNAME_TOMCAT = realjoin(USERNAME_DICT, 'dic_username_tomcat.txt')
+DIC_USERNAME_VNC = realjoin(USERNAME_DICT, 'dic_username_vnc.txt')
+DIC_USERNAME_WEBLOGIC = realjoin(USERNAME_DICT, 'dic_username_weblogic.txt')
+COMMON_USERNAME = realjoin(USERNAME_DICT, 'common_username.txt')
+
+
 
 # 在爆破中，如果一个无效ip多次出现，可以将IP加入到下列表中，程序会在爆破中过滤。
 waiting_fliter_ip = [

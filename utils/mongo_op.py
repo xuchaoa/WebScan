@@ -63,18 +63,14 @@ class MongoDB(object):
         self.db.task.update({"_id": ObjectId(FtaskID)}, {'$push': {'ChildTaskID': {'$each': ChildTasks}}})
 
     def add_open_ports(self, taskID, result):
-        ports_result = dict()
         result = json.loads(result)
         if result:
-            for _ in result.items():
-                ports_result = _[1]
-            for tmp in ports_result.keys():
-                for _ in ports_result[tmp].keys():
-                    del ports_result[tmp][_]['services']
-                    del ports_result[tmp][_]['endtime']
+            for key,value in result.items():
+                del value['services']
+                del value['endtime']
             coll = self.db.HostScan
             try:
-                coll.update({"_id":ObjectId(taskID)}, {'$set': {"ports" : ports_result}})
+                coll.update({"_id":ObjectId(taskID)}, {'$set': {"ports" : result}})
                 return True
             except Exception as e:
                 print(e)
@@ -85,9 +81,7 @@ class MongoDB(object):
     def add_port_serv(self,taskID,result):
         result = json.loads(result)
         for _ in result.keys():
-            del result[_]['state']
-            del result[_]['reason']
-            self.db.HostScan.update({"_id":ObjectId(taskID)},{'$set':{"ports.tcp."+_+".service": result[_]}})
+            self.db.HostScan.update({"_id":ObjectId(taskID)},{'$set':{"ports."+_: result[_]}})
 
     def add_ip_location(self, taskID, result):
         result = json.loads(result)
