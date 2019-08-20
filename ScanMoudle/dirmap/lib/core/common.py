@@ -15,32 +15,7 @@ import ipaddress
 import re
 
 from lib.core.data import cmdLineOptions, conf, paths, payloads
-from lib.core.enums import COLOR
-from thirdlib.colorama import Back, Fore, Style, init
 
-init(autoreset=True)
-class Outputscreen:
-    """
-    显示颜色类
-    """
-    def info(self, s):
-        print(Style.BRIGHT+Fore.WHITE + str(s) + Fore.RESET+Style.RESET_ALL)
-
-    def success(self, s):
-        print(Style.BRIGHT+Fore.GREEN + str(s) + Fore.RESET+Style.RESET_ALL)
-
-    def warning(self, s):
-        print(Style.BRIGHT+Fore.CYAN + str(s) + Fore.RESET+Style.RESET_ALL)
-
-    def error(self, s):
-        print(Style.BRIGHT+Fore.RED + str(s) + Fore.RESET+Style.RESET_ALL)
-
-    # for banner
-    def blue(self, s):
-        print(Style.BRIGHT+Fore.BLUE + str(s) + Fore.RESET+Style.RESET_ALL)
-
-#创建outputscreen对象，用于输出各种颜色的信息
-outputscreen=Outputscreen()
 
 def setPaths():
     """
@@ -54,13 +29,7 @@ def setPaths():
     paths.CONFIG_PATH = os.path.join(root_path, "dirmap.conf")
 
 
-# def banner():
-#     '''
-#     @description: 打印banner
-#     @param {type}
-#     @return:
-#     '''
-#     outputscreen.blue(BANNER)
+
 
 # 将'192.168.1.1-192.168.1.100'分解成ip地址列表
 def genIP(ip_range):

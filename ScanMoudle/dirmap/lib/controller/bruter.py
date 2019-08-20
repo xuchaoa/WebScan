@@ -23,8 +23,8 @@ import requests
 from gevent.queue import Queue
 from lxml import etree
 
-from lib.core.common import intToSize, outputscreen, urlSimilarCheck
-from lib.core.data import bar, conf, paths, payloads, tasks, th
+from lib.core.common import intToSize, urlSimilarCheck
+from lib.core.data import bar, conf, paths, payloads, tasks
 from lib.utils.config import ConfigFileParser
 from lib.plugins.inspector import Inspector
 
@@ -55,28 +55,10 @@ conf.autodiscriminator_md5 = set()
 
 bar.log = progressbar.ProgressBar()
 
-def saveResults(domain,msg):
-    '''
-    @description: 结果保存，以"域名.txt"命名，url去重复
-    @param {domain:域名,msg:保存的信息}
-    @return: null
-    '''
-    filename = domain +'.txt'
-    conf.output_path = os.path.join(paths.OUTPUT_PATH, filename)
-    #判断文件是否存在，若不存在则创建该文件
-    if not os.path.exists(conf.output_path):
-        with open(conf.output_path,'w+') as temp:
-            pass
-    with open(conf.output_path,'r+') as result_file:
-        old = result_file.read()
-        if msg+'\n' in old:
-            pass
-        else:
-            result_file.write(msg+'\n')
 
 def loadConf():
     '''
-    @description: 加载扫描配置(以后将使用参数，而非从文件加载)
+    @description: 加载扫描配置(以后将使用参数，而非从文件加载),配置文件参数全部加载到conf中
     @param {type}
     @return:
     '''
@@ -168,12 +150,12 @@ def loadSingleDict(path):
     @return:
     '''
     try:
-        outputscreen.success('[+] Load dict:{}'.format(path))
+        print('[+] Load dict:{}'.format(path))
         #加载文件时，使用utf-8编码，防止出现编码问题
         with open(path,encoding='utf-8') as single_file:
             return single_file.read().splitlines()
     except Exception as e:
-        outputscreen.error('[x] plz check file path!\n[x] error:{}'.format(e))
+        print('[x] plz check file path!\n[x] error:{}'.format(e))
         sys.exit()
 
 def loadMultDict(path):
@@ -187,7 +169,7 @@ def loadMultDict(path):
         for file in os.listdir(path):
             #FIXME:这里解决dict和fuzz模式加载多字典问题，但是loadMultDict变得臃肿，后期需要处理
             if conf.dict_mode and conf.fuzz_mode:
-                outputscreen.error('[x] Can not use dict and fuzz mode at the same time!')
+                print('[x] Can not use dict and fuzz mode at the same time!')
                 sys.exit()
             if conf.dict_mode == 2:
                 tmp_list.extend(loadSingleDict(os.path.join(conf.dict_mode_load_mult_dict,file)))
@@ -195,7 +177,7 @@ def loadMultDict(path):
                 tmp_list.extend(loadSingleDict(os.path.join(conf.fuzz_mode_load_mult_dict,file)))
         return tmp_list
     except  Exception as e:
-        outputscreen.error('[x] plz check file path!\n[x] error:{}'.format(e))
+        print('[x] plz check file path!\n[x] error:{}'.format(e))
         sys.exit()
 
 def loadSuffix(path):
@@ -209,7 +191,7 @@ def loadSuffix(path):
             #要去掉#开头的字典
             payloads.suffix = set(f.read().split('\n')) - {'', '#'}
     except  Exception as e:
-        outputscreen.error('[x] plz check file path!\n[x] error:{}'.format(e))
+        print('[x] plz check file path!\n[x] error:{}'.format(e))
         sys.exit()
 
 def generateCrawlDict(base_url):
@@ -261,7 +243,7 @@ def generateBlastDict():
     if conf.blast_mode_resume_charset != '':
         the_min = len(conf.blast_mode_resume_charset)
         if conf.blast_mode_min > the_min or conf.blast_mode_max < the_min:
-            outputscreen.error('[+] Invalid resume length: %d\n\n' % the_min)
+            print('[+] Invalid resume length: %d\n\n' % the_min)
             the_min = conf.blast_mode_min
             conf.blast_mode_resume_charset = ''
     for length in range(the_min, conf.blast_mode_max + 1):
@@ -280,7 +262,7 @@ def generateLengthDict(length):
         #enumerate()用于将一个可遍历的数据对象(如列表、元组或字符串)组合为一个索引序列
         for i, letter in enumerate(conf.blast_mode_resume_charset):
             if conf.blast_mode_custom_charset.find(letter) == -1:
-                outputscreen.error('[+] Invalid resume string: "%s"\n\n' % conf.blast_mode_resume_charset)
+                print('[+] Invalid resume string: "%s"\n\n' % conf.blast_mode_resume_charset)
                 lst = [0] * length
                 break
             lst[i] = conf.blast_mode_custom_charset.find(letter)
@@ -338,38 +320,38 @@ def scanModeHandler():
     '''
     if conf.recursive_scan:
         msg = '[*] Use recursive scan: Yes'
-        outputscreen.warning('\r'+msg+' '*(th.console_width-len(msg)+1))
+        print('\r'+msg)
     else:
         msg = '[*] Use recursive scan: No'
-        outputscreen.warning('\r'+msg+' '*(th.console_width-len(msg)+1))
+        print('\r'+msg)
     payloadlists=[]
     # fuzz模式处理，只能单独加载
     if conf.fuzz_mode:
-        outputscreen.warning('[*] Use fuzz mode')
+        print('[*] Use fuzz mode')
         if conf.fuzz_mode == 1:
             return generateSingleFuzzDict(conf.fuzz_mode_load_single_dict)
         if conf.fuzz_mode == 2:
             return generateMultFuzzDict(conf.fuzz_mode_load_mult_dict)
     # 其他模式处理，可同时加载
     else:
-        if conf.dict_mode:
-            outputscreen.warning('[*] Use dict mode')
+        if conf.dict_mode:  #默认这个
+            print('[*] Use dict mode')
             if conf.dict_mode == 1:
                 payloadlists.extend(loadSingleDict(conf.dict_mode_load_single_dict))
             elif conf.dict_mode == 2:
                 payloadlists.extend(loadMultDict(conf.dict_mode_load_mult_dict))
             else:
-                outputscreen.error("[-] You must select a dict")
+                print("[-] You must select a dict")
                 sys.exit()
         if conf.blast_mode:
-            outputscreen.warning('[*] Use blast mode')
-            outputscreen.warning('[*] Use char set: {}'.format(conf.blast_mode_custom_charset))
-            outputscreen.warning('[*] Use paylaod min length: {}'.format(conf.blast_mode_min))
-            outputscreen.warning('[*] Use paylaod max length: {}'.format(conf.blast_mode_max))
+            print('[*] Use blast mode')
+            print('[*] Use char set: {}'.format(conf.blast_mode_custom_charset))
+            print('[*] Use paylaod min length: {}'.format(conf.blast_mode_min))
+            print('[*] Use paylaod max length: {}'.format(conf.blast_mode_max))
             payloadlists.extend(generateBlastDict())
         #TODO:递归爬取url
         if conf.crawl_mode:
-            outputscreen.warning('[*] Use crawl mode')
+            print('[*] Use crawl mode')
             #自定义header
             headers = {}
             if conf.request_headers:
@@ -379,7 +361,7 @@ def scanModeHandler():
                         #print(k,v)
                         headers[k] = v
                 except Exception as e:
-                    outputscreen.error("[x] Check personalized headers format: header=value,header=value.\n[x] error:{}".format(e))
+                    print("[x] Check personalized headers format: header=value,header=value.\n[x] error:{}".format(e))
                     sys.exit()
             #自定义ua
             if conf.request_header_ua:
@@ -390,7 +372,7 @@ def scanModeHandler():
             try:
                 response = requests.get(conf.url, headers=headers, timeout=conf.request_timeout, verify=False, allow_redirects=conf.redirection_302, proxies=conf.proxy_server)
             except requests.exceptions.ConnectionError as e:
-                outputscreen.error("[x] Crawler network connection error!plz check whether the target is accessible")
+                print("[x] Crawler network connection error!plz check whether the target is accessible")
                 sys.exit()
 
             #获取页面url
@@ -401,7 +383,7 @@ def scanModeHandler():
                     try:
                         contentDecode = response.content.decode('gbk')
                     except:
-                        outputscreen.error("[x] Unrecognized page coding errors")
+                        print("[x] Unrecognized page coding errors")
                 html = etree.HTML(contentDecode)
                 #加载自定义xpath用于解析html
                 urls = html.xpath(conf.crawl_mode_parse_html)
@@ -428,7 +410,7 @@ def scanModeHandler():
     if payloadlists:
         return payloadlists
     else:
-        outputscreen.error("[-] You have to select at least one mode , plz check mode config")
+        print("[-] You have to select at least one mode , plz check mode config")
         sys.exit()
 
 def responseHandler(response):
@@ -459,10 +441,10 @@ def responseHandler(response):
         if conf.response_size:
             msg += '[{}] '.format(str(size))
         msg += response.url
-        outputscreen.info('\r'+msg+' '*(th.console_width-len(msg)+1))
+        print(msg)
         #已去重复，结果保存。NOTE:此处使用response.url进行文件名构造，解决使用-iL参数时，不能按照域名来命名文件名的问题
         #使用replace()，替换`:`，修复window下不能创建有`:`的文件问题
-        saveResults(urllib.parse.urlparse(response.url).netloc.replace(':','_'),msg)
+        # saveResults(urllib.parse.urlparse(response.url).netloc.replace(':','_'),msg)
     #关于递归扫描。响应在自定义状态码中时，添加判断是否进行递归扫描
     if response.status_code in conf.recursive_status_code:
         if conf.recursive_scan:
@@ -471,7 +453,7 @@ def responseHandler(response):
     #自定义正则匹配响应
     pattern = re.compile(conf.custom_response_page)
     if pattern.search(response.content.decode('utf-8')):
-        outputscreen.info('[!] Custom response information matched\n[!] use regular expression:{}\n[!] matched page:{}'.format(conf.custom_response_page,response.text))
+        print('[!] Custom response information matched\n[!] use regular expression:{}\n[!] matched page:{}'.format(conf.custom_response_page,response.text))
 
 def worker():
     '''
@@ -490,7 +472,7 @@ def worker():
                 #print(k,v)
                 headers[k] = v
         except Exception as e:
-            outputscreen.error("[x] Check personalized headers format: header=value,header=value.\n[x] error:{}".format(e))
+            print("[x] Check personalized headers format: header=value,header=value.\n[x] error:{}".format(e))
             sys.exit()
     #自定义ua
     if conf.request_header_ua:
@@ -548,33 +530,31 @@ def bruter(url):
     if not url.endswith('/'):
         url = url + '/'
 
-    #打印当前target
-    msg = '[+] Current target: {}'.format(url)
-    outputscreen.success('\r'+msg+' '*(th.console_width-len(msg)+1))
+
     #自动识别404-预先获取404页面特征
     if conf.auto_check_404_page:
-        outputscreen.warning("[*] Launching auto check 404")
+        print("[*] Launching auto check 404")
         # Autodiscriminator (probably deprecated by future diagnostic subsystem)
         i = Inspector(url)
         (result, notfound_type) = i.check_this()
-        if notfound_type == Inspector.TEST404_MD5 or notfound_type == Inspector.TEST404_OK:
-            conf.autodiscriminator_md5.add(result)
+        if notfound_type == Inspector.TEST404_MD5 or notfound_type == Inspector.TEST404_OK:  #TODO fix it
+            conf.autodiscriminator_md5.add(result)  #set的方法
 
     #加载payloads
     payloads.all_payloads = scanModeHandler()
     #FIXME:设置后缀名。当前以拼接方式实现，遍历一遍payload。
     try:
         if conf.file_extension:
-            outputscreen.warning('[+] Use file extentsion: {}'.format(conf.file_extension))
+            print('[+] Use file extentsion: {}'.format(conf.file_extension))
             for i in range(len(payloads.all_payloads)):
                 payloads.all_payloads[i] += conf.file_extension
     except:
-        outputscreen.error('[+] plz check extension!')
+        print('[+] plz check extension!')
         sys.exit()
     #debug模式，打印所有payload，并退出
-    if conf.debug:
-        outputscreen.blue('[+] all payloads:{}'.format(payloads.all_payloads))
-        sys.exit()
+    # if conf.debug:
+    #     print('[+] all payloads:{}'.format(payloads.all_payloads))
+    #     sys.exit()
     #payload入队task队列
     for payload in payloads.all_payloads:
         #FIXME:添加fuzz模式时，引入的url_payload构造判断

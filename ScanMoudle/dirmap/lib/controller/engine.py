@@ -13,9 +13,8 @@ import sys
 import time
 import traceback
 from lib.core.data import conf,paths,th
-from lib.core.common import outputscreen
-from lib.core.enums import BRUTER_RESULT_STATUS
-from lib.utils.console import getTerminalSize
+
+# from lib.utils.console import getTerminalSize
 from lib.controller.bruter import bruter
 
 def initEngine():
@@ -25,12 +24,11 @@ def initEngine():
     th.target = conf.target
     #是否继续扫描标志位
     th.is_continue = True
-    #控制台宽度
-    th.console_width = getTerminalSize()[0] - 2
+
     #记录开始时间
     th.start_time = time.time()
     msg = '[+] Set the number of thread: %d' % th.thread_num
-    outputscreen.success(msg)
+    print(msg)
 
 def scan():
     while True:
@@ -50,7 +48,7 @@ def scan():
 def run():
     initEngine()
     # Coroutine mode
-    outputscreen.success('[+] Coroutine mode')
+    print('[+] Coroutine mode')
     gevent.joinall([gevent.spawn(scan) for i in range(0, th.thread_num)])
     if 'errmsg' in th:
-        outputscreen.error(th.errmsg)
+        print(th.errmsg)

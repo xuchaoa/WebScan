@@ -47,13 +47,10 @@ def portscan(self, taskID, host, ports='0-10000', rate=1500):
                       queue='PortServScan',
                       kwargs=dict(taskID=taskID, ip_addr=host, resp='syn_normal'))
     else:
-    # print("masscan command line:", mas.command_line)
         PortResult = {}
         for host in mas.all_hosts:
             PortResult.update(mas[host]['tcp'])
-            # print("Host: %s (%s)" % (host, mas[host]))
         print(PortResult)
-    # print_json_format(PortResult)
         _ = MongoDB()
         _.add_open_ports(taskID, json.dumps(PortResult))
 

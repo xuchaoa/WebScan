@@ -30,17 +30,12 @@ def nmapscan(self, taskID, host, ports):
     try:
         ret = nm.scan(host, arguments=argument)
     except nmap.PortScannerError as e:
-        # logger.debug("Nmap PortScannerError host:{}".format(host))
         print(e)
         return None
     except:
         print('22222')
         return None
 
-    # debug
-    elapsed = ret["nmap"]["scanstats"]["elapsed"]
-    command_line = ret["nmap"]["command_line"]
-    # logger.debug("[nmap] successed,elapsed:%s command_line:%s" % (elapsed, command_line))
     if host in ret["scan"]:
         try:
             result = ret["scan"][host]["tcp"]

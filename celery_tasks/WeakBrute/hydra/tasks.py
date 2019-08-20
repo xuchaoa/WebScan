@@ -22,8 +22,7 @@ def dispatch(self, taskID, username, dict, host, port, service):
         NameDictBrute(taskID, dict, host, port, service)
     else:
         NameBrute(taskID, username, dict, host, port, service)
-#     if type == 'ssh':
-#         SSHBrute()
+
 
 
 def handle_result(taskID, result):
@@ -43,15 +42,12 @@ def handle_result(taskID, result):
 def NameBrute(taskID, username, large_or_small, host, port, service):
     x = os.system("hydra -l {} -P {} {} -s  {} {} -I -o x".format(username, HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
                                                           host, port, service))
-    # print(x)
+
     with open('x','r') as f:
-        print('-----------------------------')
-        # print(f.read())
         for _ in f:
             if _.startswith('['):
                 handle_result(taskID, _)
             print(_)
-        # handle_result(f.read())
     os.remove('x')
 
 def NameDictBrute(taskID, large_or_small, host, port, service):

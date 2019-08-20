@@ -8,17 +8,15 @@
 @LastEditTime: 2019-05-29 16:52:42
 '''
 
-import imp
-import os
+
 import queue
 import sys
-import time
-import ipaddress
+
 
 from lib.controller.bruter import loadConf
-from lib.core.common import parseTarget, outputscreen
+from lib.core.common import parseTarget
 from lib.core.data import conf, paths
-from thirdlib.IPy.IPy import IP
+
 
 def initOptions(args):
     EngineRegister(args)
@@ -47,7 +45,7 @@ def BruterRegister(args):
         #加载配置文件
         loadConf()
     else:
-        outputscreen.error("[+] Function development, coming soon!please use -lcf parameter")
+        print("[+] Function development, coming soon!please use -lcf parameter")
         sys.exit()
 
 def TargetRegister(args):
@@ -55,7 +53,7 @@ def TargetRegister(args):
     加载目标模块
     """
     msg = '[*] Initialize targets...'
-    outputscreen.warning(msg)
+    print(msg)
 
     #初始化目标队列
     conf.target = queue.Queue()
@@ -64,26 +62,16 @@ def TargetRegister(args):
     if args.target_input:
         # 尝试解析目标地址
         try:
-            lists=parseTarget(args.target_input)
+            lists = parseTarget(args.target_input)
         except:
             helpmsg = "Invalid input in [-i], Example: -i [http://]target.com or 192.168.1.1[/24] or 192.168.1.1-192.168.1.100"
-            outputscreen.error(helpmsg)
+            print(helpmsg)
             sys.exit()
-        # 判断处理量
-        if (len(lists))>100000:
-            warnmsg = "[*] Loading %d targets, Maybe it's too much, continue? [y/N]" % (len(lists))
-            outputscreen.warning(warnmsg)
 
-        msg = '[+] Load targets from: %s' % args.target_input
-        outputscreen.success(msg)
+
+        msg = '[+] Load targets from: %s length is %s' % (args.target_input, len(lists))
+        print(msg)
         # save to conf
         for target in lists:
             conf.target.put(target)
         conf.target_nums = conf.target.qsize()
-
-
-    #验证目标数量
-    if conf.target.qsize() == 0:
-        errormsg = msg = '[!] No targets found.Please load targets with [-i|-iF]'
-        outputscreen.error(errormsg)
-        sys.exit()

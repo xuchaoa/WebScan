@@ -10,7 +10,7 @@
 
 from configparser import ConfigParser
 from lib.core.data import paths
-from lib.core.common import outputscreen
+
 
 
 class ConfigFileParser:
@@ -21,7 +21,7 @@ class ConfigFileParser:
             cf.read(paths.CONFIG_PATH)
             return cf.get(section=section, option=option)
         except:
-            outputscreen.warning('Missing essential options, please check your config-file.')
+            print('Missing essential options, please check your config-file.')
             return ''
 
 

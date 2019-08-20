@@ -15,7 +15,6 @@ import urllib
 
 import requests
 
-from lib.core.common import outputscreen
 from lib.core.data import th, conf
 
 USER_AGENT = "Mozilla/5.0 (Windows; U; MSIE 10.0; Windows NT 9.0; es-ES)"
@@ -46,7 +45,7 @@ class Inspector:
         s = "".join(s)
         target = self.target + s
 
-        outputscreen.success("[+] Checking with: {}".format(target))
+        print("[+] Checking with: {}".format(target))
 
         try:
             page = requests.get(target, headers=user_agent, verify=False,timeout=5, proxies=conf.proxy_server)
@@ -60,7 +59,7 @@ class Inspector:
                     'location': None
                 }
 
-            if len(page.history) >= 1:
+            if len(page.history) >= 1:   #判断是否有301.302跳转
                 result['location'] = page.url
             return result
         except:
