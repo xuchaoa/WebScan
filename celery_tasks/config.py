@@ -50,10 +50,13 @@ CELERY_QUEUES = (
     Queue("ServScan", Exchange("xscan",type='direct'),routing_key='ServScan'),
     Queue("SubDomain", Exchange("xscan",type='direct'),routing_key='SubDomain'),
     Queue("IpLocation", Exchange("xscan",type='direct'),routing_key='IpLocation'),
-    Queue("HydraBrute", Exchange("xscan_brute",type='direct'),routing_key='HydraBrute'),
-    Queue("SFileScan", Exchange("xscan_web",type='direct'),routing_key='SFileScan'),
     Queue("AliveScan", Exchange("xscan",type='direct'),routing_key='AliveScan'),
     Queue("PortServScan", Exchange("xscan",type='direct'),routing_key='PortServScan'),
+    Queue("HydraBrute", Exchange("xscan_brute",type='direct'),routing_key='HydraBrute'),
+    Queue("SFileScan", Exchange("xscan_web",type='direct'),routing_key='SFileScan'),
+    Queue("ServInfo", Exchange("xscan_web",type='direct'),routing_key='ServInfo'),
+    Queue("CmsFinger", Exchange("xscan_web",type='direct'),routing_key='CmsFinger'),
+
     # Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
 
@@ -68,6 +71,7 @@ CELERY_ROUTES = {
 CELERY_IMPORTS = [
     "celery_tasks.WebScan.SFileScan.tasks",
     "celery_tasks.WebScan.ServInfo.tasks",
+    "celery_tasks.WebScan.CmsFinger.tasks",
     # "celery_tasks.TargetCollect.fuzzdomain.tasks",
     "celery_tasks.InfoCollect.PortScan.tasks",
     "celery_tasks.InfoCollect.ServScan.tasks",

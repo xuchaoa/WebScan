@@ -11,10 +11,11 @@
 
 import requests
 import re
+import json
 import queue
 import urllib3
 from celery_tasks.main import app
-
+from utils.mongo_op import MongoDB
 urllib3.disable_warnings()
 
 zhiwen = ''';notice! ';' is comment,'[]' is group.
@@ -125,7 +126,7 @@ class WebEye():
     def __init__(self, url):
         self.target = url
         self.tasks = queue.Queue()
-        self.cms_list = set()
+        self.cms_list = dict()
         self.read_config()
 
     def run(self):
@@ -184,17 +185,17 @@ class WebEye():
 
     def discern_from_header(self, name, key, reg):
         if "Server" in self.headers:
-            self.cms_list.add("Server:" + self.headers["Server"])
+            self.cms_list.update({"Server" : self.headers["Server"]})
         if "X-Powered-By" in self.headers:
-            self.cms_list.add("X-Powered-By:" + self.headers["X-Powered-By"])
+            self.cms_list.update({"X-Powered-By" : self.headers["X-Powered-By"]})
         if key in self.headers and (re.search(reg, self.headers[key], re.I)):
-            self.cms_list.add(name)
+            self.cms_list[name.split(':')[0]] = name.split(':')[1]
         else:
             pass
 
     def discern_from_index(self, name, reg):
         if re.search(reg, self.content, re.I):
-            self.cms_list.add(name)
+            self.cms_list[name.split(':')[0]] = name.split(':')[1]
         else:
             pass
 
@@ -203,7 +204,7 @@ class WebEye():
             result = requests.get(self.target + key, timeout=15, verify=False)
             # time.sleep(0.5)
             if re.search(reg, result.content, re.I):
-                self.cms_list.add(name)
+                self.cms_list[name.split(':')[0]] = name.split(':')[1]
             else:
                 pass
         except Exception as e:
@@ -212,7 +213,7 @@ class WebEye():
 
 
 @app.task(bind=True,name='ServInfo')
-def main(self, taskID, url):
+def ServInfo(self, taskID, url):
     compile_ip = re.compile('^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|[1-9])\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)$')
     if compile_ip.match(url):
         url = "http://" + url
@@ -220,9 +221,13 @@ def main(self, taskID, url):
     # url = 'https://blog.ixuchao.cn'
     res = WebEye(url)
     res.run()
-    cms = list(res.cms_list)
+    cms = res.cms_list
+    del cms['Server']
     print(cms)
+    _ = MongoDB()
+    _.add_cms_finger(taskID, json.dumps(cms))
+    return cms
 
 
 if __name__ == '__main__':
-    main('111','123.207.155.221')
+    ServInfo('5d6e24694c3e3fdb872e596c','https://blog.ixuchao.cn')

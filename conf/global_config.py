@@ -12,10 +12,10 @@ def realjoin(c, d):
 
 
 PROJECT_PATH = realjoin(__file__,'../../')
-print(PROJECT_PATH)
+# print(PROJECT_PATH)
 
 DATA_PATH = realjoin(PROJECT_PATH,'data')
-print(DATA_PATH)
+# print(DATA_PATH)
 
 
 ### fuzzdomain配置
@@ -24,7 +24,7 @@ FUZZDOMAIN_PATH = realjoin(DATA_PATH,'fuzzdomain_dic')
 FUZZDOMAIN_DIC_NORMAL = realjoin(FUZZDOMAIN_PATH,'normal.txt')
 FUZZDOMAIN_DIC_SMALL = realjoin(FUZZDOMAIN_PATH,'small.txt')
 
-print(FUZZDOMAIN_DIC_SMALL)
+# print(FUZZDOMAIN_DIC_SMALL)
 
 ###### SubDomain Setting
 SUBDOMAIN_PATH = realjoin(DATA_PATH,'subdomain_dict')
