@@ -14,11 +14,27 @@ from lib.core.common import set_paths
 from lib.core.data import scan_option
 from lib.core.option import init_options
 from lib.controller.engine import run
+from setting import poc_finger
 
 def module_path():
     return os.path.dirname(os.path.realpath(__file__))
 
-def main():
+def finger_load_poc_and_run(ip, keyword=None, port=None):
+    poc_list = set()
+    if keyword is not None:
+        for keys in poc_finger.keys():
+            if keys.split(':')[0] in keyword:
+                poc_list.update(poc_finger[keys])
+    if port is not None:
+        for keys in poc_finger.keys():
+            if keys.split(':')[1] in port:
+                poc_list.update(poc_finger[keys])
+    print(poc_list)
+    for _ in poc_list:
+        main(_, target_single=ip)
+
+def main(poc_name, target_single=None, target_range=None, target_network=None, zoomeye_dork=None, shodan_dork=None, fofa_dork=None,
+         engine_thread=False, concurrent_num=100, censys_dork=None, search_type=None, proxy=None, api_limit=100, api_offset=0):
     try:
         set_paths(module_path())
 
@@ -26,10 +42,14 @@ def main():
         #      'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': 'weblogic',
         #      'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 50, 'api_offset': 0, 'search_type': 'host',
         #      'output_path': '', 'logging_level': 0, 'proxy': ''}
-        x = {'engine_thread': False, 'concurrent_num': 100, 'poc_name': 'redis_unauth',
-             'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': '',
-             'shodan_dork': 'redis', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 100, 'api_offset': 0,
-             'search_type': '', 'proxy': ''}
+        # x = {'engine_thread': False, 'concurrent_num': 100, 'poc_name': 'redis_unauth',
+        #      'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': '',
+        #      'shodan_dork': 'redis', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 100, 'api_offset': 0,
+        #      'search_type': '', 'proxy': ''}
+        x = {'engine_thread': engine_thread, 'concurrent_num': concurrent_num, 'poc_name': poc_name,
+             'target_single': target_single, 'target_range': target_range, 'target_network': target_network, 'zoomeye_dork': zoomeye_dork,
+             'shodan_dork': shodan_dork, 'fofa_dork': fofa_dork, 'censys_dork': censys_dork, 'api_limit': api_limit, 'api_offset': api_offset,
+             'search_type': search_type, 'proxy': proxy}
         scan_option.update(x)
         init_options(scan_option)
         run()
@@ -40,4 +60,5 @@ def main():
         print('done')
 
 if __name__ == '__main__':
-    main()
+    # main()
+    finger_load_poc_and_run('150.242.251.241','redis','6379')

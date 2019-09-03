@@ -11,3 +11,8 @@ import os,sys
 ESSENTIAL_MODULE_METHODS = 'poc'
 
 IS_WIN = True if (sys.platform in ["win32", "cygwin"] or os.name == "nt") else False
+
+poc_finger = {
+    'redis:6379':['redis_unauth'],
+    'weblogic:7001':['weblogic_ssrf','weblogic_weak_pass','weblogic_xmldecoder_exec']
+}
