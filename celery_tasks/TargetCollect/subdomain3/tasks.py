@@ -4,7 +4,9 @@
     author:root@yanxiuer.com
     modify by Archerx at 2019.7.25
 '''
-
+'''
+子域名爆破工具
+'''
 
 import sys
 import platform

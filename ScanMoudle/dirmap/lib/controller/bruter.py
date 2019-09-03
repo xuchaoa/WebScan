@@ -534,7 +534,7 @@ def bruter(url):
     #自动识别404-预先获取404页面特征
     if conf.auto_check_404_page:
         print("[*] Launching auto check 404")
-        # Autodiscriminator (probably deprecated by future diagnostic subsystem)
+        # Autodiscriminator (probably deprecated by 功能特性 diagnostic subsystem)
         i = Inspector(url)
         (result, notfound_type) = i.check_this()
         if notfound_type == Inspector.TEST404_MD5 or notfound_type == Inspector.TEST404_OK:  #TODO fix it

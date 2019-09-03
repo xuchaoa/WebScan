@@ -3,6 +3,10 @@
 # By Threezh1
 # https://threezh1.github.io/
 
+'''
+JSFinder是一款用作快速在网站的js文件中提取URL，子域名的工具。
+'''
+
 import requests, argparse, sys, re
 from requests.packages import urllib3
 from urllib.parse import urlparse

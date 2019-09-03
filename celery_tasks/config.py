@@ -67,6 +67,7 @@ CELERY_ROUTES = {
 
 CELERY_IMPORTS = [
     "celery_tasks.WebScan.SFileScan.tasks",
+    "celery_tasks.WebScan.ServInfo.tasks",
     # "celery_tasks.TargetCollect.fuzzdomain.tasks",
     "celery_tasks.InfoCollect.PortScan.tasks",
     "celery_tasks.InfoCollect.ServScan.tasks",
