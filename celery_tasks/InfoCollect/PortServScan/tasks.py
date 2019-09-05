@@ -1,15 +1,27 @@
-#!/usr/bin/env python  这一行Linux上才需要
+#!/usr/bin/env python 
 # -*- coding: utf-8 -*-
 # @Time    : 2019/8/11 下午10:23
 # @Author  : Archerx
 # @Site    : https://blog.ixuchao.cn
 # @File    : tasks.py
 
+'''
+Nmap端口开放情况及服务扫描
+'''
 
 import nmap
 from utils.mongo_op import MongoDB
 import json
 from celery_tasks.main import app
+
+def tasks_dispatch(taskID, url):
+    app.send_task(name='ServInfo',
+                  queue='ServInfo',
+                  kwargs=dict(taskID='5d6e24694c3e3fdb872e596c', url='https://blog.ixuchao.cn'))
+
+    app.send_task(name='CmsFinger',
+                  queue='CmsFinger',
+                  kwargs=dict(taskID='5d6e24694c3e3fdb872e596c', url='https://blog.ixuchao.cn'))
 
 @app.task(bind=True,name='PortServScan')
 def namp_port_scan(self, taskID, ip_addr, resp):
@@ -51,9 +63,17 @@ def namp_port_scan(self, taskID, ip_addr, resp):
                 result_other[key] = value
 
 
-    print(result_open)
+    # print(result_open)
     x = MongoDB()
-    x.add_port_sev_result(taskID,json.dumps(result_open))
+    x.add_port_sev_result(taskID, json.dumps(result_open))
+
+    for key, value in result_open.items():
+        if key == 80 and 'name' in value.keys() and 'http' in value['name']:
+            tasks_dispatch(taskID, ip_addr)
+        if key == 443 and 'name' in value.keys() and 'http' in value['name']:
+            tasks_dispatch(taskID, ip_addr)
+
+    return result_open
 
 
 

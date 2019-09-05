@@ -5,6 +5,9 @@
 # @Blog    : https://blog.ixuchao.cn
 # @File    : tasks.py
 
+'''
+单纯Nmap服务扫描
+'''
 
 import os
 import sys
