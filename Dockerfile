@@ -36,7 +36,7 @@ RUN apk add --no-cache -U tzdata \
 RUN apk add --update --upgrade \
     vim \
     gcc \
-    g++ 
+    g++
 
 # 安装软件python3,升级pip,setuptools,安装selenium
 RUN apk add --no-cache python3 \
@@ -64,4 +64,6 @@ EXPOSE 8008
 
 # 设置启动时预期的命令参数, 可以被 docker run 的参数覆盖掉.
 # CMD [ "/bin/sh" ]
-CMD celery -A celery_tasks.main  worker --loglevel=info -P gevent --without-heartbeat
+#CMD celery -A celery_tasks.main  worker --loglevel=info -P gevent --without-heartbeat
+
+
