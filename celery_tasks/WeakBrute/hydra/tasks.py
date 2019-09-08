@@ -5,6 +5,9 @@
 # @Blog    : https://blog.ixuchao.cn
 # @File    : tasks.py
 
+'''
+爆破脚本
+'''
 
 import os
 from celery_tasks.main import app
@@ -40,6 +43,16 @@ def handle_result(taskID, result):
     x.add_weak_pass_service(taskID, json.dumps(_result))
 
 def NameBrute(taskID, username, large_or_small, host, port, service):
+    '''
+    用于username已经确定的情况下
+    :param taskID:
+    :param username:
+    :param large_or_small:
+    :param host:
+    :param port:
+    :param service:
+    :return:
+    '''
     x = os.system("hydra -l {} -P {} {} -s  {} {} -I -o x".format(username, HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
                                                           host, port, service))
 
@@ -51,47 +64,76 @@ def NameBrute(taskID, username, large_or_small, host, port, service):
     os.remove('x')
 
 def NameDictBrute(taskID, large_or_small, host, port, service):
+    '''
+    用于username和passwd都不确定的情况
+    :param taskID:
+    :param large_or_small:
+    :param host:
+    :param port:
+    :param service:
+    :return:
+    '''
     ##TODO 确定输出service名称的一致性
-    if service == 'mssql':
+    if 'mssql' in service:
         username_dict = DIC_USERNAME_SQLSERVER
-    elif service == 'ssh':
+        service = 'mssql'
+    elif 'ssh' in service:
         username_dict = DIC_USERNAME_SSH
-    elif service == 'mysql':
+        service = 'ssh'
+    elif 'mysql' in service:
         username_dict = DIC_USERNAME_MYSQL
-    elif service == 'rdp':
+        service = 'mysql'
+    elif 'rdp' in service:
         username_dict = DIC_USERNAME_RDP
-    elif service == 'smb':
+        service = 'rdp'
+    elif 'smb' in service:
         username_dict = DIC_USERNAME_SMB
-    elif service == 'pop3':
+        service = 'smb'
+    elif 'pop3' in service:
         username_dict = DIC_USERNAME_POP3
-    elif service == 'telnet':
+        service = 'pop3'
+    elif 'telnet' in service:
         username_dict = DIC_USERNAME_TELNET
-    elif service == 'ftp':
+        service = 'telnet'
+    elif 'ftp' in service:
         username_dict = DIC_USERNAME_FTP
-    elif service == 'memcache':
+        service = 'ftp'
+    elif 'memcache' in service:
         username_dict = DIC_USERNAME_MEMCACHED
-    elif service == 'postgresql':
+        service = 'memcache'
+    elif 'postgresql' in service:
         username_dict = DIC_USERNAME_POSTGRESQL
-    elif service == 'redis':
+        service = 'postgresql'
+    elif 'redis' in service:
         username_dict = DIC_USERNAME_REDIS
-    elif service == 'oracle':
+        service = 'redis'
+    elif 'oracle' in service:
         username_dict = DIC_USERNAME_ORACLE
-    elif service == 'mongo':
+        service = 'oracle'
+    elif 'mongo' in service:
         username_dict = DIC_USERNAME_MONGODB
-    elif service == 'tomcat':
+        service = 'mongo'
+    elif 'tomcat' in service:
         username_dict = DIC_USERNAME_TOMCAT
-    elif service == 'vnc':
+        service = 'tomcat'
+    elif 'vnc' in service:
         username_dict = DIC_USERNAME_VNC
-    elif service == 'weblogic':
+        service = 'vnc'
+    elif 'weblogic' in service:
         username_dict = DIC_USERNAME_WEBLOGIC
-    elif service == 'imap':
+        service = 'weblogic'
+    elif 'imap' in service:
         username_dict = DIC_USERNAME_IMAP
-    elif service == 'smtp':
+        service = 'imap'
+    elif 'smtp' in service:
         username_dict = DIC_USERNAME_SMTP
-    elif service == 'svn':
+        service = 'smtp'
+    elif 'svn' in service:
         username_dict = DIC_USERNAME_SVN
+        service = 'svn'
     else:
         username_dict = COMMON_USERNAME
+        service = None
     x = os.system("hydra -L {} -P {} {} -s  {} {} -I -o x -f".format(username_dict,
                                                                   HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
                                                                   host, port, service))
