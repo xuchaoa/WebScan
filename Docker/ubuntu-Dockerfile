@@ -1,8 +1,15 @@
 # 配置基础镜像
-FROM ubuntu:latest
+FROM ubuntu:16.04
 
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install python3 -y
 RUN apt-get install python3-pip -y
 RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U && python3 -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-RUN
+
+ADD ../ /code
+WORKDIR /code
+RUN pip install -r requirements/requirements.txt
+ENTRYPOINT [ "/bin/bash" ]
+CMD celery -A celery_tasks.main  worker --loglevel=info -P gevent --without-heartbeat
+
+
