@@ -3,7 +3,6 @@ pymongo==3.8.0
 celery==4.3.0
 requests==2.22.0
 requests-toolbelt==0.9.1
-
 pika==1.0.1
 fabric3==1.14.post1
 tldextract==2.2.1

@@ -1,18 +1,34 @@
-# 配置基础镜像
-FROM ubuntu:16.04
+FROM alpine:latest
 
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install python3 -y
-RUN apt-get install python3-pip -y
-RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U && python3 -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+MAINTAINER author="Archerx" email="xuchaoao@outlook.com"
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+
+RUN set -x \
+    && apk update \
+    && apk add bash \
+    && apk add python3 \
+    && apk add gcc
+#    && apk add redis \
+#    && apk add mongodb \
+#    && apk add mongodb-tools
+
+# install xscan
+
+RUN mkdir -p /xscan
+
+COPY . /xscan
+RUN pip3 install --upgrade pip
+RUN set -x \
+    && pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r /xscan/requirements/requirements.txt
+
+#RUN set -x \
+#    && chmod a+x /opt/w11scan/dockerconf/start.sh
+
+WORKDIR /xscan
 USER root
-
-COPY requirements/requirements.txt /tmp/python3.reqs
-RUN python3 -m pip install -r /tmp/python3.reqs
-ENTRYPOINT [ "/bin/bash" ]
-RUN apt-get autoclean && apt-get clean && apt-get autoremove
-ADD . /code
-WORKDIR /code
 CMD celery -A celery_tasks.main  worker --loglevel=info -P gevent --without-heartbeat
 
-
+#EXPOSE 8000
+#
+#CMD ["/usr/bin/tail", "-f", "/dev/null"]

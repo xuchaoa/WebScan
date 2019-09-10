@@ -58,4 +58,8 @@ docker pull docker.elastic.co/kibana/kibana:7.3.0
 docker run -it -d -e ELASTICSEARCH_URL=http://192.168.33.136:9200 --name kibana --network=container:elasticsearch docker.elastic.co/kibana/kibana:7.3.0
 
 ### docker node
-https://blog.csdn.net/rznice/article/details/52211620
+https://blog.csdn.net/rznice/article/details/52211620'
+
+切换到项目根目录(ubuntu-Dockerfile)
+docker build -t archerx/node:1.0 -f Docker/Dockerfile .
+
