@@ -17,11 +17,11 @@ from celery_tasks.main import app
 def tasks_dispatch(taskID, url):
     app.send_task(name='ServInfo',
                   queue='ServInfo',
-                  kwargs=dict(taskID='5d6e24694c3e3fdb872e596c', url='https://blog.ixuchao.cn'))
+                  kwargs=dict(taskID=taskID, url=url))
 
     app.send_task(name='CmsFinger',
                   queue='CmsFinger',
-                  kwargs=dict(taskID='5d6e24694c3e3fdb872e596c', url='https://blog.ixuchao.cn'))
+                  kwargs=dict(taskID=taskID, url=url))
 
 @app.task(bind=True,name='PortServScan')
 def namp_port_scan(self, taskID, ip_addr, resp):

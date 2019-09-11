@@ -6,7 +6,7 @@
 # @File    : tasks.py
 
 '''
-单纯Nmap服务扫描
+单独Nmap服务扫描
 '''
 
 import os
@@ -18,6 +18,15 @@ import nmap
 import json
 from celery_tasks.main import app
 from utils.mongo_op import MongoDB
+
+def tasks_dispatch(taskID, url):
+    app.send_task(name='ServInfo',
+                  queue='ServInfo',
+                  kwargs=dict(taskID=taskID, url=url))
+
+    app.send_task(name='CmsFinger',
+                  queue='CmsFinger',
+                  kwargs=dict(taskID=taskID, url=url))
 
 @app.task(bind=True,name='ServScan')
 def nmapscan(self, taskID, host, ports):
@@ -47,6 +56,12 @@ def nmapscan(self, taskID, host, ports):
         print(result)
         _ = MongoDB()
         _.add_port_serv(taskID,json.dumps(result))
+
+    for key, value in result.items():
+        if key == 80 and 'name' in value.keys() and 'http' in value['name']:
+            tasks_dispatch(taskID, host)
+        if key == 443 and 'name' in value.keys() and 'http' in value['name']:
+            tasks_dispatch(taskID, host)
     return None
 
 

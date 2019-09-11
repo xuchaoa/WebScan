@@ -24,9 +24,13 @@ def fingerscan(self, taskID, url, proxy=0, thread=50, time=5):
     result = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,cwd=PROJECT_PATH+"/ScanMoudle/webscan/fingerdetect/")
     res = str(result.stdout.read())[2:-3]
     # print(json.dumps(res))
-    print(res)
-    _ = MongoDB()
-    _.add_cms_finger(taskID, res)
+    try:
+        print(res)
+        json.loads(res)
+        _ = MongoDB()
+        _.add_cms_finger(taskID, res)
+    except Exception as e:
+        print(e)
 
 
 if __name__ == '__main__':
@@ -34,3 +38,4 @@ if __name__ == '__main__':
     # print(BASE_DIR)
     # fingerscan("https://blog.bbsec.xyz")
     fingerscan('5d6e24694c3e3fdb872e596c',"http://blog.zzp198.cn")
+    # fingerscan('5d6e24694c3e3fdb872e596c',"123.207.155.221")

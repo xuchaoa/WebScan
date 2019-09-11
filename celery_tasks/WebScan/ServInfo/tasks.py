@@ -230,4 +230,6 @@ def ServInfo(self, taskID, url):
 
 
 if __name__ == '__main__':
-    ServInfo('5d6e24694c3e3fdb872e596c','https://blog.ixuchao.cn')
+    # ServInfo('5d6e24694c3e3fdb872e596c','https://blog.ixuchao.cn')
+    # ServInfo('5d6e24694c3e3fdb872e596c','123.207.155.221')
+    ServInfo('5d6e24694c3e3fdb872e596c','188.131.133.213')
