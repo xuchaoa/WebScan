@@ -50,12 +50,10 @@ class MongoDB(object):
                 "ip":_[0],
                 "domain":_[1],
                 "ports":"",
-                "vulnerable_attack":{
-
-                }
             }
             child_task_ids.append(str(self.db.HostScan.insert(task_template)))
 
+        print(parentID)
         self.db.task.update({"_id":ObjectId(parentID)},{'$push':{'ChildTaskID':{'$each':child_task_ids}}})
         return child_task_ids
 

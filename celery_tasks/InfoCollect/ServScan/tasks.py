@@ -60,7 +60,7 @@ def nmapscan(self, taskID, host, ports):
     for key, value in result.items():
         if key == 80 and 'name' in value.keys() and 'http' in value['name']:
             tasks_dispatch(taskID, host)
-        if key == 443 and 'name' in value.keys() and 'http' in value['name']:
+        elif key == 443 and 'name' in value.keys() and 'http' in value['name']:
             tasks_dispatch(taskID, host)
     return None
 

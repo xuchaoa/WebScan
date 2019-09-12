@@ -8,27 +8,24 @@
 子域名爆破工具
 '''
 
+from gevent import monkey
+monkey.patch_all()
+import gevent
 import sys
 import platform
 import time
 import csv
 import shutil
 import json
-
-
 from queue import Queue
 import gc
 import os
 import argparse
 import dns.resolver
 from IPy import IP
-import gevent
-from gevent import monkey
-monkey.patch_all()
 # import lib.config as config
 from utils.mongo_op import MongoDB
 from celery_tasks.main import app
-
 from conf.global_config import low_segment_num, high_segment_num, medium_segment_num, ip_max_count, waiting_fliter_ip
 from conf.global_config import SUBDOMAIN_CDN_SERVER_DICT, SUBDOMAIN_NEXT_SUB_FULL_DICT, SUBDOMAIN_WYDOMAIN_DICT
 
@@ -276,7 +273,7 @@ class Brutedomain:
             self.add_tasks(str(taskIDs[i]),_)
             i += 1
         return handle_ip
-
+        #TODO 任务无结果的时候重试，限制重试次数
     def add_tasks(self, taskID, host):
         app.send_task(name='AliveScan',
                       queue='AliveScan',
@@ -352,4 +349,5 @@ if __name__ == '__main__':
     # parser.add_argument("-f3", "--other_file",
     #                     help="subdomain log")
 
-    main('aaa','blog.zzp198.cn')
+    # main('aaa','www.zzp198.cn')
+    main('aaa','blog.ixuchao.cn')

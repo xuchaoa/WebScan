@@ -55,9 +55,9 @@ from celery_tasks.main import app
 #               queue = 'ServScan',
 #               kwargs=dict(host='123.207.155.221', ports=['80','443','8080','9711','22']))
 
-# app.send_task(name='SubDomain',
-#               queue = 'SubDomain',
-#               kwargs=dict(taskID='5d3ee13f2083f76b467dacc2',domain='ixuchao.cn'))
+app.send_task(name='SubDomain',
+              queue = 'SubDomain',
+              kwargs=dict(taskID='5d7a01bc39630c1e8954230e',domain='baidu.com'))
 
 # app.send_task(name='testscan',
 #               queue = 'testscan')
@@ -79,9 +79,9 @@ from celery_tasks.main import app
 #               kwargs=dict(ip='106.12.150.166/24', ip_type='mask'))
 
 
-app.send_task(name='PortServScan',
-              queue='PortServScan',
-              kwargs=dict(taskID='5d6e24694c3e3fdb872e596c',ip_addr='149.129.89.93', resp='syn_normal'))
+# app.send_task(name='PortServScan',
+#               queue='PortServScan',
+#               kwargs=dict(taskID='5d6e24694c3e3fdb872e596c',ip_addr='149.129.89.93', resp='syn_normal'))
 
 # app.send_task(name='ServInfo',
 #               queue='ServInfo',

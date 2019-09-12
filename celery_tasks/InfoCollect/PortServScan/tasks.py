@@ -70,9 +70,9 @@ def namp_port_scan(self, taskID, ip_addr, resp):
     for key, value in result_open.items():
         if key == 80 and 'name' in value.keys() and 'http' in value['name']:
             tasks_dispatch(taskID, ip_addr)
-        if key == 443 and 'name' in value.keys() and 'http' in value['name']:
+        elif key == 443 and 'name' in value.keys() and 'http' in value['name']:
             tasks_dispatch(taskID, ip_addr)
-
+        #TODO 考虑一下8080,java系服务器中间件、，以及中间件的详细探测
     return result_open
 
 

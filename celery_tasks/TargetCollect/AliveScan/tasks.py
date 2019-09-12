@@ -39,6 +39,7 @@ def nmap_alive_scan_single_with_taskid(ip, taskID):
     _  = MongoDB()
     if len(result['scan'].values()):
         _.add_alive_status(taskID, result['scan'][ip]['status'])
+        add_task(taskID, ip)
     else:
         _.add_alive_status(taskID, {'status':'down','reason':''})
 

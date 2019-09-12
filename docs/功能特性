@@ -5,4 +5,7 @@
 
     web指纹分析
     waf识别
-    wappalyer分析
+    wappalyzer分析
+
+
+    中间件的详细探测、主机系统信息的详细探测

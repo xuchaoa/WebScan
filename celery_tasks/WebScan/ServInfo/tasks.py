@@ -222,7 +222,8 @@ def ServInfo(self, taskID, url):
     res = WebEye(url)
     res.run()
     cms = res.cms_list
-    del cms['Server']
+    if 'Server' in cms.keys():
+        del cms['Server']
     print(cms)
     _ = MongoDB()
     _.add_cms_finger(taskID, json.dumps(cms))
@@ -232,4 +233,7 @@ def ServInfo(self, taskID, url):
 if __name__ == '__main__':
     # ServInfo('5d6e24694c3e3fdb872e596c','https://blog.ixuchao.cn')
     # ServInfo('5d6e24694c3e3fdb872e596c','123.207.155.221')
-    ServInfo('5d6e24694c3e3fdb872e596c','188.131.133.213')
+    # ServInfo('5d6e24694c3e3fdb872e596c','188.131.133.213')  #TODO 该ip无结果，但是域名可以，确认http服务是80(可能是宝塔的限制)
+    # ServInfo('5d6e24694c3e3fdb872e596c','http://blog.zzp198.cn')
+    ServInfo('5d6e24694c3e3fdb872e596c','http://www.binarysec.top')
+

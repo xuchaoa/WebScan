@@ -37,5 +37,6 @@ if __name__ == '__main__':
     # print(sys.path[:-1])
     # print(BASE_DIR)
     # fingerscan("https://blog.bbsec.xyz")
-    fingerscan('5d6e24694c3e3fdb872e596c',"http://blog.zzp198.cn")
-    # fingerscan('5d6e24694c3e3fdb872e596c',"123.207.155.221")
+    # fingerscan('5d6e24694c3e3fdb872e596c',"http://blog.zzp198.cn")
+    fingerscan('5d6e24694c3e3fdb872e596c',"http://www.freebuf.com")
+    fingerscan('5d6e24694c3e3fdb872e596c',"123.207.155.221")  #TODO 直接ip报未知错误
