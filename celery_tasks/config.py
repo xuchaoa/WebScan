@@ -38,7 +38,7 @@ CELERY_IGNORE_RESULT = True
 # CELERYD_PREFETCH_MULTIPLIER = 2
 
 # # 任务发出后，经过一段时间还未收到acknowledge , 就将任务重新交给其他worker执行
-# CELERY_DISABLE_RATE_LIMITS = True
+# CELERY_DISABLE_RATE_LIMITS = False
 
 # 设置默认,当没有微任务指定队列时,推到默认队列
 CELERY_DEFAULT_QUEUE = 'xscan'

@@ -46,8 +46,8 @@ def handle_result(taskID, ip_addr, result):
                 service = 'rdp'
             elif re.search('microsoft-ds', service, re.I):
                 service = 'smb'
-            elif re.search('pop3', service, re.I):
-                service = 'pop3'
+            # elif re.search('pop3', service, re.I):  #太耗费时间，成功率不高
+            #     service = 'pop3'
             elif re.search('telnet', service, re.I):
                 service = 'telnet'
             elif re.search('ftp', service, re.I):
@@ -68,10 +68,10 @@ def handle_result(taskID, ip_addr, result):
                 service = 'vnc'
             elif 'weblogic' in service:
                 service = 'weblogic'
-            elif 'imap' == service:
-                service = 'imap'
-            elif 'smtp' == service:
-                service = 'smtp'
+            # elif 'imap' == service:
+            #     service = 'imap'
+            # elif 'smtp' == service:
+            #     service = 'smtp'
             elif 'svn' == service:
                 service = 'svn'
             else:

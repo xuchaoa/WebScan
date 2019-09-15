@@ -10,6 +10,7 @@
 '''
 
 import os
+import time
 from celery_tasks.main import app
 from conf.global_config import HYDRADIC_SMALL, HYDRADIC_LARGE
 from utils.mongo_op import MongoDB
@@ -21,7 +22,7 @@ from conf.global_config import DIC_USERNAME_FTP, DIC_USERNAME_IMAP, DIC_USERNAME
     DIC_USERNAME_MSSQL,DIC_USERNAME_SSH,DIC_USERNAME_SVN,DIC_USERNAME_TELNET,DIC_USERNAME_TOMCAT,DIC_USERNAME_VNC,DIC_USERNAME_WEBLOGIC,COMMON_USERNAME,USERNAME_DICT
 
 
-@app.task(bind=True,name='HydraBrute')
+@app.task(bind=True,name='HydraBrute',time_limit=600,max_retries=0)
 def dispatch(self, taskID, username, dict, host, port, service):
     if username == "dict":  #跑username字典
         NameDictBrute(taskID, dict, host, port, service)
@@ -88,6 +89,7 @@ def NameDictBrute(taskID, large_or_small, host, port, service):
                 handle_result(taskID, _)
             print(_)
     os.remove('x')
+
 
 
 

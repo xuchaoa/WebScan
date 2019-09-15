@@ -66,9 +66,15 @@ from celery_tasks.main import app
 #               queue = 'IpLocation',
 #               kwargs=dict(taskID='5d3edfd675f097ac6ee499c6',ip='123.207.155.221'))
 
+# app.send_task(name='HydraBrute',
+#               queue = 'HydraBrute',
+#               kwargs=dict(taskID='', username='dict', dict='small', host='149.129.60.179', port='22', service='ssh')
+#               )
+
 app.send_task(name='HydraBrute',
               queue = 'HydraBrute',
-              kwargs=dict(taskID='', username='dict', dict='small', host='149.129.60.179', port='22', service='ssh')
+              kwargs=dict(taskID='', username='dict', dict='small', host='149.129.60.176', port='22', service='ssh'),
+
               )
 
 # app.send_task(name='AliveScan',
