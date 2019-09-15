@@ -23,12 +23,12 @@ a = {22: {'state': 'filtered', 'reason': 'no-response', 'name': 'ssh', 'product'
 # for _ in a.keys():
 #     print(a[_])
 
-result = {}
-for key,value in a.items():
-     if key == 80 and 'name' in value.keys() and 'http' in value['name']:
-          print(key)
-     if key == 443 and 'name' in value.keys() and 'http' in value['name']:
-          print(key)
+# result = {}
+# for key,value in a.items():
+#      if key == 80 and 'name' in value.keys() and 'http' in value['name']:
+#           print(key)
+#      if key == 443 and 'name' in value.keys() and 'http' in value['name']:
+#           print(key)
 
 
 # print(result)
@@ -37,3 +37,8 @@ for key,value in a.items():
 # x = json.dumps(a, sort_keys=True, indent=4, separators=(',', ':'))
 # with open('x.json','w') as f:
 #     f.write(a)
+
+
+import re
+if re.search('vnc-\d{1}', 'ssvnc-1', re.I):
+     print(11)

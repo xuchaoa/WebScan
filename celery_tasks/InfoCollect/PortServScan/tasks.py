@@ -13,6 +13,8 @@ import nmap
 from utils.mongo_op import MongoDB
 import json
 from celery_tasks.main import app
+import re
+
 
 def tasks_dispatch(taskID, url):
     app.send_task(name='ServInfo',
@@ -22,6 +24,67 @@ def tasks_dispatch(taskID, url):
     app.send_task(name='CmsFinger',
                   queue='CmsFinger',
                   kwargs=dict(taskID=taskID, url=url))
+
+
+def handle_result(taskID, ip_addr, result):
+    for key, value in result.items():
+        if key == 80 and 'name' in value.keys() and 'http' in value['name']:
+            tasks_dispatch(taskID, ip_addr)
+        elif key == 443 and 'name' in value.keys() and 'http' in value['name']:
+            tasks_dispatch(taskID, ip_addr)
+        if 'name' in value.keys():
+            service = value['name']
+            ##TODO 确定输出service名称的一致性
+            # 详见https://svn.nmap.org/nmap/nmap-services
+            if re.search('teedtap', service, re.I):
+                service = 'mssql'
+            elif 'ssh' == service or re.search('tcpwrapped', service, re.I):  # 'ssh' in service:
+                service = 'ssh'
+            elif 'mysql' == service:
+                service = 'mysql'
+            elif re.search('ms-wbt-server', service, re.I):
+                service = 'rdp'
+            elif re.search('microsoft-ds', service, re.I):
+                service = 'smb'
+            elif re.search('pop3', service, re.I):
+                service = 'pop3'
+            elif re.search('telnet', service, re.I):
+                service = 'telnet'
+            elif re.search('ftp', service, re.I):
+                service = 'ftp'
+            elif re.search('memcache', service, re.I):
+                service = 'memcache'
+            elif re.search('postgresql', service, re.I):
+                service = 'postgresql'
+            elif re.search('redis', service, re.I):
+                service = 'redis'
+            elif re.search('oracle', service, re.I):
+                service = 'oracle'
+            elif re.search('mongod', service, re.I):
+                service = 'mongo'
+            elif 'tomcat' in service:
+                service = 'tomcat'
+            elif re.search('^vnc-\d{1}', service, re.I):
+                service = 'vnc'
+            elif 'weblogic' in service:
+                service = 'weblogic'
+            elif 'imap' == service:
+                service = 'imap'
+            elif 'smtp' == service:
+                service = 'smtp'
+            elif 'svn' == service:
+                service = 'svn'
+            else:
+                service = 'xxx'
+            if not service == 'xxx':
+                app.send_task(name='HydraBrute',
+                              queue='HydraBrute',
+                              kwargs=dict(taskID=taskID, username='dict', dict='small', host=ip_addr, port=key, service=service)
+                              )
+        else:
+            print('no name in keys')
+
+        #TODO 考虑一下8080,java系服务器中间件、，以及中间件的详细探测
 
 @app.task(bind=True,name='PortServScan')
 def namp_port_scan(self, taskID, ip_addr, resp):
@@ -67,12 +130,7 @@ def namp_port_scan(self, taskID, ip_addr, resp):
     x = MongoDB()
     x.add_port_sev_result(taskID, json.dumps(result_open))
 
-    for key, value in result_open.items():
-        if key == 80 and 'name' in value.keys() and 'http' in value['name']:
-            tasks_dispatch(taskID, ip_addr)
-        elif key == 443 and 'name' in value.keys() and 'http' in value['name']:
-            tasks_dispatch(taskID, ip_addr)
-        #TODO 考虑一下8080,java系服务器中间件、，以及中间件的详细探测
+    handle_result(taskID, ip_addr, result_open)
     return result_open
 
 

@@ -1,0 +1,11 @@
+nmap扫描服务对应：
+22: ssh tcpwrapped
+3389: ms-wbt-server
+443: https
+3306: MySQL
+21: ftp
+80: http
+3389: "name" : "ssl",
+            "product" : "Microsoft SChannel TLS",
+
+详见： https://svn.nmap.org/nmap/nmap-services

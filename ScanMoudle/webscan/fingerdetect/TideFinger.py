@@ -8,7 +8,8 @@
 import hashlib,time,requests,os
 import random,ssl,getopt
 import threading, Queue, datetime
-import sys,re,sqlite3,lxml
+import sys,re,sqlite3
+import bs4
 from bs4 import BeautifulSoup as BS
 import argparse
 import json

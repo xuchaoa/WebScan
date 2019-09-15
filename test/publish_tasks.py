@@ -55,9 +55,9 @@ from celery_tasks.main import app
 #               queue = 'ServScan',
 #               kwargs=dict(host='123.207.155.221', ports=['80','443','8080','9711','22']))
 
-app.send_task(name='SubDomain',
-              queue = 'SubDomain',
-              kwargs=dict(taskID='5d7a01bc39630c1e8954230e',domain='baidu.com'))
+# app.send_task(name='SubDomain',
+#               queue = 'SubDomain',
+#               kwargs=dict(taskID='5d7a01bc39630c1e8954230e',domain='baidu.com'))
 
 # app.send_task(name='testscan',
 #               queue = 'testscan')
@@ -66,9 +66,10 @@ app.send_task(name='SubDomain',
 #               queue = 'IpLocation',
 #               kwargs=dict(taskID='5d3edfd675f097ac6ee499c6',ip='123.207.155.221'))
 
-# app.send_task(name='HydraBrute',
-#               queue = 'HydraBrute',
-#               )
+app.send_task(name='HydraBrute',
+              queue = 'HydraBrute',
+              kwargs=dict(taskID='', username='dict', dict='small', host='149.129.60.179', port='22', service='ssh')
+              )
 
 # app.send_task(name='AliveScan',
 #               queue='AliveScan',
@@ -89,4 +90,4 @@ app.send_task(name='SubDomain',
 #
 # app.send_task(name='CmsFinger',
 #               queue='CmsFinger',
-#               kwargs=dict(taskID='5d6e24694c3e3fdb872e596c',url='https://blog.ixuchao.cn'))
+#               kwargs=dict(taskID='5d7c96f15ded2c3496c7d368',url='https://blog.ixuchao.cn'))
