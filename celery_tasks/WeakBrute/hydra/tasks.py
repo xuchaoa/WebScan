@@ -11,6 +11,7 @@
 
 import os
 import time
+import uuid
 from celery_tasks.main import app
 from conf.global_config import HYDRADIC_SMALL, HYDRADIC_LARGE
 from utils.mongo_op import MongoDB
@@ -31,16 +32,27 @@ def dispatch(self, taskID, username, dict, host, port, service):
 
 
 
-def handle_result(taskID, result):
+def handle_result(taskID, result, service):
     print("this is the begin")
     x = result.strip('\n').split(' ')
-    _result = {
-        x[0].strip('[').split(']')[1][1:]: {
-            'port': x[0].strip('[').split(']')[0],
-            'login': x[6].strip(),
-            'password': x[10].strip()
+    if result is 's':
+        _result = {
+            'redis': {
+                'service':service,
+                'port': x[0].strip('[').split(']')[0],
+                'login': '',
+                'password': ''
+            }
         }
-    }
+    else:
+        _result = {
+            x[0].strip('[').split(']')[1][1:]: {
+                'service': service,
+                'port': x[0].strip('[').split(']')[0],
+                'login': x[6].strip(),
+                'password': x[10].strip()
+            }
+        }
     print(_result)
     x = MongoDB()
     x.add_weak_pass_service(taskID, json.dumps(_result))
@@ -56,15 +68,20 @@ def NameBrute(taskID, username, large_or_small, host, port, service):
     :param service:
     :return:
     '''
-    _ = os.system("hydra -l {} -P {} {} -s  {} {} -I -o x".format(username, HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
-                                                          host, port, service))
+    file_name = str(uuid.uuid1())
+    if service in ['redis','cisio','snmp','vnc']:
+        _ = os.system("hydra -P {} {} -s  {} {} -I -o {} -f".format(HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
+                                                                             host, port, service, file_name))
+    else:
+        _ = os.system("hydra -l {} -P {} {} -s  {} {} -I -o {}".format(username, HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
+                                                          host, port, service, file_name))
 
-    with open('x','r') as f:
+    with open(file_name,'r') as f:
+        print(f.read())
         for _ in f:
             if _.startswith('['):
-                handle_result(taskID, _)
-            print(_)
-    os.remove('x')
+                handle_result(taskID, _, service)
+    os.remove(file_name)
 
 def NameDictBrute(taskID, large_or_small, host, port, service):
     '''
@@ -76,19 +93,27 @@ def NameDictBrute(taskID, large_or_small, host, port, service):
     :param service:
     :return:
     '''
+    # he redis, adam6500, cisco, oracle-listener, s7-300, snmp and vnc modules are only using the -p or -P option, not login (-l, -L) or colon file (-C).
+    file_name = str(uuid.uuid1())
     dict_name = 'dic_username_' + service + '.txt'
     username_dict = realjoin(USERNAME_DICT,dict_name)
-
-    _ = os.system("hydra -L {} -P {} {} -s  {} {} -I -o x -f".format(username_dict,
+    if service in ['redis','cisio','snmp','vnc']:
+        _ = os.system("hydra -P {} {} -s  {} {} -I -o {} -f".format(HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
+                                                                          host, port, service, file_name))
+    else:
+        _ = os.system("hydra -L {} -P {} {} -s  {} {} -I -o {} -f".format(username_dict,
                                                                   HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
-                                                                  host, port, service))
+                                                                  host, port, service, file_name))
+
     print(_)
-    with open('x', 'r') as f:
+    ## TODO redis未授权访问无法解决
+    with open(file_name, 'r') as f:
+        print("-------------------------------------------------"+f.read())
         for _ in f:
             if _.startswith('['):
-                handle_result(taskID, _)
-            print(_)
-    os.remove('x')
+                handle_result(taskID, _ , service)
+
+    os.remove(file_name)
 
 
 
@@ -97,7 +122,8 @@ def NameDictBrute(taskID, large_or_small, host, port, service):
 if __name__ == '__main__':
     # SSHBrute('sa','small','127.0.0.1','1433','mssql')
 
-    dispatch('5d51652fa814d0464ed543b6','dict','small','149.129.60.194','22','ssh')
+    dispatch('5d7e39cd13e0dfe95c52e4cf','dict','small','127.0.0.1','6379','redis')
+    dispatch('5d7e39cd13e0dfe95c52e4cf','dict','small','127.0.0.1','22','ssh')
     # handle_result('5d51652fa814d0464ed543b7',"[22][ssh] host: 127.0.0.1   login: x   password: xuchao")
     # handle_result('5d51652fa814d0464ed543b7',"[22][aaa] host: 127.0.0.1   login: x   password: xuchao")
 

@@ -63,8 +63,8 @@ def handle_result(taskID, ip_addr, result):
                 service = 'redis'
             elif re.search('oracle', service, re.I):
                 service = 'oracle'
-            elif re.search('mongod', service, re.I):
-                service = 'mongo'
+            # elif re.search('mongodb', service, re.I):
+            #     service = 'mongo'
             elif 'tomcat' in service:
                 service = 'tomcat'
             elif re.search('^vnc-\d{1}', service, re.I):
