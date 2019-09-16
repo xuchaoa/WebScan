@@ -11,7 +11,7 @@
 import gevent
 import importlib.util
 from setting import ESSENTIAL_MODULE_METHODS
-from lib.core.data import conf, xscan
+from lib.core.data import conf, xscan, scan_option
 import sys
 import os
 import time
@@ -80,7 +80,7 @@ def change_current_tc_count(num):
 def result_handle(result, target):
     if not result or result is POC_RESULT_STATUS.FAIL:
         return
-    elif result is POC_RESULT_STATUS.RETRAY:
+    elif result is POC_RESULT_STATUS.RETRAY:  #result == 2
         change_scan_count(-1)
         xscan.target.put(target)
         return
@@ -130,6 +130,14 @@ def run():
         xscan.found_count, xscan.target.qsize(), xscan.scan_count, time.time() - xscan.start_time)
 
     print(msg)
+    result = [scan_option.poc_name]
+    if 'taskID' in scan_option.keys():
+        taskID = scan_option.taskID
+        from utils.mongo_op import MongoDB
+        x = MongoDB()
+        x.add_poc_vuln(taskID, result)
     print(xscan.result)
+    print(result)
+    return xscan.result
 
 

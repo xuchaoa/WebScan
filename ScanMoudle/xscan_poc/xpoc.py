@@ -5,13 +5,14 @@
 # @Blog    : https://blog.ixuchao.cn
 # @File    : xpoc.py
 # modify from POC-T Proj by Archerx
+
 # xpoc将作为一个单独可运行的组件，和主调度引擎之间耦合度很小,方便单独拿出来用
 
 from gevent import monkey
 monkey.patch_all()
 import os
 from lib.core.common import set_paths
-from lib.core.data import scan_option
+from lib.core.data import scan_option, xscan
 from lib.core.option import init_options
 from lib.controller.engine import run
 from setting import poc_finger
@@ -19,7 +20,15 @@ from setting import poc_finger
 def module_path():
     return os.path.dirname(os.path.realpath(__file__))
 
-def finger_load_poc_and_run(ip, keyword=None, port=None):
+
+def finger_load_poc_and_run(taskID, ip, keyword=None, port=None):
+    '''
+    此入口函数只能进行 单ip 多poc
+    :param ip:
+    :param keyword:
+    :param port:
+    :return:
+    '''
     poc_list = set()
     if keyword is not None:
         for keys in poc_finger.keys():
@@ -31,9 +40,9 @@ def finger_load_poc_and_run(ip, keyword=None, port=None):
                 poc_list.update(poc_finger[keys])
     print(poc_list)
     for _ in poc_list:
-        main(_, target_single=ip)
+        main( _, target_single=ip, taskID=taskID)
 
-def main(poc_name, target_single=None, target_range=None, target_network=None, zoomeye_dork=None, shodan_dork=None, fofa_dork=None,
+def main(poc_name, taskID=None, target_single=None, target_range=None, target_network=None, zoomeye_dork=None, shodan_dork=None, fofa_dork=None,
          engine_thread=False, concurrent_num=100, censys_dork=None, search_type=None, proxy=None, api_limit=100, api_offset=0):
     try:
         set_paths(module_path())
@@ -50,6 +59,8 @@ def main(poc_name, target_single=None, target_range=None, target_network=None, z
              'target_single': target_single, 'target_range': target_range, 'target_network': target_network, 'zoomeye_dork': zoomeye_dork,
              'shodan_dork': shodan_dork, 'fofa_dork': fofa_dork, 'censys_dork': censys_dork, 'api_limit': api_limit, 'api_offset': api_offset,
              'search_type': search_type, 'proxy': proxy}
+        if taskID is not None:
+            scan_option.taskID = taskID
         scan_option.update(x)
         init_options(scan_option)
         run()
@@ -61,4 +72,4 @@ def main(poc_name, target_single=None, target_range=None, target_network=None, z
 
 if __name__ == '__main__':
     # main()
-    finger_load_poc_and_run('150.242.251.241','redis','6379')
+    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','127.0.0.1','redis','6379')

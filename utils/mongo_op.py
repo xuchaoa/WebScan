@@ -98,7 +98,7 @@ class MongoDB(object):
                     "domain": "",
                     "ports": "",
                     "location": "",
-                    "vulnerable_attack": {}
+                    "vulnerable_attack": []
                 }
                 coll = x.db.HostScan
                 if status['state'] == 'up':
@@ -150,10 +150,8 @@ class MongoDB(object):
         '''
         self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$push': {'web.sensitive_file': {'$each': result}}})
 
-
-
-
-
+    def add_poc_vuln(self, taskID, result):
+        self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$push': {'vulnerable_attack': {'$each': result}}})
 
 def insert_test():
     x = MongoDB()
