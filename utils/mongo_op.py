@@ -134,6 +134,15 @@ class MongoDB(object):
     def add_Ftask(self):  # insert blank document to 'task' collection
         return self.db.task.insert({'ChildTaskID':[]})
 
+    def add_wappalyzer(self, taskID, result):
+        '''
+        :param taskID:  str
+        :param result:  list
+        :return:
+        '''
+        self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$push': {'wappalyzer': {'$each': result}}})
+
+
 
 
 

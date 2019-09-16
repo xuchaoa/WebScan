@@ -71,14 +71,14 @@ from celery_tasks.main import app
 #               kwargs=dict(taskID='', username='dict', dict='small', host='149.129.60.179', port='22', service='ssh')
 #               )
 
-app.send_task(name='HydraBrute',
-              queue = 'HydraBrute',
-              kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='22', service='ssh'),
-              )
-app.send_task(name='HydraBrute',
-              queue = 'HydraBrute',
-              kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='6379', service='redis'),
-              )
+# app.send_task(name='HydraBrute',
+#               queue = 'HydraBrute',
+#               kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='22', service='ssh'),
+#               )
+# app.send_task(name='HydraBrute',
+#               queue = 'HydraBrute',
+#               kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='6379', service='redis'),
+#               )
 
 # app.send_task(name='AliveScan',
 #               queue='AliveScan',
@@ -100,3 +100,8 @@ app.send_task(name='HydraBrute',
 # app.send_task(name='CmsFinger',
 #               queue='CmsFinger',
 #               kwargs=dict(taskID='5d7c96f15ded2c3496c7d368',url='https://blog.ixuchao.cn'))
+
+app.send_task(name='Wappalyzer',
+              queue = 'Wappalyzer',
+              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', domain='123.207.155.221'),
+              )

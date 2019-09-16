@@ -16,7 +16,7 @@ from celery_tasks.main import app
 import re
 
 
-def tasks_dispatch(taskID, url):
+def tasks_dispatch_web(taskID, url):
     app.send_task(name='ServInfo',
                   queue='ServInfo',
                   kwargs=dict(taskID=taskID, url=url))
@@ -25,16 +25,20 @@ def tasks_dispatch(taskID, url):
                   queue='CmsFinger',
                   kwargs=dict(taskID=taskID, url=url))
 
+    app.send_task(name='Wappalyzer',
+                  queue='Wappalyzer',
+                  kwargs=dict(taskID=taskID, domain=url),
+                  )
 
 def handle_result(taskID, ip_addr, result):
     for key, value in result.items():
-        if key == 80 and 'name' in value.keys() and 'http' in value['name']:
-            tasks_dispatch(taskID, ip_addr)
-        elif key == 443 and 'name' in value.keys() and 'http' in value['name']:
-            tasks_dispatch(taskID, ip_addr)
+        ## TODO 需要添加 只有443开放但是80未开放  的情况
+        if (key == 80 or key == 443) and 'name' in value.keys() and 'http' in value['name']:
+            tasks_dispatch_web(taskID, ip_addr)
+        # elif key == 443 and 'name' in value.keys() and 'http' in value['name']:
+        #     tasks_dispatch(taskID, ip_addr)
         if 'name' in value.keys():
             service = value['name']
-            ##TODO 确定输出service名称的一致性
             # 详见https://svn.nmap.org/nmap/nmap-services
             if re.search('teedtap', service, re.I):
                 service = 'mssql'
