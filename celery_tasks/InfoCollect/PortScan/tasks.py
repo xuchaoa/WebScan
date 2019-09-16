@@ -29,7 +29,7 @@ def add_serv_task(taskID, host, ports):
                   queue='ServScan',
                   kwargs=dict(taskID=taskID, host=host,ports=ports))
 
-@app.task(bind=True,name=work_name('PortScan'))
+@app.task(bind=True,name=work_name('PortScan'), rate_limit='1/m')  #TODO 任务限制测试 效果未知
 def portscan(self, taskID, host, ports='0-10000', rate=1500):
     try:
         mas = masscan.PortScanner()

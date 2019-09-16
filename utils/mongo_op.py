@@ -140,7 +140,15 @@ class MongoDB(object):
         :param result:  list
         :return:
         '''
-        self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$push': {'wappalyzer': {'$each': result}}})
+        self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$push': {'web.wappalyzer': {'$each': result}}})
+
+    def add_sensitive_file(self, taskID, result):
+        '''
+        :param taskID: str
+        :param result: list
+        :return:
+        '''
+        self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$push': {'web.sensitive_file': {'$each': result}}})
 
 
 

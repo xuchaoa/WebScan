@@ -41,7 +41,7 @@ def wappalyzer(self, taskID, domain):
         #               )
     except Exception as e:
         print(e)
-    return res
+    return list(res)
 
 
 if __name__ == '__main__':

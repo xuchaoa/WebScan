@@ -42,9 +42,9 @@ from celery_tasks.main import app
 # 缓冲区已经flush而且消息已经确认发送到了RabbitMQ中，关闭链接
 # connection.close()
 
-# app.send_task(name='sFileScan',
-#               queue = 'sFileScan',
-#               kwargs=dict(url='https://binarysec.top'))
+app.send_task(name='SFileScan',
+              queue = 'SFileScan',
+              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', url='https://binarysec.top'))
 
 # app.send_task(name='FuzzDomain',
 #               queue = 'FuzzDomain',
@@ -58,7 +58,7 @@ from celery_tasks.main import app
 # app.send_task(name='SubDomain',
 #               queue = 'SubDomain',
 #               kwargs=dict(taskID='5d7a01bc39630c1e8954230e',domain='baidu.com'))
-
+#
 # app.send_task(name='testscan',
 #               queue = 'testscan')
 
@@ -101,7 +101,7 @@ from celery_tasks.main import app
 #               queue='CmsFinger',
 #               kwargs=dict(taskID='5d7c96f15ded2c3496c7d368',url='https://blog.ixuchao.cn'))
 
-app.send_task(name='Wappalyzer',
-              queue = 'Wappalyzer',
-              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', domain='123.207.155.221'),
-              )
+# app.send_task(name='Wappalyzer',
+#               queue = 'Wappalyzer',
+#               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', domain='123.207.155.221'),
+#               )

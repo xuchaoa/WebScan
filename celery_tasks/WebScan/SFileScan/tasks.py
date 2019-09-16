@@ -9,9 +9,10 @@
 import requests
 import os
 from celery_tasks.main import app
+from utils.mongo_op import MongoDB
 
-@app.task(bind=True,name='sFileScan')
-def sfileScan(self,url):
+@app.task(bind=True, name='SFileScan')
+def sfileScan(self, taskID, url):
     keywords = ['wwwroot','web','ftp','admin','www']
 
     listFile = []
@@ -28,7 +29,7 @@ def sfileScan(self,url):
     warning_list = []
     for payload in listFile:
         loads = url + "/" + payload
-        print(loads)
+        # print(loads)
         try:
             header = dict()
             header[
@@ -46,6 +47,8 @@ def sfileScan(self,url):
     if len(warning_list) > 3:
         return False
     print(warning_list)
+    x = MongoDB()
+    x.add_sensitive_file(taskID, warning_list)
     return warning_list   #
 
 
