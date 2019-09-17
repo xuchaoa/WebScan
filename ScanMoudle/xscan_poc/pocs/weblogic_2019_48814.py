@@ -260,4 +260,3 @@ def poc(url):
     windows_check_2(url, webshell_path)
 
     return webshell_path
-

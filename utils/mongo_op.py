@@ -151,7 +151,9 @@ class MongoDB(object):
         self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$push': {'web.sensitive_file': {'$each': result}}})
 
     def add_poc_vuln(self, taskID, result):
-        self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$push': {'vulnerable_attack': {'$each': result}}})
+        result = json.loads(result)
+        for key , value in result.items():
+            self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$set': {"vulnerable_attack."+key : value}})
 
 def insert_test():
     x = MongoDB()

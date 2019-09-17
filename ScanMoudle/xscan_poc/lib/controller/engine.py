@@ -17,6 +17,7 @@ import os
 import time
 import threading
 from lib.core.enum import POC_RESULT_STATUS
+import json
 
 
 def initEngine():
@@ -130,14 +131,20 @@ def run():
         xscan.found_count, xscan.target.qsize(), xscan.scan_count, time.time() - xscan.start_time)
 
     print(msg)
-    result = [scan_option.poc_name]
-    if 'taskID' in scan_option.keys():
-        taskID = scan_option.taskID
-        from utils.mongo_op import MongoDB
-        x = MongoDB()
-        x.add_poc_vuln(taskID, result)
+    if len(xscan.result) != 0:
+        result = {
+            scan_option.poc_name: {
+                'payload':xscan.result,
+                'info':''
+            }
+        }
+        if 'taskID' in scan_option.keys():
+            taskID = scan_option.taskID
+            from utils.mongo_op import MongoDB
+            x = MongoDB()
+            x.add_poc_vuln(taskID, json.dumps(result))
+        print(result)
     print(xscan.result)
-    print(result)
     return xscan.result
 
 

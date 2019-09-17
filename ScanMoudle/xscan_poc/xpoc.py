@@ -38,11 +38,12 @@ def finger_load_poc_and_run(taskID, ip, keyword=None, port=None):
         for keys in poc_finger.keys():
             if keys.split(':')[1] in port:
                 poc_list.update(poc_finger[keys])
+    #TODO 这里存在一个问题，如果传入的参数keyword=redis，port=6380  则即使存在漏洞，因为端口问题也扫不出来
     print(poc_list)
     for _ in poc_list:
-        main( _, target_single=ip, taskID=taskID)
+        main( poc_name=_, target_single=ip, taskID=taskID)
 
-def main(poc_name, taskID=None, target_single=None, target_range=None, target_network=None, zoomeye_dork=None, shodan_dork=None, fofa_dork=None,
+def main(poc_name=None, taskID=None, target_single=None, target_range=None, target_network=None, zoomeye_dork=None, shodan_dork=None, fofa_dork=None,
          engine_thread=False, concurrent_num=100, censys_dork=None, search_type=None, proxy=None, api_limit=100, api_offset=0):
     try:
         set_paths(module_path())
@@ -72,4 +73,4 @@ def main(poc_name, taskID=None, target_single=None, target_range=None, target_ne
 
 if __name__ == '__main__':
     # main()
-    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','127.0.0.1','redis','6379')
+    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','140.207.4.77','weblogic','6379')

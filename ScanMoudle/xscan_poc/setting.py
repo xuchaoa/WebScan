@@ -14,5 +14,5 @@ IS_WIN = True if (sys.platform in ["win32", "cygwin"] or os.name == "nt") else F
 
 poc_finger = {
     'redis:6379':['redis_unauth'],
-    'weblogic:7001':['weblogic_ssrf','weblogic_weak_pass','weblogic_xmldecoder_exec']
+    'weblogic:7001':['weblogic_ssrf','weblogic_weak_pass','weblogic_xmldecoder_exec','weblogic_2019_48814']
 }
