@@ -16,6 +16,21 @@ import json
 from celery_tasks.main import app
 from utils.mongo_op import MongoDB
 from utils.printx import print_json_format
+import celery
+class my_task(celery.Task):
+    def on_success(self, retval, task_id, args, kwargs):
+        print('task success : {}:{}:{}:{}'.format(retval, task_id, args, kwargs))
+    def on_failure(self, exc, task_id, args, kwargs, einfo):
+        print(' task fail {}:{}:{}:{}:{}'.format(exc, task_id, args, kwargs, einfo))
+    def on_retry(self, exc, task_id, args, kwargs, einfo):
+        print('task retry {}:{}:{}:{}:{}'.format(exc, task_id, args, kwargs, einfo))
+        print('---',self.request.retries)
+        if self.request.retries == 2:
+            # 连续三次失败,把任务推动到给 nmap
+            app.send_task(name='PortServScan',
+                          queue='PortServScan',
+                          kwargs=dict(taskID=kwargs['taskID'], ip_addr=kwargs['host'], resp='syn_normal'))
+
 
 
 def work_name(name, tid=None):
@@ -29,8 +44,8 @@ def add_serv_task(taskID, host, ports):
                   queue='ServScan',
                   kwargs=dict(taskID=taskID, host=host,ports=ports))
 
-@app.task(bind=True,name=work_name('PortScan'), rate_limit='1/m')  #TODO 任务限制测试 效果未知
-def portscan(self, taskID, host, ports='0-10000', rate=1500):
+@app.task(bind=True,name=work_name('PortScan'), base=my_task)  # , retry_kwargs={'max_retries':3, 'countdown': 10}
+def portscan(self, taskID, host, ports='0-10000', rate=1000):
     try:
         mas = masscan.PortScanner()
     except masscan.PortScannerError:
@@ -43,9 +58,11 @@ def portscan(self, taskID, host, ports='0-10000', rate=1500):
         mas.scan(host, ports, sudo=False,arguments="--rate {}".format(rate))
     except masscan.NetworkConnectionError or masscan.PortScannerError as e:
         print(e)
-        app.send_task(name='PortServScan',
-                      queue='PortServScan',
-                      kwargs=dict(taskID=taskID, ip_addr=host, resp='syn_normal'))
+        print('当前重试次数',self.request.retries)
+        raise self.retry(exc=e, countdown=60, max_retries=2)  #最大重试次数2，对一个ip最多扫描3次结束
+        # app.send_task(name='PortServScan',
+        #               queue='PortServScan',
+        #               kwargs=dict(taskID=taskID, ip_addr=host, resp='syn_normal'))
     else:
         PortResult = {}
         for host in mas.all_hosts:
@@ -57,7 +74,7 @@ def portscan(self, taskID, host, ports='0-10000', rate=1500):
         ports = []
         for _ in PortResult.keys():
             ports.append(str(_))
-        add_serv_task(taskID, host, ports)
+        # add_serv_task(taskID, host, ports)
 
 
 

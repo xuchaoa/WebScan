@@ -22,19 +22,10 @@ from conf.global_config import DIC_USERNAME_FTP, DIC_USERNAME_IMAP, DIC_USERNAME
     DIC_USERNAME_ORACLE, DIC_USERNAME_POP3, DIC_USERNAME_POSTGRESQL, DIC_USERNAME_RDP,DIC_USERNAME_REDIS, DIC_USERNAME_SMB,DIC_USERNAME_SMTP,\
     DIC_USERNAME_MSSQL,DIC_USERNAME_SSH,DIC_USERNAME_SVN,DIC_USERNAME_TELNET,DIC_USERNAME_TOMCAT,DIC_USERNAME_VNC,DIC_USERNAME_WEBLOGIC,COMMON_USERNAME,USERNAME_DICT
 
-import celery
-class my_task(celery.Task):
-    def on_success(self, retval, task_id, args, kwargs):
-        print('task success : {}:{}:{}:{}'.format(retval, task_id, args, kwargs))
-    def on_failure(self, exc, task_id, args, kwargs, einfo):
-        print(' task fail {}:{}:{}:{}:{}'.format(exc, task_id, args, kwargs, einfo))
-    def on_retry(self, exc, task_id, args, kwargs, einfo):
-        print('task retry {}:{}:{}:{}:{}'.format(exc, task_id, args, kwargs, einfo))
 
-
-@app.task(bind=True, name='HydraBrute', base=my_task)
+@app.task(bind=True, name='HydraBrute')
 def dispatch(self, taskID, username, dict, host, port, service):
-    #TODO fix 任务执行成功，但是无法发送ack导致任务重复执行 amqp.exceptions.RecoverableConnectionError: connection already closed \
+    # have fixed 任务执行成功，但是无法发送ack导致任务重复执行 amqp.exceptions.RecoverableConnectionError: connection already closed \
     # 原因是cpu占用过高，心跳线程没有足够的cpu资源导致两次心跳包未发送rabbitmq直接关闭连接
     # http://eventlet.net/doc/modules/debug.html#eventlet.debug.hub_blocking_detection
     # 解决方法  1.降低cpu使用  2.增大rabbitmq的心跳阈值
