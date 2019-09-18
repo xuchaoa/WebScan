@@ -43,6 +43,5 @@ def wappalyzer(self, taskID, domain):
         print(e)
     return list(res)
 
-
 if __name__ == '__main__':
     wappalyzer('5d7a2f0ccb102ff5bce42782', '123.207.155.222')

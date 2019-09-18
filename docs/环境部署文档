@@ -38,6 +38,7 @@ docker run --name mongodb-server0 -v /data/mongodb0:/data/db -p 27017:27017 -d �
 
 # celery
 celery -A celery_tasks.main  worker --loglevel=info -P gevent --without-heartbeat
+--concurrency=4  #并发数量
 celery -A celery_tasks.main  beat --loglevel=info
 
 --without-heartbeat  关闭心跳包

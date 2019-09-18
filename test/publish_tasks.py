@@ -42,9 +42,9 @@ from celery_tasks.main import app
 # 缓冲区已经flush而且消息已经确认发送到了RabbitMQ中，关闭链接
 # connection.close()
 
-app.send_task(name='SFileScan',
-              queue = 'SFileScan',
-              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', url='https://binarysec.top'))
+# app.send_task(name='SFileScan',
+#               queue = 'SFileScan',
+#               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', url='https://binarysec.top'))
 
 # app.send_task(name='FuzzDomain',
 #               queue = 'FuzzDomain',
@@ -71,10 +71,10 @@ app.send_task(name='SFileScan',
 #               kwargs=dict(taskID='', username='dict', dict='small', host='149.129.60.179', port='22', service='ssh')
 #               )
 
-# app.send_task(name='HydraBrute',
-#               queue = 'HydraBrute',
-#               kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='22', service='ssh'),
-#               )
+app.send_task(name='HydraBrute',
+              queue = 'HydraBrute',
+              kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='22', service='ssh'),
+              )
 # app.send_task(name='HydraBrute',
 #               queue = 'HydraBrute',
 #               kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='6379', service='redis'),

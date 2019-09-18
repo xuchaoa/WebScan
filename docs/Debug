@@ -1,0 +1,9 @@
+[2019-09-18 16:44:44,634: WARNING/MainProcess] File "/home/x/PycharmProjects/WebScan/venv/lib/python3.6/site-packages/amqp/transport.py", line 444, in _read
+    raise IOError('Server unexpectedly closed connection')
+[2019-09-18 16:44:44,634: WARNING/MainProcess] OSError: Server unexpectedly closed connection
+[2019-09-18 16:44:44,634: WARNING/MainProcess] 2019-09-18T08:44:44Z
+[2019-09-18 16:44:44,634: WARNING/MainProcess] <built-in method switch of gevent.__greenlet_primitives.TrackedRawGreenlet object at 0x7fe1030562a8> failed with OSError
+
+
+celery在启动时不管有没有开启心跳，在broker队列为空时，rabbitmq会关闭连接，并报上面的错误。
+原因是 除非有任务接受 或者 ack消息，否则 drain_events() 不会产生发送任何心跳包，导致rabbitmq关闭链接
