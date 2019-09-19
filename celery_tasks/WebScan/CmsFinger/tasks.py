@@ -14,9 +14,11 @@ sys.path.append(PROJECT_PATH)
 import subprocess
 import json
 from utils.mongo_op import MongoDB
+from utils.common import add_http
 
 @app.task(bind=True,name='CmsFinger')
 def fingerscan(self, taskID, url, proxy=0, thread=50, time=5):
+    url = add_http(url)
     # os.system("cd "+BASE_DIR+"/ScanMoudle/webscan/fingerdetect/")
     cmd = ['python2','TideFinger.py','-u',url,'-p',str(proxy),'-m',str(thread),'-t',str(time)]
     cmd = ' '.join(cmd)
@@ -31,6 +33,7 @@ def fingerscan(self, taskID, url, proxy=0, thread=50, time=5):
         _.add_cms_finger(taskID, res)
     except Exception as e:
         print(e)
+    return res
 
 
 if __name__ == '__main__':

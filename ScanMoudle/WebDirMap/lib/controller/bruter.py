@@ -24,7 +24,7 @@ from gevent.queue import Queue
 from lxml import etree
 
 from lib.core.common import intToSize, urlSimilarCheck
-from lib.core.data import bar, conf, paths, payloads, tasks
+from lib.core.data import bar, conf, paths, payloads, tasks, result
 from lib.utils.config import ConfigFileParser
 from lib.plugins.inspector import Inspector
 
@@ -53,7 +53,7 @@ tasks.crawl_task = Queue()
 #假性404页面md5列表
 conf.autodiscriminator_md5 = set()
 
-bar.log = progressbar.ProgressBar()
+# bar.log = progressbar.ProgressBar()
 
 
 def loadConf():
@@ -373,7 +373,8 @@ def scanModeHandler():
                 response = requests.get(conf.url, headers=headers, timeout=conf.request_timeout, verify=False, allow_redirects=conf.redirection_302, proxies=conf.proxy_server)
             except requests.exceptions.ConnectionError as e:
                 print("[x] Crawler network connection error!plz check whether the target is accessible")
-                sys.exit()
+                # sys.exit()
+                # sys.exit() 会直接退出整个celery
 
             #获取页面url
             if response.status_code in conf.response_status_code:
@@ -435,13 +436,24 @@ def responseHandler(response):
 
     #自定义状态码显示
     if response.status_code in conf.response_status_code:
-        msg = '[{}]'.format(str(response.status_code))
+        # msg = '[{}]'.format(str(response.status_code))
+        # if conf.response_header_content_type:
+        #     msg += '[{}]'.format(response.headers['content-type'])
+        # if conf.response_size:
+        #     msg += '[{}] '.format(str(size))
+        # msg += response.url
+        # msg += 'xuchao'
+        # print(msg)
+        msg = []
+
+        msg.append(str(response.status_code))
         if conf.response_header_content_type:
-            msg += '[{}]'.format(response.headers['content-type'])
+            msg.append(str(response.headers['content-type']))
         if conf.response_size:
-            msg += '[{}] '.format(str(size))
-        msg += response.url
+            msg.append(str(size))
+        msg.append(str(response.url))
         print(msg)
+        result.append(msg)
         #已去重复，结果保存。NOTE:此处使用response.url进行文件名构造，解决使用-iL参数时，不能按照域名来命名文件名的问题
         #使用replace()，替换`:`，修复window下不能创建有`:`的文件问题
         # saveResults(urllib.parse.urlparse(response.url).netloc.replace(':','_'),msg)
@@ -499,8 +511,9 @@ def worker():
         pass
     finally:
         #更新进度条
-        tasks.task_count += 1
-        bar.log.update(tasks.task_count)
+        pass
+        # tasks.task_count += 1
+        # bar.log.update(tasks.task_count)
 
 def boss():
     '''
@@ -569,7 +582,7 @@ def bruter(url):
     if not conf.recursive_scan:
         #NOTE:这里取所有payloads的长度*target数量计算任务总数，修复issue#2
         tasks.task_length = len(payloads.all_payloads)*conf.target_nums
-        bar.log.start(tasks.task_length)
+        # bar.log.start(tasks.task_length)
     #FIXME:循环任务数不能一次性取完所有的task，暂时采用每次执行30个任务。这样写还能解决hub.LoopExit的bug
     while not tasks.all_task.empty():
         all_task = [gevent.spawn(boss) for i in range(conf.request_limit)]

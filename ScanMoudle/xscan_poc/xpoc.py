@@ -38,7 +38,7 @@ def finger_load_poc_and_run(taskID, ip, keyword=None, port=None):
         for keys in poc_finger.keys():
             if keys.split(':')[1] in port:
                 poc_list.update(poc_finger[keys])
-    #TODO 这里存在一个问题，如果传入的参数keyword=redis，port=6380  则即使存在漏洞，因为端口问题也扫不出来
+    #TODO fix 这里存在一个问题，如果传入的参数keyword=redis，port=6380  则即使存在漏洞，因为端口问题也扫不出来
     print(poc_list)
     for _ in poc_list:
         main( poc_name=_, target_single=ip, taskID=taskID)

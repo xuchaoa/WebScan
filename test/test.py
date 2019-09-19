@@ -39,6 +39,24 @@ a = {22: {'state': 'filtered', 'reason': 'no-response', 'name': 'ssh', 'product'
 #     f.write(a)
 
 
-import re
-if re.search('vnc-\d{1}', 'ssvnc-1', re.I):
-     print(11)
+# import re
+# if re.search('vnc-\d{1}', 'ssvnc-1', re.I):
+#      print(11)
+#
+
+
+x = []
+x.append('ss')
+x.append('qq')
+print(x)
+
+import requests
+
+list = []
+res = requests.get('https://blog.ixuchao.cn')
+print(res.status_code)
+print(type(res.url))
+list.append(str(res.status_code))
+list.append(str(res.headers['content-type']))
+list.append(res.url)
+print(list)

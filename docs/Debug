@@ -7,5 +7,4 @@
 
 celery在启动时不管有没有开启心跳，在broker队列为空时，rabbitmq会关闭连接，并报上面的错误。
 原因是 除非有任务接受 或者 ack消息，否则 drain_events() 不会产生发送任何心跳包，导致rabbitmq关闭链接
-
-https://www.cnblogs.com/zhjh256/p/6207339.html
+- https://www.cnblogs.com/zhjh256/p/6207339.html

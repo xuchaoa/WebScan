@@ -493,8 +493,6 @@ if __name__ == "__main__":
             else:
                 print
                 "读取代理列表出错，请确保代理文件名为proxys_ips.txt,每行一条代理，格式如: 124.225.223.101:80"
-        if re.search(r'(([01]{0,1}\d{0,1}\d|2[0-4]\d|25[0-5])\.){3}([01]{0,1}\d{0,1}\d|2[0-4]\d|25[0-5])',target_url):
-            target_url = 'http://' + target_url
         if re.match(r'^https?:/{2}\w.+$', target_url):
 
             daytime = time.strftime('%Y-%m-%d', time.localtime(time.time()))

@@ -155,6 +155,10 @@ class MongoDB(object):
         for key , value in result.items():
             self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$set': {"vulnerable_attack."+key : value}})
 
+    def add_web_dir(self, taskID, result):
+        # type(result) is list
+        self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$push': {'web.web_dir': {'$each': result}}})
+
 def insert_test():
     x = MongoDB()
     new_posts = {

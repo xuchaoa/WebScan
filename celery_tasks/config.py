@@ -57,6 +57,7 @@ CELERY_QUEUES = (
     Queue("ServInfo", Exchange("xscan_web",type='direct'),routing_key='ServInfo'),
     Queue("CmsFinger", Exchange("xscan_web",type='direct'),routing_key='CmsFinger'),
     Queue("Wappalyzer", Exchange("xscan_web",type='direct'),routing_key='Wappalyzer'),
+    Queue("DirScan", Exchange("xscan_web",type='direct'),routing_key='DirScan'),
 
     # Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
@@ -74,6 +75,7 @@ CELERY_IMPORTS = [
     "celery_tasks.WebScan.ServInfo.tasks",
     "celery_tasks.WebScan.CmsFinger.tasks",
     "celery_tasks.WebScan.Wappalyzer.tasks",
+    "celery_tasks.WebScan.DirScan.tasks",
     # "celery_tasks.TargetCollect.fuzzdomain.tasks",
     "celery_tasks.InfoCollect.PortScan.tasks",
     "celery_tasks.InfoCollect.ServScan.tasks",
@@ -86,14 +88,7 @@ CELERY_IMPORTS = [
 ]
 
 
-# 配置定时任务不成功
-# TODO 报错如下
-# Did you remember to import the module containing this task?
-# Or maybe you're using relative imports?
-#
-# Please see
-# http://docs.celeryq.org/en/latest/internals/protocol.html
-# for more information.
+
 
 CELERYBEAT_SCHEDULE = {
     "schedule-test": {

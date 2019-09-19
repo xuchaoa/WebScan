@@ -1,26 +1,18 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# @Time    : 9/19/19 4:45 PM
 # @Author  : Archerx
+# @Blog    : https://blog.ixuchao.cn
+# @File    : tasks.py
+
+'''
+web目录、文件扫描模块
+'''
+
+from ScanMoudle.WebDirMap.dirmap import main
+from celery_tasks.main import app
 
 
-import requests
-import os
-
-
-def fileScan(url,type):
-    # with open('../../data/FileScan/')
-    filesList = os.listdir('../../../data/FileScan/')
-    print(filesList)
-    path = '../../../data/FileScan/'
-
-    if type == 'php':
-        if type + '.txt' in filesList:
-            f = open(path + type + '.txt', 'r', encoding='utf8').read()
-            for i in f:
-                print(f)
-        else:
-            return None
-
-
-if __name__ == '__main__':
-    fileScan('1','php')
+@app.task(bind=True,name='DirScan')
+def dirscan(self, taskID, target, thread_num=60, load_config_file=True):
+    main(taskID, target, thread_num, load_config_file)

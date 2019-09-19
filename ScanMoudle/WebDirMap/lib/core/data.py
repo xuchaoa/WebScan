@@ -31,3 +31,6 @@ tasks = AttribDict()
 
 #创建进度条对象存储进度
 bar = AttribDict()
+
+#存储总的扫描结果
+result = []
