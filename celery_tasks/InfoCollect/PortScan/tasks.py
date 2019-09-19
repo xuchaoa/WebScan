@@ -18,18 +18,23 @@ from utils.mongo_op import MongoDB
 from utils.printx import print_json_format
 import celery
 class my_task(celery.Task):
+    '''
+    在任务执行完毕后会根据结果调用里面相应函数
+    '''
     def on_success(self, retval, task_id, args, kwargs):
         print('task success : {}:{}:{}:{}'.format(retval, task_id, args, kwargs))
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         print(' task fail {}:{}:{}:{}:{}'.format(exc, task_id, args, kwargs, einfo))
-    def on_retry(self, exc, task_id, args, kwargs, einfo):
-        print('task retry {}:{}:{}:{}:{}'.format(exc, task_id, args, kwargs, einfo))
-        print('---',self.request.retries)
         if self.request.retries == 2:
             # 连续三次失败,把任务推动到给 nmap
+            print('连续失败三次')
             app.send_task(name='PortServScan',
                           queue='PortServScan',
                           kwargs=dict(taskID=kwargs['taskID'], ip_addr=kwargs['host'], resp='syn_normal'))
+
+    def on_retry(self, exc, task_id, args, kwargs, einfo):
+        print('task retry {}:{}:{}:{}:{}'.format(exc, task_id, args, kwargs, einfo))
+        print('---',self.request.retries)
 
 
 
@@ -44,7 +49,7 @@ def add_serv_task(taskID, host, ports):
                   queue='ServScan',
                   kwargs=dict(taskID=taskID, host=host,ports=ports))
 
-@app.task(bind=True,name=work_name('PortScan'), base=my_task)  # , retry_kwargs={'max_retries':3, 'countdown': 10}
+@app.task(bind=True,name=work_name('PortScan'), base=my_task, rate_limit='1/m')  # , retry_kwargs={'max_retries':3, 'countdown': 10}
 def portscan(self, taskID, host, ports='0-10000', rate=1000):
     try:
         mas = masscan.PortScanner()
@@ -74,7 +79,7 @@ def portscan(self, taskID, host, ports='0-10000', rate=1000):
         ports = []
         for _ in PortResult.keys():
             ports.append(str(_))
-        # add_serv_task(taskID, host, ports)
+        add_serv_task(taskID, host, ports)
 
 
 

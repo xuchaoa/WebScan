@@ -108,5 +108,5 @@ from celery_tasks.main import app
 
 app.send_task(name='PortScan',
               queue = 'PortScan',
-              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', host='123.207.155.221'),
+              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', host='192.168.232.112'),
               )
