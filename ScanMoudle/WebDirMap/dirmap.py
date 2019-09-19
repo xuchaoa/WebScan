@@ -56,4 +56,4 @@ def main(taskID, target, thread_num, load_config_file):
     return result
 
 if __name__ == "__main__":
-    main('xx', 'https://blog.ixuchao.cn', 30, True)
+    main('xx', 'http://123.207.155.221', 30, True)

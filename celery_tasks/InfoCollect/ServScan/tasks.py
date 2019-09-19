@@ -29,6 +29,21 @@ def tasks_dispatch(taskID, url):
                   queue='CmsFinger',
                   kwargs=dict(taskID=taskID, url=url))
 
+    app.send_task(name='Wappalyzer',
+                  queue='Wappalyzer',
+                  kwargs=dict(taskID=taskID, domain=url),
+                  )
+    _ = MongoDB()
+    info = _.get_one_hostscan_info(taskID)
+    if 'domain' in info.keys() and len(info['domain']) != 0:
+        app.send_task(name='DirScan',
+                      queue='DirScan',
+                      kwargs=dict(taskID=taskID, target=info['domain'])
+                      )
+    else:
+        pass
+        # TODO 以ip作为扫描目标,暂未实现
+
 def handle_result(taskID, ip_addr, result):
     for key, value in result.items():
         if key == 80 and 'name' in value.keys() and 'http' in value['name']:

@@ -14,6 +14,7 @@ from utils.mongo_op import MongoDB
 import json
 from celery_tasks.main import app
 import re
+from utils.mongo_op import MongoDB
 
 
 def tasks_dispatch_web(taskID, url):
@@ -29,6 +30,17 @@ def tasks_dispatch_web(taskID, url):
                   queue='Wappalyzer',
                   kwargs=dict(taskID=taskID, domain=url),
                   )
+    _ = MongoDB()
+    info = _.get_one_hostscan_info(taskID)
+    if 'domain' in info.keys() and len(info['domain']) != 0:
+        app.send_task(name='DirScan',
+                      queue='DirScan',
+                      kwargs=dict(taskID=taskID, target=info['domain'])
+                      )
+    else:
+        pass
+        # TODO 以ip作为扫描目标,暂未实现
+
 
 def handle_result(taskID, ip_addr, result):
     for key, value in result.items():

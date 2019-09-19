@@ -512,6 +512,7 @@ def worker():
     finally:
         #更新进度条
         pass
+        # print(tasks.task_length,tasks.task_count)
         # tasks.task_count += 1
         # bar.log.update(tasks.task_count)
 

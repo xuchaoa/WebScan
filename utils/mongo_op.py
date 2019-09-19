@@ -159,6 +159,11 @@ class MongoDB(object):
         # type(result) is list
         self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$push': {'web.web_dir': {'$each': result}}})
 
+    def get_one_hostscan_info(self, taskID):
+        return self.db.HostScan.find_one({"_id": ObjectId(taskID)})
+
+
+
 def insert_test():
     x = MongoDB()
     new_posts = {
@@ -204,8 +209,8 @@ def add_open_ports_test():
 
 
     x = MongoDB()
-    c = x.add_open_ports('5d3ac102dd76c2600d6fbc9c',json.dumps(a))
-    print(c)
+    # c = x.add_open_ports('5d3ac102dd76c2600d6fbc9c',json.dumps(a))
+    # print(c)
 
 def test_ip_location():
     result = {'country_id': 'CN', 'country': 'China', 'region': 'Beijing'}
@@ -218,6 +223,10 @@ def test_ip_location():
 if __name__ == '__main__':
     # add_open_ports_test()
     # insert_test()
-    test_ip_location()
+    # test_ip_location()
+    x = MongoDB()
+    a = x.get_hostscan_info('5d7a2f0ccb102ff5bce42782')
+    print(type(a))
+    print(a)
 
 

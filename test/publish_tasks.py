@@ -107,15 +107,15 @@ from celery_tasks.main import app
 
 # app.send_task(name='Wappalyzer',
 #               queue = 'Wappalyzer',
-#               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', domain='123.207.155.221'),
+#               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', domain='123.207.155.221')
 #               )
 
 # app.send_task(name='PortScan',
 #               queue = 'PortScan',
-#               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', host='192.168.232.112'),
+#               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', host='192.168.232.112')
 #               )
 
 app.send_task(name='DirScan',
               queue = 'DirScan',
-              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', target='https://blog.ixuchao.cn'),
+              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', target='https://blog.ixuchao.cn')
               )
