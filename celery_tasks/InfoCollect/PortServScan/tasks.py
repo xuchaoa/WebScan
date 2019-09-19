@@ -30,6 +30,9 @@ def tasks_dispatch_web(taskID, url):
                   queue='Wappalyzer',
                   kwargs=dict(taskID=taskID, domain=url),
                   )
+    app.send_task(name='SFileScan',
+                  queue='SFileScan',
+                  kwargs=dict(taskID=taskID, url=url))
     _ = MongoDB()
     info = _.get_one_hostscan_info(taskID)
     if 'domain' in info.keys() and len(info['domain']) != 0:
@@ -44,7 +47,7 @@ def tasks_dispatch_web(taskID, url):
 
 def handle_result(taskID, ip_addr, result):
     for key, value in result.items():
-        ## TODO 需要添加 只有443开放但是80未开放  的情况
+        # TODO 需要添加 只有443开放但是80未开放  的情况 和web端口更改的情况
         if (key == 80 or key == 443) and 'name' in value.keys() and 'http' in value['name']:
             tasks_dispatch_web(taskID, ip_addr)
         # elif key == 443 and 'name' in value.keys() and 'http' in value['name']:

@@ -49,8 +49,8 @@ def sfileScan(self, taskID, url):
     print(warning_list)
     x = MongoDB()
     x.add_sensitive_file(taskID, warning_list)
-    return warning_list   #
+    return warning_list
 
 
 if __name__ == '__main__':
-    sfileScan('http://binarysec.top')  #add the http:// protocol
+    sfileScan('xx','http://blog.ixuchao.cn')  #add the http:// protocol

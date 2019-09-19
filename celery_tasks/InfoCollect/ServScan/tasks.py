@@ -33,6 +33,9 @@ def tasks_dispatch(taskID, url):
                   queue='Wappalyzer',
                   kwargs=dict(taskID=taskID, domain=url),
                   )
+    app.send_task(name='SFileScan',
+                  queue='SFileScan',
+                  kwargs=dict(taskID=taskID, url=url))
     _ = MongoDB()
     info = _.get_one_hostscan_info(taskID)
     if 'domain' in info.keys() and len(info['domain']) != 0:

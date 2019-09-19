@@ -115,7 +115,7 @@ from celery_tasks.main import app
 #               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', host='192.168.232.112')
 #               )
 
-app.send_task(name='DirScan',
-              queue = 'DirScan',
-              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', target='https://blog.ixuchao.cn')
-              )
+# app.send_task(name='DirScan',
+#               queue = 'DirScan',
+#               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', target='https://blog.ixuchao.cn')
+#               )
