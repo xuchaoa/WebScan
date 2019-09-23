@@ -24,6 +24,7 @@ def module_path():
 def finger_load_poc_and_run(taskID, ip, keyword=None, port=None):
     '''
     此入口函数只能进行 单ip 多poc
+    选择payload以keyword为准。
     :param ip:
     :param keyword:
     :param port:
@@ -38,10 +39,12 @@ def finger_load_poc_and_run(taskID, ip, keyword=None, port=None):
         for keys in poc_finger.keys():
             if keys.split(':')[1] in port:
                 poc_list.update(poc_finger[keys])
-    #TODO fix 这里存在一个问题，如果传入的参数keyword=redis，port=6380  则即使存在漏洞，因为端口问题也扫不出来
+    # 服务不是标准端口也可以检测，同时为防止漏报依旧匹配端口
+    if len(poc_list) == 0:
+        poc_list = poc_finger['others']
     print(poc_list)
     for _ in poc_list:
-        main( poc_name=_, target_single=ip, taskID=taskID)
+        main( poc_name=_, target_single=ip + ':' + port, taskID=taskID)
 
 def main(poc_name=None, taskID=None, target_single=None, target_range=None, target_network=None, zoomeye_dork=None, shodan_dork=None, fofa_dork=None,
          engine_thread=False, concurrent_num=100, censys_dork=None, search_type=None, proxy=None, api_limit=100, api_offset=0):

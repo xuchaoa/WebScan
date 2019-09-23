@@ -45,7 +45,7 @@ def sfileScan(self, taskID, url):
 
     # In order to  solve the misreport
     if len(warning_list) > 3:
-        return False
+        return 'No backup file'
     print(warning_list)
     x = MongoDB()
     x.add_sensitive_file(taskID, warning_list)
