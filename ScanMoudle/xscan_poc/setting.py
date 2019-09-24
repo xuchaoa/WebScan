@@ -18,4 +18,5 @@ poc_finger = {
     'thinkphp:80':['thinkphp_rce'],
     'wordpress:80':['wp_social_warfare_rce'],
     'others':[]
+
 }
