@@ -564,7 +564,7 @@ def bruter(url):
                 payloads.all_payloads[i] += conf.file_extension
     except:
         print('[+] plz check extension!')
-        sys.exit()
+
     #debug模式，打印所有payload，并退出
     # if conf.debug:
     #     print('[+] all payloads:{}'.format(payloads.all_payloads))

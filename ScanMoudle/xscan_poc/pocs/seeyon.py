@@ -10,7 +10,7 @@ import base64
 from lib.core.Request import request
 import hashlib
 from urllib.parse import urlparse
-from plugin.random_ua import get_random_ua
+from lib.utils.random_ua import get_random_ua
 
 def f_base64decode(cipherlist):
     base64list = 'gx74KW1roM9qwzPFVOBLSlYaeyncdNbI=JfUCQRHtj2+Z05vshXi3GAEuT/m8Dpk6'

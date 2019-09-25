@@ -13,7 +13,7 @@ from gevent.queue import Queue
 from lib.core.data import paths
 from lib.core.Request import request
 from urllib.parse import urlparse
-from plugin.random_ua import get_random_ua
+from lib.utils.random_ua import get_random_ua
 
 def poc(url):
     # url = "http://www.example.org/default.html?ct=32&op=92&item=98"

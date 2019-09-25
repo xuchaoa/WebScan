@@ -16,6 +16,7 @@ from lib.core.data import scan_option, xscan
 from lib.core.option import init_options
 from lib.controller.engine import run
 from setting import poc_finger
+import re
 
 def module_path():
     return os.path.dirname(os.path.realpath(__file__))
@@ -33,15 +34,16 @@ def finger_load_poc_and_run(taskID, ip, keyword=None, port=None):
     poc_list = set()
     if keyword is not None:
         for keys in poc_finger.keys():
-            if keys.split(':')[0] in keyword:
+            if re.search(keys.split(':')[0], keyword, re.I):
+            # if keys.split(':')[0] in keyword:
                 poc_list.update(poc_finger[keys])
     if port is not None:
         for keys in poc_finger.keys():
-            if keys.split(':')[1] in port:
+            if keys.split(':')[1] == '222':
                 poc_list.update(poc_finger[keys])
     # 服务不是标准端口也可以检测，同时为防止漏报依旧匹配端口
     if len(poc_list) == 0:
-        poc_list = poc_finger['others']
+        poc_list = poc_finger['x_others:999999']
     print(poc_list)
     for _ in poc_list:
         main( poc_name=_, target_single=ip + ':' + port, taskID=taskID)
@@ -76,4 +78,4 @@ def main(poc_name=None, taskID=None, target_single=None, target_range=None, targ
 
 if __name__ == '__main__':
     # main()
-    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','140.207.4.77','weblogic','6379')
+    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','127.0.0.1','discuz','6380')

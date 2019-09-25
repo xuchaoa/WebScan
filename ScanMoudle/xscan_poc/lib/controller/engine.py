@@ -39,13 +39,14 @@ def load_module():
     global scan_poc
     # print(ESSENTIAL_MODULE_METHODS,conf.module_path)
     try:
+
         module_spec = importlib.util.spec_from_file_location(ESSENTIAL_MODULE_METHODS,conf.module_path)
         module = importlib.util.module_from_spec(module_spec)
         module_spec.loader.exec_module(module)
         #TODO to change the method
         scan_poc = module.poc
     except Exception as e:
-        msg = "[-] Your current script [%s.py] caused this exception\n%s\n%s" % (os.path.basename(conf.module_path),
+        msg = "[-] Your current script [%s] caused this exception\n%s\n%s" % (os.path.basename(conf.module_path),
               '[Error Msg]: ' + str(e), 'Maybe you can download this module from pip or easy_install')
         print(msg)
         sys.exit(0)
@@ -91,6 +92,8 @@ def result_handle(result, target):
     elif isinstance(result, list):
         for _ in  result:
             xscan.result.append(_)
+    elif isinstance(result, dict):
+        xscan.result.update(result)
     else:
         _ = str(result)
         xscan.result.append(_)
@@ -131,19 +134,26 @@ def run():
         xscan.found_count, xscan.target.qsize(), xscan.scan_count, time.time() - xscan.start_time)
 
     print(msg)
-    if len(xscan.result) != 0:
+
+    # 结果加入MongoDB
+    if isinstance(xscan.result, dict):
+        result = {
+            scan_option.poc_name: xscan.result
+        }
+    elif len(xscan.result) != 0:
         result = {
             scan_option.poc_name: {
                 'payload':xscan.result,
+                'post_data':'',
                 'info':''
             }
         }
-        if 'taskID' in scan_option.keys():
-            taskID = scan_option.taskID
-            from utils.mongo_op import MongoDB
-            x = MongoDB()
-            x.add_poc_vuln(taskID, json.dumps(result))
-        print(result)
+    if 'taskID' in scan_option.keys():
+        taskID = scan_option.taskID
+        from utils.mongo_op import MongoDB
+        x = MongoDB()
+        x.add_poc_vuln(taskID, json.dumps(result))  # key相同会覆盖原有数据
+    print(result)
     print(xscan.result)
     return xscan.result
 

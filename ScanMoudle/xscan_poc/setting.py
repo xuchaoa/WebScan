@@ -17,6 +17,8 @@ poc_finger = {
     'weblogic:7001':['weblogic_ssrf','weblogic_weak_pass','weblogic_xmldecoder_exec','weblogic_2019_48814'],
     'thinkphp:80':['thinkphp_rce'],
     'wordpress:80':['wp_social_warfare_rce'],
-    'others':[]
+    'mongo:27017':['mongodb'],
+    'discuz:80':['discuz_focus_flashxss','discuz_forum_message_ssrf','discuz_plugin_ques_sqli','discuz_x25_path_disclosure'],
+    'x_others:999999':['redis_unauth','coremail_source_leak','fastadmin_weak','seeyon','source_leak_check']
 
 }

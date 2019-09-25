@@ -36,7 +36,7 @@ def  engine_register(args):
 def poc_register(args):
     if not args.poc_name:
         print("no poc name ")
-        sys.exit()
+        return
     conf.module_path = os.path.abspath(os.path.abspath(os.path.join(paths.POC_PATH, args.poc_name + '.py')))
 
 def target_register(args):
