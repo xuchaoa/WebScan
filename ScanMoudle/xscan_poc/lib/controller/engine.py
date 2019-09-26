@@ -23,6 +23,7 @@ import json
 def initEngine():
     load_module()
     xscan.result = []
+    xscan.result_dic = {}
     xscan.thread_mode = True if conf.engine_mode == "multi_threaded" else False
     xscan.target = conf.target
     xscan.scan_count = xscan.found_count = 0
@@ -93,7 +94,7 @@ def result_handle(result, target):
         for _ in  result:
             xscan.result.append(_)
     elif isinstance(result, dict):
-        xscan.result.update(result)
+        xscan.result_dic.update(result)
     else:
         _ = str(result)
         xscan.result.append(_)
@@ -134,14 +135,14 @@ def run():
         xscan.found_count, xscan.target.qsize(), xscan.scan_count, time.time() - xscan.start_time)
 
     print(msg)
-
     # 结果加入MongoDB
-    if isinstance(xscan.result, dict):
-        result = {
-            scan_option.poc_name: xscan.result
+    res = {}
+    if len(xscan.result_dic) != 0:
+        res = {
+            scan_option.poc_name: xscan.result_dic
         }
     elif len(xscan.result) != 0:
-        result = {
+        res = {
             scan_option.poc_name: {
                 'payload':xscan.result,
                 'post_data':'',
@@ -152,9 +153,8 @@ def run():
         taskID = scan_option.taskID
         from utils.mongo_op import MongoDB
         x = MongoDB()
-        x.add_poc_vuln(taskID, json.dumps(result))  # key相同会覆盖原有数据
-    print(result)
-    print(xscan.result)
-    return xscan.result
+        x.add_poc_vuln(taskID, json.dumps(res))  # key相同会覆盖原有数据
+    print(res)
+    return res
 
 

