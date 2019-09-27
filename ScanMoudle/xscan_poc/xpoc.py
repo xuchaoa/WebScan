@@ -78,4 +78,4 @@ def main(poc_name=None, taskID=None, target_single=None, target_range=None, targ
 
 if __name__ == '__main__':
     # main()
-    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','127.0.0.1','discuz','6380')
+    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','127.0.0.1','redis','6380')

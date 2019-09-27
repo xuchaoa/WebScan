@@ -12,6 +12,7 @@ from lib.core.data import paths
 import queue
 from lib.core.common import ip_range_to_list
 import ipaddress
+from setting import poc_path
 
 
 def init_options(scan_option):
@@ -32,12 +33,18 @@ def  engine_register(args):
         conf.concurrent_num = 100
     else:
         conf.concurrent_num = args.concurrent_num
+def get_poc_path(poc_name):
+    for key,value in poc_path.items():
+        if poc_name in value:
+            return key
+    return ''
 
 def poc_register(args):
     if not args.poc_name:
         print("no poc name ")
         return
-    conf.module_path = os.path.abspath(os.path.abspath(os.path.join(paths.POC_PATH, args.poc_name + '.py')))
+
+    conf.module_path = os.path.abspath(os.path.abspath(os.path.join(paths.POC_PATH, get_poc_path(args.poc_name) + args.poc_name + '.py')))
 
 def target_register(args):
     conf.target = queue.Queue()

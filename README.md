@@ -2,7 +2,7 @@ WebScan-Node
 
 这是扫描节点代码，目前正在开发中。
 
-celery + rabbitmq + mongo 实现分布式，不熟任意数量扫描节点
+celery + rabbitmq + mongo 实现分布式，可以部署任意数量扫描节点
 
 目前支持：
 1. 子域名爆破  - subdomain3
