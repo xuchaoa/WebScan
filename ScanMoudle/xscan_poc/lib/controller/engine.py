@@ -109,13 +109,15 @@ def xpoc():
         try:
             result = scan_poc(target)
             result_handle(result, target)
-        except:
+        except Exception as e:
+            print(e)
             xscan.is_continue = False
         change_scan_count(1)
     change_current_tc_count(-1)
 
 def run():
     initEngine()
+    # print(xscan.target.qsize())
     if xscan.thread_mode:
         set_thread_lock()
         print('nulti thread mode, number is {}'.format(xscan.current_tc_count ))

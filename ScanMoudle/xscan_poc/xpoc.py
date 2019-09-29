@@ -46,7 +46,10 @@ def finger_load_poc_and_run(taskID, ip, keyword=None, port=None):
         poc_list = poc_finger['x_others:999999']
     print(poc_list)
     for _ in poc_list:
-        main( poc_name=_, target_single=ip + ':' + port, taskID=taskID)
+        if port is not None:
+            main( poc_name=_, target_single=ip + ':' + port , taskID=taskID)
+        else:
+            main(poc_name=_, target_single=ip, taskID=taskID)
 
 def main(poc_name=None, taskID=None, target_single=None, target_range=None, target_network=None, zoomeye_dork=None, shodan_dork=None, fofa_dork=None,
          engine_thread=False, concurrent_num=100, censys_dork=None, search_type=None, proxy=None, api_limit=100, api_offset=0):
@@ -57,9 +60,9 @@ def main(poc_name=None, taskID=None, target_single=None, target_range=None, targ
         #      'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': 'weblogic',
         #      'shodan_dork': '', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 50, 'api_offset': 0, 'search_type': 'host',
         #      'output_path': '', 'logging_level': 0, 'proxy': ''}
-        # x = {'engine_thread': False, 'concurrent_num': 100, 'poc_name': 'redis_unauth',
+        # x = {'engine_thread': False, 'concurrent_num': 100, 'poc_name': 'poc',
         #      'target_single': '', 'target_range': '', 'target_network': '', 'zoomeye_dork': '',
-        #      'shodan_dork': 'redis', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 100, 'api_offset': 0,
+        #      'shodan_dork': 'phpcms', 'fofa_dork': '', 'censys_dork': '', 'api_limit': 100, 'api_offset': 0,
         #      'search_type': '', 'proxy': ''}
         x = {'engine_thread': engine_thread, 'concurrent_num': concurrent_num, 'poc_name': poc_name,
              'target_single': target_single, 'target_range': target_range, 'target_network': target_network, 'zoomeye_dork': zoomeye_dork,
@@ -78,4 +81,4 @@ def main(poc_name=None, taskID=None, target_single=None, target_range=None, targ
 
 if __name__ == '__main__':
     # main()
-    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','127.0.0.1','redis','6380')
+    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','http://www.corner.com.cn','phpcms')
