@@ -69,9 +69,12 @@ def handle_data(ip_list, alive_ip, FtaskID):
 
 
 def add_task(taskID, host):
-    app.send_task(name='PortScan',
-                  queue='PortScan',
-                  kwargs=dict(taskID=taskID, host=host))
+    # app.send_task(name='PortScan',
+    #               queue='PortScan',
+    #               kwargs=dict(taskID=taskID, host=host))
+    app.send_task(name='PortServScan',
+                  queue='PortServScan',
+                  kwargs=dict(taskID=taskID, ip_addr=host, resp='syn_normal'))
     app.send_task(name='IpLocation',
                   queue='IpLocation',
                   kwargs=dict(taskID=taskID, ip=host))

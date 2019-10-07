@@ -17,7 +17,7 @@ from kombu import Queue, Exchange
 # CELERY_RESULT_BACKEND = 'redis://:SDUTctf@10.6.65.231:6379/3'
 
 
-BROKER_URL= 'amqp://admin:sdutsec@127.0.0.1:5672/xscan'
+BROKER_URL= 'amqp://admin:sdutsec@192.168.2.108:5672/xscan'
 
 # CELERY_RESULT_BACKEND= 'amqp://admin:sdutsec@10.6.65.231:5672/xscan'
 

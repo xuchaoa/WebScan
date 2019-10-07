@@ -16,6 +16,14 @@ beautifulsoup4==4.8.0
 shodan==1.14.0
 sentry-sdk==0.10.2
 lxml==4.4.1
+bs4
+gevent==1.4.0
+progressbar==2.5
+python-nmap==0.6.1
+dnspython==1.16.0
+IPy==1.0
+geoip2==2.9.0
+
 
 
 

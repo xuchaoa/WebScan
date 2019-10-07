@@ -29,4 +29,4 @@ app.config_from_object(config)
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
 
-sentry_sdk.init("http://4a1bad6dbac74432b238b0f529c25070@192.168.23.128:9000/2", integrations=[CeleryIntegration()])
+sentry_sdk.init("http://19ced4b6bb564d64a5fe648559105e41@192.168.2.108:9000/2", integrations=[CeleryIntegration()])

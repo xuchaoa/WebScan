@@ -80,13 +80,13 @@ from celery_tasks.main import app
 #               kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='6379', service='redis'),
 #               )
 
+app.send_task(name='AliveScan',
+              queue='AliveScan',
+              kwargs=dict(FtaskID='5d7e306dbc4f8c642bde8a2d',ip='123.207.155.210-123.207.155.221', ip_type='range'))
+# #
 # app.send_task(name='AliveScan',
 #               queue='AliveScan',
-#               kwargs=dict(taskID='5d3ee2532eb519917d2daa9d', ip='106.12.150.166', ip_type='single'))
-#
-# app.send_task(name='AliveScan',
-#               queue='AliveScan',
-#               kwargs=dict(ip='106.12.150.166/24', ip_type='mask'))
+#               kwargs=dict(FtaskID='5d7e306dbc4f8c642bde8a2d', ip='149.129.89.220/24', ip_type='mask'))
 
 
 # app.send_task(name='PortServScan',

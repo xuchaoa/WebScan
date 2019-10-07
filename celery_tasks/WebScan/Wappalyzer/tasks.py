@@ -20,6 +20,7 @@ def wappalyzer(self, taskID, domain):
     if not domain.startswith('http'):
         domain = 'http://' + domain
     wappalyzer = Wappalyzer.latest()
+    res = ''
     try:
         webpage = WebPage.new_from_url(domain, verify=False)
         res = wappalyzer.analyze(webpage)

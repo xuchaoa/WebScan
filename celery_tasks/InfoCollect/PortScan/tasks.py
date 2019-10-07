@@ -25,9 +25,9 @@ class my_task(celery.Task):
         print('task success : {}:{}:{}:{}'.format(retval, task_id, args, kwargs))
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         print(' task fail {}:{}:{}:{}:{}'.format(exc, task_id, args, kwargs, einfo))
-        if self.request.retries == 2:
-            # 连续三次失败,把任务推动到给 nmap
-            print('连续失败三次')
+        if self.request.retries == 1:
+            # 连续2次失败,把任务推给 nmap
+            print('重试失败,推送任务到PortServScan')
             app.send_task(name='PortServScan',
                           queue='PortServScan',
                           kwargs=dict(taskID=kwargs['taskID'], ip_addr=kwargs['host'], resp='syn_normal'))
@@ -64,7 +64,7 @@ def portscan(self, taskID, host, ports='0-10000', rate=1000):
     except masscan.NetworkConnectionError or masscan.PortScannerError as e:
         print(e)
         print('当前重试次数',self.request.retries)
-        raise self.retry(exc=e, countdown=60, max_retries=2)  #最大重试次数2，对一个ip最多扫描3次结束
+        raise self.retry(exc=e, countdown=1, max_retries=1)  #最大重试次数1，对一个ip最多扫描2次结束
         # app.send_task(name='PortServScan',
         #               queue='PortServScan',
         #               kwargs=dict(taskID=taskID, ip_addr=host, resp='syn_normal'))
