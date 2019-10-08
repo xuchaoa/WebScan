@@ -52,6 +52,14 @@ def handle_result(taskID, ip_addr, result):
             tasks_dispatch_web(taskID, ip_addr)
         # elif key == 443 and 'name' in value.keys() and 'http' in value['name']:
         #     tasks_dispatch(taskID, ip_addr)
+        if 'name' in value.keys() and re.search('ms-wbt-server', value['name'], re.I):
+            # app.send_task(name='DirScan',
+            #               queue='DirScan',
+            #               kwargs=dict(taskID=taskID, target=info['domain'])
+            #               )
+            #推送给单独爆破的脚本
+            pass
+
         if 'name' in value.keys():
             service = value['name']
             # 详见https://svn.nmap.org/nmap/nmap-services
@@ -61,8 +69,9 @@ def handle_result(taskID, ip_addr, result):
                 service = 'ssh'
             elif 'mysql' == service:
                 service = 'mysql'
-            elif re.search('ms-wbt-server', service, re.I):
-                service = 'rdp'
+            # elif re.search('ms-wbt-server', service, re.I):
+            #     service = 'rdp'
+            ## 因为hydra的rdp爆破脚本过时，支持不够广泛，这里的爆破任务推送给独立爆破脚本
             elif re.search('microsoft-ds', service, re.I):
                 service = 'smb'
             # elif re.search('pop3', service, re.I):  #太耗费时间，成功率不高

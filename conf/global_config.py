@@ -63,6 +63,10 @@ DIC_USERNAME_VNC = realjoin(USERNAME_DICT, 'dic_username_vnc.txt')
 DIC_USERNAME_WEBLOGIC = realjoin(USERNAME_DICT, 'dic_username_weblogic.txt')
 COMMON_USERNAME = realjoin(USERNAME_DICT, 'common_username.txt')
 
+### RDPassSpray dcit
+RDP_DIC_PATH = realjoin(DATA_PATH, 'rdp_dict')
+RDP_DIC_USER = realjoin(RDP_DIC_PATH, 'users.txt')
+RDP_DIC_PASSWD = realjoin(RDP_DIC_PATH, 'passwords.txt')
 
 
 # 在爆破中，如果一个无效ip多次出现，可以将IP加入到下列表中，程序会在爆破中过滤。

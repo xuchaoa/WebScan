@@ -17,12 +17,14 @@ from kombu import Queue, Exchange
 # CELERY_RESULT_BACKEND = 'redis://:SDUTctf@10.6.65.231:6379/3'
 
 
-BROKER_URL= 'amqp://admin:sdutsec@192.168.2.108:5672/xscan'
+# BROKER_URL= 'amqp://admin:sdutsec@192.168.2.108:5672/xscan'
+BROKER_URL= 'amqp://admin:sdutsec@127.0.0.1:5672/xscan'
 
 # CELERY_RESULT_BACKEND= 'amqp://admin:sdutsec@10.6.65.231:5672/xscan'
 
 CELERY_ACCEPT_CONTENT = ['json']
 
+CELERYD_CONCURRENCY = 20
 
 # 设定 Celery 时区
 CELERY_TIMEZONE = 'Asia/Shanghai'
@@ -53,6 +55,7 @@ CELERY_QUEUES = (
     Queue("AliveScan", Exchange("xscan",type='direct'),routing_key='AliveScan'),
     Queue("PortServScan", Exchange("xscan",type='direct'),routing_key='PortServScan'),
     Queue("HydraBrute", Exchange("xscan_brute",type='direct'),routing_key='HydraBrute'),
+    Queue("RDPassSpray", Exchange("xscan_brute",type='direct'),routing_key='RDPassSpray'),
     Queue("SFileScan", Exchange("xscan_web",type='direct'),routing_key='SFileScan'),
     Queue("ServInfo", Exchange("xscan_web",type='direct'),routing_key='ServInfo'),
     Queue("CmsFinger", Exchange("xscan_web",type='direct'),routing_key='CmsFinger'),
@@ -83,6 +86,7 @@ CELERY_IMPORTS = [
     "celery_tasks.TargetCollect.subdomain3.tasks",
     "celery_tasks.InfoCollect.IpLocation.tasks",
     "celery_tasks.WeakBrute.hydra.tasks",
+    "celery_tasks.WeakBrute.RDPassSpray.RDPassSpray",
     "celery_tasks.TargetCollect.AliveScan.tasks",
     # "celery_task.epp_scripts.test2",
 ]

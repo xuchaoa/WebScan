@@ -113,7 +113,6 @@ def NameDictBrute(taskID, large_or_small, host, port, service):
     print(_)
     ## TODO redis未授权访问无法解决
     ## 有些情况下不生成文件,所以这里要进行异常处理
-    ## TODO RDP爆破 看看有没有替代方法
     with open(file_name, 'r') as f:
         print("-------------------------------------------------"+f.read())
         for _ in f:

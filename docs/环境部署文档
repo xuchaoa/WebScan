@@ -64,3 +64,9 @@ https://blog.csdn.net/rznice/article/details/52211620'
 切换到项目根目录(ubuntu-Dockerfile)
 docker build -t archerx/node:1.0 -f Docker/Dockerfile .
 
+### 安装RDPassSpray依赖
+```
+apt-get install python-apt
+apt-get install xfreerdp
+````
+

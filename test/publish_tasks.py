@@ -80,9 +80,9 @@ from celery_tasks.main import app
 #               kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='6379', service='redis'),
 #               )
 
-app.send_task(name='AliveScan',
-              queue='AliveScan',
-              kwargs=dict(FtaskID='5d7e306dbc4f8c642bde8a2d',ip='123.207.155.210-123.207.155.221', ip_type='range'))
+# app.send_task(name='AliveScan',
+#               queue='AliveScan',
+#               kwargs=dict(FtaskID='5d7e306dbc4f8c642bde8a2d',ip='123.207.155.210-123.207.155.221', ip_type='range'))
 # #
 # app.send_task(name='AliveScan',
 #               queue='AliveScan',
@@ -119,3 +119,7 @@ app.send_task(name='AliveScan',
 #               queue = 'DirScan',
 #               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', target='https://blog.ixuchao.cn')
 #               )
+
+app.send_task(name='RDPassSpray',
+              queue='RDPassSpray',
+              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42783',target='10.0.83.217'))
