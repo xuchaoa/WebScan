@@ -67,6 +67,6 @@ docker build -t archerx/node:1.0 -f Docker/Dockerfile .
 ### 安装RDPassSpray依赖
 ```
 apt-get install python-apt
-apt-get install xfreerdp
+apt-get install xfreerdp  或者  sudo apt-get install freerdp-x11     #前后这两个其实是一个东西
 ````
 
