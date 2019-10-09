@@ -89,9 +89,9 @@ from celery_tasks.main import app
 #               kwargs=dict(FtaskID='5d7e306dbc4f8c642bde8a2d', ip='149.129.89.220/24', ip_type='mask'))
 
 
-# app.send_task(name='PortServScan',
-#               queue='PortServScan',
-#               kwargs=dict(taskID='5d6e24694c3e3fdb872e596c',ip_addr='149.129.89.93', resp='syn_normal'))
+app.send_task(name='PortServScan',
+              queue='PortServScan',
+              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42783',ip_addr='192.168.23.1', resp='syn_normal'))
 
 # app.send_task(name='ServInfo',
 #               queue='ServInfo',
@@ -120,6 +120,6 @@ from celery_tasks.main import app
 #               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42782', target='https://blog.ixuchao.cn')
 #               )
 
-app.send_task(name='RDPassSpray',
-              queue='RDPassSpray',
-              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42783',target='10.0.83.217'))
+# app.send_task(name='RDPassSpray',
+#               queue='RDPassSpray',
+#               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42783',target='10.0.83.217'))

@@ -15,9 +15,9 @@ import urllib.error
 import time
 from requests.exceptions import ChunkedEncodingError, ConnectionError, ConnectTimeout
 from urllib.parse import quote, unquote
-from functools import partial
 from bs4 import BeautifulSoup
 from concurrent import futures
+from celery_tasks.main import app
 
 
 
@@ -1465,13 +1465,14 @@ def check_one(s):
 
 def scan_one(url, data=None, headers=None, encoding="UTF-8"):
     """扫描单个URL漏洞"""
+    if not url.startswith('http'):
+        url = 'http://' + url
     click.secho('[+] 正在扫描URL:' + url, fg='green')
     ss = [s(url, data, headers, encoding) for s in s2_list]
     with futures.ThreadPoolExecutor(max_workers=10) as executor:
         results = list(executor.map(check_one, ss))
     # print(results)
     results = [r for r in results if r]
-    click.secho('[*] ----------------results------------------'.format(url=url), fg='green')
     if (not results) and (not is_quiet):
         click.secho('[*] {url} 未发现漏洞'.format(url=url), fg='red')
     finally_result = {}
@@ -1483,8 +1484,12 @@ def scan_one(url, data=None, headers=None, encoding="UTF-8"):
     print(finally_result)
 
 
-def main():
-    scan_one('http://127.0.0.1:8080/S2-001/')
+@app.task(bind=True,name='Struts2Scan')
+def main(self, url):
+    scan_one(url=url)
+    # scan_one('192.168.23.1:8080/S2-001')
+    # scan_one('192.168.23.1:8080')
+    ## TODO fix 像这种如果没有具体目录会漏报
 
 
 

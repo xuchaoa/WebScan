@@ -53,11 +53,12 @@ def handle_result(taskID, ip_addr, result):
         # elif key == 443 and 'name' in value.keys() and 'http' in value['name']:
         #     tasks_dispatch(taskID, ip_addr)
         if 'name' in value.keys() and re.search('ms-wbt-server', value['name'], re.I):
-            # app.send_task(name='DirScan',
-            #               queue='DirScan',
-            #               kwargs=dict(taskID=taskID, target=info['domain'])
-            #               )
             #推送给单独爆破的脚本
+            app.send_task(name='RDPassSpray',
+                          queue='RDPassSpray',
+                          kwargs=dict(taskID=taskID, target=ip_addr))
+        if key == 8080:
+        # TODO 找出明确特征证明使用的是st2框架
             pass
 
         if 'name' in value.keys():

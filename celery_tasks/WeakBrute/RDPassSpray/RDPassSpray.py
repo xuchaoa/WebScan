@@ -231,6 +231,7 @@ def main(taskID, target):
     return result
 
 @app.task(bind=True,name='RDPassSpray')
+# 可以非阻塞执行
 def RDPassSpray(self, taskID, target):
     _ = main(taskID, target)
     mon = MongoDB()

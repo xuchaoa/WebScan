@@ -15,7 +15,7 @@ from celery_tasks.main import app
 import requests
 requests.packages.urllib3.disable_warnings()
 
-@app.task(bind=True, name='Wappalyzer', max_retries=3)
+@app.task(bind=True, name='Wappalyzer')
 def wappalyzer(self, taskID, domain):
     if not domain.startswith('http'):
         domain = 'http://' + domain
@@ -29,6 +29,7 @@ def wappalyzer(self, taskID, domain):
         x.add_wappalyzer(taskID, list(res))
     except requests.exceptions.ConnectTimeout as e:
         print(e)
+        # 不存在该服务也会可能出现这种异常
         app.send_task(name='Wappalyzer',
                       queue='Wappalyzer',
                       kwargs=dict(taskID=taskID, domain=domain),
@@ -45,4 +46,4 @@ def wappalyzer(self, taskID, domain):
     return list(res)
 
 if __name__ == '__main__':
-    wappalyzer('5d7a2f0ccb102ff5bce42782', '123.207.155.222')
+    wappalyzer('5d7a2f0ccb102ff5bce42783', '192.168.23.1')
