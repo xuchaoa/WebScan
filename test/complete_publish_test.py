@@ -12,13 +12,13 @@ from celery_tasks.main import app
 x = MongoDB()
 id = x.add_Ftask()
 
-app.send_task(name='AliveScan',
-              queue='AliveScan',
-              kwargs=dict(FtaskID=str(id), ip='127.0.0.1', ip_type='single'))
-
 # app.send_task(name='AliveScan',
 #               queue='AliveScan',
-#               kwargs=dict(FtaskID=str(id), ip='123.207.155.100-123.207.155.200', ip_type='range'))
+#               kwargs=dict(FtaskID=str(id), ip='127.0.0.1', ip_type='single'))
+
+app.send_task(name='AliveScan',
+              queue='AliveScan',
+              kwargs=dict(FtaskID=str(id), ip='149.129.89.150-149.129.89.200', ip_type='range'))
 
 #149.129.60.133
 # app.send_task(name='AliveScan',

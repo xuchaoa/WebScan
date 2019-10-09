@@ -1463,7 +1463,7 @@ def check_one(s):
     return result
 
 
-def scan_one(url, data=None, headers=None, encoding="UTF-8"):
+def scan_one(taskID, url, data=None, headers=None, encoding="UTF-8"):
     """扫描单个URL漏洞"""
     if not url.startswith('http'):
         url = 'http://' + url
@@ -1482,11 +1482,11 @@ def scan_one(url, data=None, headers=None, encoding="UTF-8"):
         else:
             finally_result.update(r)
     print(finally_result)
-
+    return finally_result
 
 @app.task(bind=True,name='Struts2Scan')
-def main(self, url):
-    scan_one(url=url)
+def main(self, taskID, url):
+    scan_one(taskID, url)
     # scan_one('192.168.23.1:8080/S2-001')
     # scan_one('192.168.23.1:8080')
     ## TODO fix 像这种如果没有具体目录会漏报

@@ -71,10 +71,10 @@ from celery_tasks.main import app
 #               kwargs=dict(taskID='', username='dict', dict='small', host='149.129.60.179', port='22', service='ssh')
 #               )
 
-# app.send_task(name='HydraBrute',
-#               queue = 'HydraBrute',
-#               kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='22', service='ssh'),
-#               )
+app.send_task(name='HydraBrute',
+              queue = 'HydraBrute',
+              kwargs=dict(taskID='5d9de69076b4eddcbbefeaf0', username='dict', dict='small', host='149.129.89.151', port='22', service='ssh'),
+              )
 # app.send_task(name='HydraBrute',
 #               queue = 'HydraBrute',
 #               kwargs=dict(taskID='5d7e32de6846c2a6b6fc1291', username='dict', dict='small', host='127.0.0.1', port='6379', service='redis'),
@@ -89,9 +89,9 @@ from celery_tasks.main import app
 #               kwargs=dict(FtaskID='5d7e306dbc4f8c642bde8a2d', ip='149.129.89.220/24', ip_type='mask'))
 
 
-app.send_task(name='PortServScan',
-              queue='PortServScan',
-              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42783',ip_addr='192.168.23.1', resp='syn_normal'))
+# app.send_task(name='PortServScan',
+#               queue='PortServScan',
+#               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42783',ip_addr='192.168.23.1', resp='syn_normal'))
 
 # app.send_task(name='ServInfo',
 #               queue='ServInfo',

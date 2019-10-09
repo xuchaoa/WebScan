@@ -61,6 +61,7 @@ CELERY_QUEUES = (
     Queue("CmsFinger", Exchange("xscan_web",type='direct'),routing_key='CmsFinger'),
     Queue("Wappalyzer", Exchange("xscan_web",type='direct'),routing_key='Wappalyzer'),
     Queue("DirScan", Exchange("xscan_web",type='direct'),routing_key='DirScan'),
+    Queue("Struts2Scan", Exchange("xscan_web",type='direct'),routing_key='Struts2Scan'),
 
     # Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
@@ -79,6 +80,7 @@ CELERY_IMPORTS = [
     "celery_tasks.WebScan.CmsFinger.tasks",
     "celery_tasks.WebScan.Wappalyzer.tasks",
     "celery_tasks.WebScan.DirScan.tasks",
+    "celery_tasks.WebScan.Struts2Scan.Struts2Scan",
     # "celery_tasks.TargetCollect.fuzzdomain.tasks",
     "celery_tasks.InfoCollect.PortScan.tasks",
     "celery_tasks.InfoCollect.ServScan.tasks",

@@ -98,7 +98,7 @@ class MongoDB(object):
                     "domain": "",
                     "ports": "",
                     "location": "",
-                    "vulnerable_attack": []
+                    "vulnerable_attack": ""
                 }
                 coll = x.db.HostScan
                 if status['state'] == 'up':
@@ -154,6 +154,17 @@ class MongoDB(object):
         result = json.loads(result)
         for key , value in result.items():
             self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$set': {"vulnerable_attack."+key : value}})
+
+    def add_struts2_vuln(self, taskID, result):
+        '''
+
+        :param taskID: str
+        :param result: dict
+        :return:
+        '''
+        result = json.loads(result)
+        for key, value in result.items():
+            self.db.HostScan.update({"_id": ObjectId(taskID)}, {'$set': {"struts2_vuln."+key : value}})
 
     def add_web_dir(self, taskID, result):
         # type(result) is list

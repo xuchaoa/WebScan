@@ -109,7 +109,7 @@ def NameDictBrute(taskID, large_or_small, host, port, service):
         _ = os.system("hydra -L {} -P {} {} -s  {} {} -I -o {} -f -t 15".format(username_dict,
                                                                   HYDRADIC_LARGE if large_or_small == "large" else HYDRADIC_SMALL,
                                                                   host, port, service, file_name))
-
+    # does not support password authentication.  出现这种问题可能时关闭了密码认证,使用的秘钥认证
     print(_)
     ## TODO redis未授权访问无法解决
     ## 有些情况下不生成文件,所以这里要进行异常处理

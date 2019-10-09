@@ -23,6 +23,8 @@ python-nmap==0.6.1
 dnspython==1.16.0
 IPy==1.0
 geoip2==2.9.0
+click=7.0
+
 
 
 
