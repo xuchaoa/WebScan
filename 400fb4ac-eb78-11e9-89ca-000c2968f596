@@ -1,0 +1,1 @@
+# Hydra v8.6 run at 2019-10-11 00:08:52 on 149.129.89.165 ssh (hydra -L /home/archerx/PycharmProjects/WebScan/data/hydra_dict/username_dict/dic_username_ssh.txt -P /home/archerx/PycharmProjects/WebScan/data/hydra_dict/weakpass_small.txt -s 22 -I -o 400fb4ac-eb78-11e9-89ca-000c2968f596 -f -t 15 149.129.89.165 ssh)

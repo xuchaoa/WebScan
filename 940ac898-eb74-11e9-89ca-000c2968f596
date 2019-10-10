@@ -1,1 +1,0 @@
-# Hydra v8.6 run at 2019-10-10 23:42:34 on 149.129.89.151 ftp (hydra -L /home/archerx/PycharmProjects/WebScan/data/hydra_dict/username_dict/dic_username_ftp.txt -P /home/archerx/PycharmProjects/WebScan/data/hydra_dict/weakpass_small.txt -s 21 -I -o 940ac898-eb74-11e9-89ca-000c2968f596 -f -t 15 149.129.89.151 ftp)

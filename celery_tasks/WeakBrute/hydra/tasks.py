@@ -122,7 +122,8 @@ def NameDictBrute(taskID, large_or_small, host, port, service):
     os.remove(file_name)
 
 
-
+## TODO 报这种错误会死循环  [ERROR] Host '114.88.233.234' is not allowed to connect to this MySQL server
+## 参照 BruteDum方法来解决
 
 
 if __name__ == '__main__':
