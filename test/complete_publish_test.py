@@ -18,7 +18,7 @@ id = x.add_Ftask()
 
 app.send_task(name='AliveScan',
               queue='AliveScan',
-              kwargs=dict(FtaskID=str(id), ip='149.129.89.150-149.129.89.200', ip_type='range'))
+              kwargs=dict(FtaskID=str(id), ip='149.129.89.150-149.129.89.170', ip_type='range'))
 
 #149.129.60.133
 # app.send_task(name='AliveScan',

@@ -17,7 +17,10 @@ from requests.exceptions import ChunkedEncodingError, ConnectionError, ConnectTi
 from urllib.parse import quote, unquote
 from bs4 import BeautifulSoup
 from concurrent import futures
+import json
+
 from celery_tasks.main import app
+from utils.mongo_op import MongoDB
 
 
 
@@ -1482,6 +1485,8 @@ def scan_one(taskID, url, data=None, headers=None, encoding="UTF-8"):
         else:
             finally_result.update(r)
     print(finally_result)
+    _ = MongoDB()
+    _.add_struts2_vuln(taskID, json.dumps(finally_result))
     return finally_result
 
 @app.task(bind=True,name='Struts2Scan')
