@@ -1,3 +1,4 @@
+#1
 [2019-09-18 16:44:44,634: WARNING/MainProcess] File "/home/x/PycharmProjects/WebScan/venv/lib/python3.6/site-packages/amqp/transport.py", line 444, in _read
     raise IOError('Server unexpectedly closed connection')
 [2019-09-18 16:44:44,634: WARNING/MainProcess] OSError: Server unexpectedly closed connection

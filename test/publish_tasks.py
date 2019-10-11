@@ -73,7 +73,7 @@ from celery_tasks.main import app
 
 app.send_task(name='HydraBrute',
               queue = 'HydraBrute',
-              kwargs=dict(taskID='5d9de69076b4eddcbbefeaf0', username='dict', dict='small', host='149.129.89.151', port='22', service='ssh'),
+              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42783', username='dict', dict='small', host='127.0.0.1', port='22', service='ssh'),
               )
 # app.send_task(name='HydraBrute',
 #               queue = 'HydraBrute',

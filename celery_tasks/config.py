@@ -24,20 +24,28 @@ BROKER_URL= 'amqp://admin:sdutsec@127.0.0.1:5672/xscan'
 
 CELERY_ACCEPT_CONTENT = ['json']
 
-CELERYD_CONCURRENCY = 20
-
 # 设定 Celery 时区
 CELERY_TIMEZONE = 'Asia/Shanghai'
 
 
 # 任务 ACK 确认机制，防止 Task 在处理时程序异常导致 Task 丢失的问题
 CELERY_ACKS_LATE = True
+# 并发任务数量
+CELERYD_CONCURRENCY = 2
+# 每个worker最多执行20个任务就会被销毁，可防止内存泄露
+CELERYD_MAX_TASKS_PER_CHILD = 1
+# 单个任务的运行时间不超过此值，否则会被SIGKILL 信号杀死
+CELERYD_TASK_TIME_LIMIT = 600
 
+# 任务发出后，经过一段时间还未收到acknowledge , 就将任务重新交给其他worker执行
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 600}
 # 忽略 Task 处理程序的返回结果，结果直接在处理程序中连接后端数据库进行处理
 CELERY_IGNORE_RESULT = True
 
 # # 处理程序从任务队列预加载的待处理任务数
-# CELERYD_PREFETCH_MULTIPLIER = 2
+CELERYD_PREFETCH_MULTIPLIER = 0
+
+BROKER_HEARTBEAT = 0  # 解决Debug中的 #1
 
 # # 任务发出后，经过一段时间还未收到acknowledge , 就将任务重新交给其他worker执行
 # CELERY_DISABLE_RATE_LIMITS = False

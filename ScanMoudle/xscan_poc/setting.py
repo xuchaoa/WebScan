@@ -12,6 +12,10 @@ ESSENTIAL_MODULE_METHODS = 'poc'
 
 IS_WIN = True if (sys.platform in ["win32", "cygwin"] or os.name == "nt") else False
 
+def get_all_poc():
+    poc_list = []
+    for name in poc_finger.values():
+
 poc_path = {
     'system/redis/':['redis_unauth'],
     'system/mongo/':['mongodb'],

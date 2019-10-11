@@ -81,4 +81,4 @@ def main(poc_name=None, taskID=None, target_single=None, target_range=None, targ
 
 if __name__ == '__main__':
     # main()
-    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','http://www.corner.com.cn','phpcms')
+    # finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','http://www.corner.com.cn','phpcms')
