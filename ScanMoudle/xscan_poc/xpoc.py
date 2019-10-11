@@ -15,7 +15,7 @@ from lib.core.common import set_paths
 from lib.core.data import scan_option, xscan
 from lib.core.option import init_options
 from lib.controller.engine import run
-from setting import poc_finger
+from setting import poc_finger, get_all_poc
 import re
 
 def module_path():
@@ -43,7 +43,9 @@ def finger_load_poc_and_run(taskID, ip, keyword=None, port=None):
                 poc_list.update(poc_finger[keys])
     # 服务不是标准端口也可以检测，同时为防止漏报依旧匹配端口
     if len(poc_list) == 0:
-        poc_list = poc_finger['x_others:999999']
+        # poc_list = poc_finger['x_others:999999']
+    ## 匹配不到直接暴力跑所有poc
+        poc_list = get_all_poc()
     print(poc_list)
     for _ in poc_list:
         if port is not None:
@@ -81,4 +83,5 @@ def main(poc_name=None, taskID=None, target_single=None, target_range=None, targ
 
 if __name__ == '__main__':
     # main()
-    # finger_load_poc_and_run('5d7a2f0ccb102ff5bce42782','http://www.corner.com.cn','phpcms')
+    # finger_load_poc_and_run('5d9f404daf1af103b9e0de2c','127.0.0.1','mongo')
+    finger_load_poc_and_run('5d9f404daf1af103b9e0de2c','127.0.0.1')

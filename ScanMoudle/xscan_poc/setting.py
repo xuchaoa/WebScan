@@ -15,6 +15,8 @@ IS_WIN = True if (sys.platform in ["win32", "cygwin"] or os.name == "nt") else F
 def get_all_poc():
     poc_list = []
     for name in poc_finger.values():
+        poc_list += name
+    return poc_list
 
 poc_path = {
     'system/redis/':['redis_unauth'],

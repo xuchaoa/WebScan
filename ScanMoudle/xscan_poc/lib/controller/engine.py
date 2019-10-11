@@ -157,6 +157,6 @@ def run():
         x = MongoDB()
         x.add_poc_vuln(taskID, json.dumps(res))  # key相同会覆盖原有数据
     print(res)
-    return res
+    # return res
 
 

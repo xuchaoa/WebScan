@@ -14,7 +14,7 @@ date:2019-05-11
 """
 
 from lib.core.Request import request
-from plugin.random_ua import get_random_ua
+from lib.utils.random_ua import get_random_ua
 from urllib.parse import urlparse
 
 
