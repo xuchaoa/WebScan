@@ -9,7 +9,7 @@ See the file 'LICENSE' for copying permission
 
 
 from urllib.parse import urlparse
-from lib.core.Request import request
+from ScanMoudle.xscan_poc.lib.core.Request import request
 import time
 
 post_headers = {

@@ -69,6 +69,12 @@ RDP_DIC_USER = realjoin(RDP_DIC_PATH, 'users.txt')
 RDP_DIC_PASSWD = realjoin(RDP_DIC_PATH, 'passwords.txt')
 
 
+
+SCANMOUDLE_PATH = realjoin(PROJECT_PATH,'ScanMoudle')
+
+### xpoc
+XPOC_PATH = realjoin(SCANMOUDLE_PATH, 'xscan_poc')
+
 # 在爆破中，如果一个无效ip多次出现，可以将IP加入到下列表中，程序会在爆破中过滤。
 waiting_fliter_ip = [
     '222.221.5.253',

@@ -5,8 +5,9 @@ import sys
 import json
 import warnings
 import time
-from lib.core.Request import request
+from ScanMoudle.xscan_poc.lib.core.Request import request
 from urllib.parse import urlparse
+
 post_headers={
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)",
     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",

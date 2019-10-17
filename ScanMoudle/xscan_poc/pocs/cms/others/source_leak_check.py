@@ -10,10 +10,10 @@ See the file 'LICENSE' for copying permission
 
 import gevent
 from gevent.queue import Queue
-from lib.core.data import paths
-from lib.core.Request import request
+from ScanMoudle.xscan_poc.lib.core.data import paths
+from ScanMoudle.xscan_poc.lib.core.Request import request
 from urllib.parse import urlparse
-from lib.utils.random_ua import get_random_ua
+from ScanMoudle.xscan_poc.lib.utils.random_ua import get_random_ua
 
 def poc(url):
     # url = "http://www.example.org/default.html?ct=32&op=92&item=98"

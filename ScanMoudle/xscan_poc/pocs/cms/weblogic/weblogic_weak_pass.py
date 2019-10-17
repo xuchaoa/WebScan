@@ -13,7 +13,7 @@ description: weblogic 后台弱口令
 import sys
 import json
 import warnings
-from lib.core.Request import request
+from ScanMoudle.xscan_poc.lib.core.Request import request
 
 
 def poc(url):

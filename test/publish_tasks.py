@@ -124,6 +124,6 @@ from celery_tasks.main import app
 #               queue='RDPassSpray',
 #               kwargs=dict(taskID='5d7a2f0ccb102ff5bce42783',target='10.0.83.217'))
 
-app.send_task(name='RDPassSpray',
-              queue='RDPassSpray',
-              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42783',target='10.0.83.217'))
+app.send_task(name='PocScan',
+              queue='PocScan',
+              kwargs=dict(taskID='5d7a2f0ccb102ff5bce42783',ip='127.0.0.1'))

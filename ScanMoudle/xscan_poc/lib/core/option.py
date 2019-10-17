@@ -6,11 +6,11 @@
 # @File    : option.py
 
 import sys
-from lib.core.data import conf
+from ScanMoudle.xscan_poc.lib.core.data import conf
 import os
-from lib.core.data import paths
+from ScanMoudle.xscan_poc.lib.core.data import paths
 import queue
-from lib.core.common import ip_range_to_list
+from ScanMoudle.xscan_poc.lib.core.common import ip_range_to_list
 import ipaddress
 from setting import poc_path
 

@@ -5,6 +5,10 @@
 # @Blog    : https://blog.ixuchao.cn
 # @File    : tasks.py
 
+import os, sys
+from conf.global_config import XPOC_PATH
+sys.path.append(XPOC_PATH)
+
 from ScanMoudle.xscan_poc.xpoc import finger_load_poc_and_run
 from celery_tasks.main import app
 

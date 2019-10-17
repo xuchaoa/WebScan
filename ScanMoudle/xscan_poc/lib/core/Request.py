@@ -7,7 +7,7 @@
 
 import requests
 import urllib3
-from lib.utils.random_ua import get_random_ua
+from ScanMoudle.xscan_poc.lib.utils.random_ua import get_random_ua
 
 
 class Requests:

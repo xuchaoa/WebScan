@@ -6,7 +6,7 @@ referer: http://blog.gdssecurity.com/labs/2015/3/30/weblogic-ssrf-and-xss-cve-20
 description: weblogic 版本10.0.2 -- 10.3.6中SearchPublicRegistries.jsp，参数operator可传入内网IP造成SSRF漏洞
 '''
 import sys
-from lib.core.Request import request
+from ScanMoudle.xscan_poc.lib.core.Request import request
 
 
 def poc(url):

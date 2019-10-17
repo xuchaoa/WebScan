@@ -11,7 +11,7 @@ referer: https://www.anquanke.com/post/id/92003
 description: weblogic /wls-wsat/CoordinatorPortType接口存在命令执行。
 """
 import sys
-from lib.core.Request import request
+from ScanMoudle.xscan_poc.lib.core.Request import request
 
 def poc(url):
     headers = {

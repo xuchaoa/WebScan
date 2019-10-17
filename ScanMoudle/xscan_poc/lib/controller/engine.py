@@ -11,12 +11,12 @@
 import gevent
 import importlib.util
 from setting import ESSENTIAL_MODULE_METHODS
-from lib.core.data import conf, xscan, scan_option
+from ScanMoudle.xscan_poc.lib.core.data import conf, xscan, scan_option
 import sys
 import os
 import time
 import threading
-from lib.core.enum import POC_RESULT_STATUS
+from ScanMoudle.xscan_poc.lib.core.enum import POC_RESULT_STATUS
 import json
 
 
@@ -158,6 +158,6 @@ def run():
         x.add_poc_vuln(taskID, json.dumps(res))  # key相同会覆盖原有数据
     print(res)
     # return res
-    
+
 
 

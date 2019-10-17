@@ -7,7 +7,7 @@ See the file 'LICENSE' for copying permission
 """
 
 import sys
-from lib.core.Request import request
+from ScanMoudle.xscan_poc.lib.core.Request import request
 # try :
 #     import tldextract
 # except:

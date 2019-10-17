@@ -14,9 +14,9 @@ import warnings
 
 
 
-def extract_controller(self, url):
+def extract_controller(url):
     urls = list()
-    req = requests.get(self.url, timeout=10, verify=False)
+    req = requests.get(url, timeout=10, verify=False)
     pattern = '<a[\\s+]href="/[A-Za-z]+'
     matches = re.findall(pattern, req.text)
     for match in matches:
