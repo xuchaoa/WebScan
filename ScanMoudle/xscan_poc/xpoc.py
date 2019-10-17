@@ -7,6 +7,10 @@
 # modify from POC-T Proj by Archerx
 
 # xpoc将作为一个单独可运行的组件，和主调度引擎之间耦合度很小,方便单独拿出来用
+import os, sys
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+print(BASE_DIR)
+sys.path.append(BASE_DIR)
 
 from gevent import monkey
 monkey.patch_all()
@@ -84,4 +88,4 @@ def main(poc_name=None, taskID=None, target_single=None, target_range=None, targ
 if __name__ == '__main__':
     # main()
     # finger_load_poc_and_run('5d9f404daf1af103b9e0de2c','127.0.0.1','mongo')
-    finger_load_poc_and_run('5d9f404daf1af103b9e0de2c','127.0.0.1')
+    finger_load_poc_and_run('5d7a2f0ccb102ff5bce42783','127.0.0.1', 'momgo')

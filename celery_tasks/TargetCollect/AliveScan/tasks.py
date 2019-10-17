@@ -72,6 +72,8 @@ def add_task(taskID, host):
     # app.send_task(name='PortScan',
     #               queue='PortScan',
     #               kwargs=dict(taskID=taskID, host=host))
+    ##TODO 细化poc之前直接全扫
+
     app.send_task(name='PortServScan',
                   queue='PortServScan',
                   kwargs=dict(taskID=taskID, ip_addr=host, resp='syn_normal'))

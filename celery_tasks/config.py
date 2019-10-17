@@ -70,6 +70,7 @@ CELERY_QUEUES = (
     Queue("Wappalyzer", Exchange("xscan_web",type='direct'),routing_key='Wappalyzer'),
     Queue("DirScan", Exchange("xscan_web",type='direct'),routing_key='DirScan'),
     Queue("Struts2Scan", Exchange("xscan_web",type='direct'),routing_key='Struts2Scan'),
+    Queue("PocScan", Exchange("xscan_vuln",type='direct'),routing_key='PocScan')
 
     # Queue('portsca',Exchange("xscan",type='direct'), routing_key='portsca'),
     )
@@ -98,6 +99,7 @@ CELERY_IMPORTS = [
     "celery_tasks.WeakBrute.hydra.tasks",
     "celery_tasks.WeakBrute.RDPassSpray.RDPassSpray",
     "celery_tasks.TargetCollect.AliveScan.tasks",
+    "celery_tasks.VulnScan.PocScan.tasks"
     # "celery_task.epp_scripts.test2",
 ]
 
